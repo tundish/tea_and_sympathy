@@ -18,30 +18,17 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-"""
-A web-native single-puzzle text adventure for PyWeek 28 and NarraScope 2020.
-
-"""
 import argparse
-import asyncio
 from collections import deque
-from collections import namedtuple
-import difflib
-import functools
-import math
-import random
 import sys
 
 from aiohttp import web
 import pkg_resources
 
 from turberfield.catchphrase.presenter import Presenter
-from turberfield.catchphrase.render import Settings
-from turberfield.dialogue.matcher import Matcher
-from turberfield.dialogue.model import Model
 
+import tas
 from tas.story import Story
-from tas.tea import TeaTime
 
 
 async def get_frame(request):
@@ -97,67 +84,16 @@ async def post_command(request):
         )
     raise web.HTTPFound("/")
 
-
-async def post_action(request):
-    # TODO: get dwell, pause, style = request.match_info["hop"]
-    if not tor.rules.choice_validator.match(hop):
-        raise web.HTTPUnauthorized(reason="User sent invalid hop.")
-    else:
-        index = int(hop)
-        presenter = request.app["presenter"][0]
-        location = presenter.narrator.state.area
-        destination = tor.rules.topology[location][index]
-        presenter.narrator.state = presenter.narrator.state._replace(area=destination)
-        presenter.frames.clear()
-
-        entities = [
-            i for i in presenter.ensemble
-            if getattr(i, "area", destination) == destination
-        ]
-        for character in (i for i in entities if isinstance(i, Character)):
-            character.set_state(random.randrange(10))
-
-        if destination not in ("butcher", "chamber"):
-            rv = tor.rules.apply_rules(
-                None, None, None, tor.rules.Settings, presenter.narrator.state
-            )
-            if rv:
-                presenter.narrator.state = tor.rules.State(**rv)
-            else:
-                print("Game Over", file=sys.stderr)
-                rapunzel = next(
-                    i for i in presenter.ensemble
-                    if isinstance(i, Character) and i.get_state(Occupation) == Occupation.teenager
-                )
-                rapunzel.set_state(Hanging.club)
-
-
-        raise web.HTTPFound("/")
-
-
 def build_app(args):
     app = web.Application()
     app.add_routes([
         web.get("/", get_frame),
-        #web.post("/drama/{{cmd:{0}}}".format(TeaTime.validator.pattern), post_cmd),
         web.post("/drama/cmd/", post_command),
     ])
     app.router.add_static(
         "/css/",
         pkg_resources.resource_filename("tas", "css")
     )
-    #app.router.add_static(
-    #    "/img/",
-    #    pkg_resources.resource_filename("app", "static/img")
-    #)
-    #app.router.add_static(
-    #    "/audio/",
-    #    pkg_resources.resource_filename("app", "static/audio")
-    #)
-    #app.router.add_static(
-    #    "/fonts/",
-    #    pkg_resources.resource_filename("app", "static/fonts")
-    #)
     story = Story()
     app["story"] = deque([story], maxlen=1)
     return app
@@ -190,7 +126,7 @@ def run():
 
     rv = 0
     if args.version:
-        sys.stdout.write(app.__version__)
+        sys.stdout.write(tas.__version__)
         sys.stdout.write("\n")
     else:
         rv = main(args)

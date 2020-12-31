@@ -18,23 +18,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import argparse
-import difflib
-import enum
-import functools
-import re
 import sys
 import time
-import operator
 
 from turberfield.catchphrase.presenter import Presenter
 from turberfield.catchphrase.render import Renderer
 from turberfield.catchphrase.render import Settings
-from turberfield.dialogue.matcher import Matcher
-from turberfield.dialogue.model import Model
-from turberfield.dialogue.types import DataObject
-from turberfield.dialogue.types import EnumFactory
-from turberfield.dialogue.types import Persona
-from turberfield.dialogue.types import Stateful
 
 # import logging
 # logging.basicConfig(level=logging.DEBUG)
@@ -54,8 +43,9 @@ class Story(Renderer):
 
 def parser():
     rv = argparse.ArgumentParser()
-    rv.add_argument("--profanity", default=False, action="store_true", help="Permit adult language.") 
+    rv.add_argument("--profanity", default=False, action="store_true", help="Permit adult language.")
     return rv
+
 
 def main(args):
     story = Story(**vars(args))
@@ -79,11 +69,13 @@ def main(args):
                 print(line)
                 time.sleep(duration)
 
+
 def run():
     p = parser()
     args = p.parse_args()
     rv = main(args)
     sys.exit(rv)
+
 
 if __name__ == "__main__":
     run()
