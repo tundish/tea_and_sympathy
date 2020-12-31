@@ -57,7 +57,7 @@ Virtual Environment
 
 #. Update the package manager within it::
 
-    C:\Users\author\catchphrase-app\Scripts\pip install -U pip, wheel
+    C:\Users\author\catchphrase-app\Scripts\pip install -U pip wheel
 
 #. Install Catchphrase::
 
@@ -105,7 +105,7 @@ Virtual Environment
 
 #. Update the package manager within it::
 
-    ~/catchphrase-app/bin/pip install -U pip, wheel
+    ~/catchphrase-app/bin/pip install -U pip wheel
 
 #. Install Catchphrase::
 
