@@ -55,7 +55,7 @@ async def get_frame(request):
         next_="/",
         refresh=Presenter.refresh_animations(animation, min_val=2) if story.presenter.pending else None,
     ).format(
-        "",
+        '<link rel="stylesheet" href="/css/tas.css" />',
         story.render_dict_to_css(vars(story.settings)),
         story.render_frame_to_html(
             animation,

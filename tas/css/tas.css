@@ -1,0 +1,101 @@
+/* Base : Grid : Objects : State: Theme */
+
+/*  Base    */
+
+@font-face {
+font-family: "Bernier Regular";
+src: local("Bernier Regular"), local("BernierRegular-Regular"),
+    url(/fonts/BERNIERRegular-Regular.otf) format("opentype"),
+    url(/fonts/BERNIERRegular-Regular.ttf) format("ttf");
+font-weight: 100 950;
+}
+
+@font-face {
+font-family: "Bernier Shade";
+src: local("Bernier Shade"), local("BernierShade-Regular"),
+    url(/fonts/BERNIERShade-Regular.otf) format("opentype"),
+    url(/fonts/BERNIERShade-Regular.ttf) format("ttf");
+font-weight: 100 950;
+}
+
+@font-face {
+font-family: "Tenderness";
+src: local("Tenderness"), local("Tenderness-Regular"),
+    url(/fonts/Tenderness.otf) format("opentype");
+font-weight: 100 950;
+}
+
+/*  Grid and Flex */
+
+body {
+display: grid;
+grid-template-columns: 3fr 6fr 2fr;
+grid-template-areas:
+"banner  speech  images"
+"banner  speech  images"
+"banner  action  images"
+"banner  legals  images";
+height: 100vh;
+}
+
+.catchphrase-banner {
+font-family: var(--titles);
+grid-area: banner;
+}
+
+div.catchphrase-reveal {
+grid-area: speech;
+}
+
+aside.catchphrase-reveal {
+grid-area: images;
+min-width: 128px;
+}
+
+@media screen and (max-width: 1024px) {
+
+body {
+display: grid;
+grid-template-columns: 5fr 1fr;
+grid-template-areas:
+"speech  images"
+"speech  images"
+"action  legals";
+}
+
+}
+
+/*  Objects  */
+
+.catchphrase-reveal blockquote header {
+font-family: var(--system);
+font-size: 1.1rem;
+font-weight: lighter;
+}
+
+.catchphrase-reveal p {
+font-family: var(--detail);
+font-size: 1.3rem;
+}
+
+
+/*  State   */
+
+
+/*  Theme   */
+
+body {
+font-family: var(--detail);
+}
+
+h1, h2 {
+font-family: var(--titles);
+}
+
+a {
+font-family: var(--detail);
+}
+
+button {
+font-family: var(--blocks);
+}
