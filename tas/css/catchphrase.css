@@ -16,6 +16,11 @@ text-decoration: none;
 vertical-align: baseline;
 }
 
+button, input, select, textarea {
+font-family: inherit;
+font-size: 100%;
+}
+
 /*  Grid and Flex */
 
 .catchphrase-banner {
@@ -191,8 +196,6 @@ color: var(--catchphrase-colour-washout, whitesmoke);
 button {
 border: 2px solid var(--catchphrase-colour-washout, whitesmoke);
 color: var(--catchphrase-colour-shadows, grey);
-letter-spacing: 0.125rem;
-font-size: 1.6rem;
 margin: 1rem;
 min-width: 6rem;
 padding: 0.6rem;
@@ -201,6 +204,19 @@ width: fit-content(15rem);
 
 button:hover {
 border: 2px solid var(--catchphrase-colour-shadows, grey);
+}
+
+button, label {
+letter-spacing: 0.125rem;
+font-family: sans-serif;
+font-size: 1.6rem;
+font-style: normal;
+}
+
+input {
+font-family: sans-serif;
+font-size: 1.6rem;
+font-style: normal;
 }
 
 .catchphrase-banner h1 {

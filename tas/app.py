@@ -50,10 +50,12 @@ async def get_frame(request):
         frame = story.presenter.frames.pop(0)
         animation = story.presenter.animate(frame)
 
+    refresh = Presenter.refresh_animations(animation, min_val=2) if story.presenter.pending else None
+    print(refresh)
     rv = story.render_body_html(
         title="Story",
         next_="/",
-        refresh=Presenter.refresh_animations(animation, min_val=2) if story.presenter.pending else None,
+        refresh=refresh,
     ).format(
         "", # '<link rel="stylesheet" href="/css/tas.css" />',
         story.render_dict_to_css(vars(story.settings)),
@@ -61,7 +63,7 @@ async def get_frame(request):
             animation,
             options=story.drama.active,
             title="Tea and Sympathy",
-            actions=show_actions, commands=show_prompt
+            actions=show_actions, commands=show_prompt and not story.presenter.pending
         )
     )
     return web.Response(text=rv, content_type="text/html")
