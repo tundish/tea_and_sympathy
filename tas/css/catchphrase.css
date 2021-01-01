@@ -39,7 +39,7 @@ flex-direction: column;
 div.catchphrase-reveal nav ul {
 display: flex;
 flex-direction: row;
-justify-content: flex-end;
+justify-content: left;
 }
 
 aside.catchphrase-reveal {
@@ -66,6 +66,8 @@ padding-top: 0.9rem;
 /*  Objects  */
 
 .catchphrase-reveal ul {
+animation-name: fadeinout;
+animation-fill-mode: both;
 padding: 0.5em;
 }
 
@@ -130,7 +132,7 @@ opacity: 0.6;
 /*  Theme   */
 
 body {
-border: 6rem solid var(--catchphrase-colour-washout, whitesmoke);
+border-top: 6rem solid var(--catchphrase-colour-washout, whitesmoke);
 color: var(--catchphrase-colour-shadows, grey);
 }
 
