@@ -24,6 +24,7 @@ background-color: var(--catchphrase-colour-washout, whitesmoke);
 color: var(--catchphrase-colour-midtone, silver);
 display: flex;
 flex-direction: row;
+font-family: monospace;
 font-variant: small-caps;
 padding-left: 1.0rem;
 padding-right: 1.2rem;
@@ -79,11 +80,16 @@ animation-name: fadein;
 }
 
 .catchphrase-reveal blockquote header {
+font-family: sans-serif;
+font-style: oblique;
 margin: 0.25rem 0 0.25rem 0;
 }
 
 .catchphrase-reveal p {
-font-variant: normal;
+font-family: serif;
+font-size: 1.3rem;
+font-style: normal;
+letter-spacing: 0.11rem;
 }
 
 .catchphrase-reveal blockquote > header:empty + p {
