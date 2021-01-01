@@ -51,7 +51,6 @@ async def get_frame(request):
         animation = story.presenter.animate(frame)
 
     refresh = Presenter.refresh_animations(animation, min_val=2) if story.presenter.pending else None
-    print(refresh)
     rv = story.render_body_html(
         title="Story",
         next_="/",
