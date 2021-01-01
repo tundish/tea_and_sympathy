@@ -66,8 +66,6 @@ padding-top: 0.9rem;
 /*  Objects  */
 
 .catchphrase-reveal ul {
-animation-name: fadeinout;
-animation-fill-mode: both;
 padding: 0.5em;
 }
 
@@ -85,6 +83,15 @@ animation-name: fadein;
 font-family: sans-serif;
 font-style: oblique;
 margin: 0.25rem 0 0.25rem 0;
+}
+
+.catchphrase-reveal blockquote > ul li {
+animation-name: fadein;
+font-family: serif;
+font-size: 1.3rem;
+font-style: normal;
+letter-spacing: 0.11rem;
+padding-left: 2rem;
 }
 
 .catchphrase-reveal p {
