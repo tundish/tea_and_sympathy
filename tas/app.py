@@ -56,7 +56,7 @@ async def get_frame(request):
         next_="/",
         refresh=refresh,
     ).format(
-        "", # '<link rel="stylesheet" href="/css/tas.css" />',
+        '<link rel="stylesheet" href="/css/theme/tas.css" />',
         story.render_dict_to_css(vars(story.settings)),
         story.render_frame_to_html(
             animation,
@@ -92,7 +92,11 @@ def build_app(args):
         web.post("/drama/cmd/", post_command),
     ])
     app.router.add_static(
-        "/css/",
+        "/css/base/",
+        pkg_resources.resource_filename("turberfield.catchphrase", "css")
+    )
+    app.router.add_static(
+        "/css/theme/",
         pkg_resources.resource_filename("tas", "css")
     )
     story = Story()
