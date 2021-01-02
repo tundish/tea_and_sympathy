@@ -27,8 +27,8 @@
 .. entity:: DRAMA
    :types:  turberfield.catchphrase.drama.Drama
 
-.. .. entity:: SETTINGS
-   :types:  turberfield.catchphrase.types.Settings
+.. entity:: SETTINGS
+   :types:  turberfield.catchphrase.render.Settings
 
 
 Early
@@ -41,11 +41,17 @@ Input
 
 .. |INPUT_TEXT| property:: DRAMA.input_text
 
-Spam
+Busy
 ----
 
 .. condition:: DRAMA.turns 0
 .. condition:: DRAMA.turns 3
+
+|NPC_NAME| is on her phone.
+
+Spam
+----
+
 .. condition:: DRAMA.turns 5
 
 [NPC]_
@@ -56,7 +62,6 @@ Ignore them
 -----------
 
 .. condition:: DRAMA.turns 3
-.. condition:: DRAMA.turns 5
 
 [PLAYER]_
 
@@ -66,7 +71,14 @@ Ignore them
 
     I can't though, it's the Electricity.
 
-    I put it on my phone.
+Stupidly
+--------
+
+.. condition:: DRAMA.turns 5
+
+[NPC]_
+
+    I set it up on my phone.
 
     Stupidly.
 

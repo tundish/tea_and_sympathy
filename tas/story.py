@@ -49,10 +49,8 @@ def parser():
 
 def main(args):
     story = Story(**vars(args))
+    results = []
     while story.drama.active:
-        text = input("? ")
-        fn, args, kwargs = story.drama.interpret(story.drama.match(text))
-        results = list(story.drama(fn, *args, **kwargs))
         rv = list(Presenter.build_shots(*results, shot="Epilogue"))
         n, presenter = Presenter.build_from_folder(
             *Presenter.build_shots(*results, shot="Epilogue"),
@@ -68,6 +66,10 @@ def main(args):
             for line, duration in story.render_frame_to_terminal(animation):
                 print(line)
                 time.sleep(duration)
+        else:
+            cmd = input("? ")
+            fn, args, kwargs = story.drama.interpret(story.drama.match(cmd))
+            results = list(story.drama(fn, *args, **kwargs))
 
 
 def run():

@@ -27,8 +27,8 @@
 .. entity:: DRAMA
    :types:  turberfield.catchphrase.drama.Drama
 
-.. .. entity:: SETTINGS
-   :types:  turberfield.catchphrase.types.Settings
+.. entity:: SETTINGS
+   :types:  turberfield.catchphrase.render.Settings
 
 
 Thanks

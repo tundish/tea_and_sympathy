@@ -31,6 +31,8 @@ import tas
 from tas.story import Story
 
 
+# TODO: Protect me from rude words.
+
 async def get_frame(request):
     show_actions = request.query.get("action", "").lower() == "true"
     show_prompt = request.query.get("cmd", "").lower() == "true" or not show_actions

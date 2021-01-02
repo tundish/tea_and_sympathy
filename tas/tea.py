@@ -84,25 +84,6 @@ class TeaTime(Drama):
 
     validator = re.compile("[\\w ]+")
 
-    """
-    TODO:
-
-    Fix
-    ---
-
-    * Sophie: You pour the hot water into the white mug.
-
-    pick up tap
-    Sophie: Where is he?
-    Louise: I'll put the kettle on.
-    You get the  tap from out of the sink.
-    The  tap is on the counter.
-
-    find some milk
-    Sophie: You get the  milk from out of the fridge.
-    Sophie: The  milk is on the counter.
-    """
-
     @staticmethod
     def prioritise(match):
         """
@@ -143,7 +124,7 @@ class TeaTime(Drama):
             Space(names=["mug"], colour="red").set_state(Location.SHELF, 10),
             Space(names=["mug"], colour="white").set_state(Location.SHELF, 10),
             Space(names=["mug"], colour="yellow").set_state(Location.SHELF, 10),
-            Space(names=["bin", "trash", "recycling"]).set_state(Location.SINK),
+            Space(names=["bin", "rubbish", "trash"]).set_state(Location.SINK),
         ]
         rv.extend([Space(names=["spoon"], n=n).set_state(Location.DRAWER) for n in range(2)])
         rv.extend([Item(names=["teabag", "tea"], n=n).set_state(Location.SHELF, 20) for n in range(2)])
