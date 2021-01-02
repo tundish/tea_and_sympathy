@@ -1,10 +1,9 @@
-.. .. |VERSION| property:: tea_and_sympathy.app.version
+.. |VERSION| property:: tas.story.version
 
 :author:    D Haynes
 :made_at:   2020-11-23
-:project:   catchphrase
-
-.. :version:   |VERSION|
+:project:   Tea and Sympathy
+:version:   |VERSION|
 
 .. entity:: PLAYER
    :types:  tas.types.Character

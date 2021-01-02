@@ -28,7 +28,10 @@ from turberfield.catchphrase.render import Settings
 # import logging
 # logging.basicConfig(level=logging.DEBUG)
 
+import tas
 from tas.sympathy import TeaAndSympathy
+
+version = tas.__version__
 
 
 class Story(Renderer):

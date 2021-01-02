@@ -23,6 +23,7 @@ from tas.tea import Location
 from tas.sympathy import TeaAndSympathy
 
 from turberfield.catchphrase.presenter import Presenter
+from turberfield.catchphrase.render import Settings
 from turberfield.dialogue.model import Model
 
 
@@ -61,6 +62,7 @@ class DialogueTests(unittest.TestCase):
 
     def setUp(self):
         self.drama = TeaAndSympathy()
+        self.ensemble = self.drama.ensemble + [self.drama, Settings()]
 
     def test_early(self):
         next(iter(self.drama.lookup["kettle"])).state = 20
@@ -69,7 +71,7 @@ class DialogueTests(unittest.TestCase):
         n, presenter = Presenter.build_from_folder(
             *Presenter.build_shots(*results, shot="Epilogue"),
             folder=self.drama.folder,
-            ensemble=self.drama.ensemble,
+            ensemble=self.ensemble,
             strict=True
         )
         self.assertEqual("early.rst", self.drama.folder.paths[n])
@@ -82,7 +84,7 @@ class DialogueTests(unittest.TestCase):
         n, presenter = Presenter.build_from_folder(
             *Presenter.build_shots(*results, shot="Epilogue"),
             folder=self.drama.folder,
-            ensemble=self.drama.ensemble,
+            ensemble=self.ensemble,
             strict=True
         )
         self.assertEqual("thanks.rst", self.drama.folder.paths[n])
