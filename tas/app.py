@@ -34,8 +34,6 @@ from tas.story import Story
 # TODO: Protect me from rude words.
 
 async def get_frame(request):
-    show_actions = request.query.get("action", "").lower() == "true"
-    show_prompt = request.query.get("cmd", "").lower() == "true" or not show_actions
     story = request.app["story"][0]
     try:
         animation = None
@@ -53,18 +51,15 @@ async def get_frame(request):
         animation = story.presenter.animate(frame)
 
     refresh = Presenter.refresh_animations(animation, min_val=2) if story.presenter.pending else None
-    rv = story.render_body_html(
-        title=next(iter(story.presenter.metadata.get("project", ["Story"])), "Story"),
-        next_="/",
-        refresh=refresh,
-    ).format(
+    title = next(iter(story.presenter.metadata.get("project", ["Tea and Sympathy"])), "Tea and Sympathy")
+    rv = story.render_body_html(title=title, next_="/", refresh=refresh).format(
         '<link rel="stylesheet" href="/css/theme/tas.css" />',
         story.render_dict_to_css(vars(story.settings)),
         story.render_frame_to_html(
             animation,
             options=story.drama.active,
-            title="Tea and Sympathy",
-            actions=show_actions, commands=show_prompt and not story.presenter.pending
+            title=title,
+            commands=not story.presenter.pending,
         )
     )
     return web.Response(text=rv, content_type="text/html")
