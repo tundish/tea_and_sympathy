@@ -36,12 +36,6 @@ class Acting(enum.Enum):
     active = 1
 
 
-@enum.unique
-class Tone(enum.Enum):
-    calm = 0
-    grumpy = 1
-
-
 class Location(enum.Enum):
     DRAWER = ["drawer"]
     FRIDGE = ["fridge"]

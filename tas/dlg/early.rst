@@ -48,6 +48,12 @@ Busy
 
 |NPC_NAME| is on her phone.
 
+[NPC]_
+
+    I am going to swear.
+
+.. property:: DRAMA.prompt Type 'quit' if you don't want adult language
+
 Spam
 ----
 
@@ -94,7 +100,6 @@ Every day
 
     They are doing it every day now. I swear to God.
 
-.. .. property:: DRAMA.prompt Say:
 
 Cold
 ----

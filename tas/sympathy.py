@@ -21,8 +21,6 @@ from turberfield.dialogue.model import SceneScript
 
 from tas.tea import Acting
 from tas.tea import TeaTime
-from tas.tea import Tone
-
 from tas.types import Character
 
 
@@ -41,10 +39,18 @@ class TeaAndSympathy(TeaTime):
     def build(self):
         yield from super().build()
         yield from [
-            Character(names=["Sophie"]).set_state(Acting.passive, Tone.grumpy if self.profanity else Tone.calm),
-            Character(names=["Louise"]).set_state(Acting.active, Tone.grumpy if self.profanity else Tone.calm),
+            Character(names=["Sophie"]).set_state(Acting.passive),
+            Character(names=["Louise"]).set_state(Acting.active),
         ]
 
     def __init__(self, *args, **kwargs):
-        self.profanity = kwargs.get("profanity", True)
         super().__init__(*args, **kwargs)
+        self.active.add(self.do_quit)
+
+    def do_quit(self, this, text, /, **kwargs):
+        """
+        exit | finish | stop | quit
+
+        """
+        for i in self.lookup[Character]:
+            i.state = Acting.passive
