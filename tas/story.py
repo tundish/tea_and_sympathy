@@ -49,11 +49,11 @@ class Story(Renderer):
         self.drama = TeaAndSympathy(**kwargs)
         self.definitions = {
             "catchphrase-colour-washout": "hsl(50, 0%, 100%, 1.0)",
-            "catchphrase-colour-shadows": "hsl(37, 93%, 12%, 0.7)",
-            "catchphrase-colour-midtone": "hsl(86, 93%, 12%, 0.7)",
-            "catchphrase-colour-hilight": "hsl(224, 70%, 16%, 0.7)",
-            "catchphrase-colour-glamour": "hsl(76, 80%, 35%, 1.0)",
-            "catchphrase-colour-gravity": "hsl(36, 20%, 18%, 1.0)",
+            "catchphrase-colour-shadows": "hsl(202.86, 100%, 4.12%)",
+            "catchphrase-colour-midtone": "hsl(203.39, 96.72%, 11.96%)",
+            "catchphrase-colour-hilight": "hsl(203.06, 97.3%, 56.47%)",
+            "catchphrase-colour-glamour": "hsl(353.33, 96.92%, 12.75%)",
+            "catchphrase-colour-gravity": "hsl(293.33, 96.92%, 12.75%)",
         }
         self.settings = Settings(**self.definitions)
 

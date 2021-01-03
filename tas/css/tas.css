@@ -50,6 +50,7 @@ grid-template-areas:
 /*  Objects  */
 
 .catchphrase-reveal blockquote header {
+color: var(--catchphrase-colour-midtone, grey);
 font-size: 1.1rem;
 font-weight: lighter;
 }
@@ -64,6 +65,15 @@ font-size: 1.3rem;
 
 /*  Theme   */
 
+body {
+color: var(--catchphrase-colour-shadows, grey);
+}
+
+li a {
+font-family: sans-serif;
+font-weight: normal;
+}
+
 button {
 display: none;
 }
@@ -75,22 +85,14 @@ width: 42rem;
 }
 
 .catchphrase-banner h1 {
-color: var(--catchphrase-colour-midtone, silver);
+color: var(--catchphrase-colour-gravity, magenta);
 display: flex inline;
 flex-direction: column;
 font-size: 2rem;
 font-weight: bold;
 }
 
-.catchphrase-banner h1 span:nth-child(4n+1)::first-letter {
-color: var(--catchphrase-colour-gravity, darkslategrey);
-}
-
-.catchphrase-banner h1 span:nth-child(4n+2)::first-letter {
-color: var(--catchphrase-colour-hilight, powderblue);
-}
-
-.catchphrase-banner h1 span:nth-child(4n+3) {
-color: var(--catchphrase-colour-shadows, grey);
+.catchphrase-reveal blockquote > header:empty + p {
+letter-spacing: 0.1rem;
 }
 

@@ -24,7 +24,10 @@ Repo
 ----
 
 .. property:: SETTINGS.catchphrase-states-refresh none
+.. property:: SETTINGS.catchphrase-colour-gravity hsl(113.33, 96.92%, 12.75%)
 
-This is a short work for the `turberfield-catchphrase`_ library.
+This is a technical demo and teaching example for the `turberfield-catchphrase`_ library.
+
+An Interactive Story.
 
 .. _turberfield-catchphrase: https://github.com/tundish/turberfield-catchphrase
