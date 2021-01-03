@@ -32,7 +32,7 @@ class TeaAndSympathy(TeaTime):
             pkg="tas.dlg",
             description="Tea and Sympathy",
             metadata={},
-            paths=["early.rst", "kettle.rst", "thanks.rst", "weblinks.rst"],
+            paths=["about.rst", "early.rst", "kettle.rst", "thanks.rst"],
             interludes=None
         )
 

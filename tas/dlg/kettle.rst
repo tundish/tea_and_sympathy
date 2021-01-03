@@ -40,6 +40,8 @@ Input
 .. |INPUT_TEXT| property:: DRAMA.input_text
 
 
+.. property:: DRAMA.prompt ?
+
 1
 -
 

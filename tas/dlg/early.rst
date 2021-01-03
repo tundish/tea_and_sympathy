@@ -131,6 +131,7 @@ Idea
 
     I'll put the kettle on.
 
+.. property:: DRAMA.prompt ?
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
