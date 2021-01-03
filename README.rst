@@ -59,6 +59,10 @@ Virtual Environment
 
     C:\Users\author\catchphrase-app\Scripts\pip install -U pip wheel
 
+#. Install dependencies::
+
+    C:\Users\author\catchphrase-app\Scripts\pip install aiohttp
+
 #. Install Catchphrase::
 
     C:\Users\author\catchphrase-app\Scripts\pip install turberfield-catchphrase
@@ -106,6 +110,10 @@ Virtual Environment
 #. Update the package manager within it::
 
     ~/catchphrase-app/bin/pip install -U pip wheel
+
+#. Install dependencies::
+
+    ~/catchphrase-app/bin/pip install aiohttp
 
 #. Install Catchphrase::
 
