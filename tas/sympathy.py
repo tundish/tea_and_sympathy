@@ -56,4 +56,3 @@ class TeaAndSympathy(TeaTime):
             if isinstance(i, Character):
                 i.state = Acting.passive
         yield ""
-        print(self.lookup)

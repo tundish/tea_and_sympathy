@@ -40,11 +40,10 @@ Input
 
 .. |INPUT_TEXT| property:: DRAMA.input_text
 
-Busy
-----
+Caution
+-------
 
 .. condition:: DRAMA.turns 0
-.. condition:: DRAMA.turns 3
 
 |NPC_NAME| is on her phone.
 
@@ -53,6 +52,18 @@ Busy
     I am going to swear.
 
 .. property:: DRAMA.prompt Type 'quit' if you don't want adult language
+
+Cold
+----
+
+.. condition:: DRAMA.turns 1
+
+[NPC]_
+
+    It's freezing.
+
+.. property:: DRAMA.prompt ?
+
 
 Spam
 ----
@@ -100,15 +111,6 @@ Every day
 
     They are doing it every day now. I swear to God.
 
-
-Cold
-----
-
-.. condition:: DRAMA.turns 1
-
-[NPC]_
-
-    It's freezing.
 
 Waiting
 -------

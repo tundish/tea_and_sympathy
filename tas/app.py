@@ -51,8 +51,9 @@ async def get_frame(request):
         animation = story.presenter.animate(frame)
 
     refresh = Presenter.refresh_animations(animation, min_val=2) if story.presenter.pending else None
+    refresh_target = story.refresh_target("/")
     title = next(iter(story.presenter.metadata.get("project", ["Tea and Sympathy"])), "Tea and Sympathy")
-    rv = story.render_body_html(title=title, next_="/", refresh=refresh).format(
+    rv = story.render_body_html(title=title, next_=refresh_target, refresh=refresh).format(
         '<link rel="stylesheet" href="/css/theme/tas.css" />',
         story.render_dict_to_css(vars(story.settings)),
         story.render_frame_to_html(

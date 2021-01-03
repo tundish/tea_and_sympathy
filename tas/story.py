@@ -36,6 +36,15 @@ version = tas.__version__
 
 class Story(Renderer):
 
+    def refresh_target(self, url):
+        refresh_state = getattr(self.settings, "catchphrase-states-refresh", "inherit").lower()
+        if refresh_state == "none":
+            return None
+        elif refresh_state == "inherit":
+            return url
+        else:
+            return refresh_state
+
     def __init__(self, cfg=None, **kwargs):
         # TODO: a heapq
         self.drama = TeaAndSympathy(**kwargs)

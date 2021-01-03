@@ -23,7 +23,7 @@ About
 Repo
 ----
 
-.. property:: SETTINGS.punchline-states-refresh none
+.. property:: SETTINGS.catchphrase-states-refresh none
 
 This is a short work for the `turberfield-catchphrase`_ library.
 
