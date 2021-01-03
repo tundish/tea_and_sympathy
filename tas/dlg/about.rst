@@ -27,18 +27,16 @@ Repo
 .. property:: SETTINGS.catchphrase-colour-gravity hsl(113.33, 96.92%, 12.75%)
 
 This is a technical demo and teaching example for the `turberfield-catchphrase`_ package.
-A modern, web-native Python library, it's there_ for you to use. You can download and install it today.
+A modern, web-native Python library you can download and install today. It's there_ for you to use.
 
 Catchphrase is unique in the way it lets you layer beautifully-written dialogue on top of well-tested game logic.
-Your Interactive Story will be a work of art, and at the same time a piece of great engineering.
+Your Interactive Story will be a work of art, and at the same time a great piece of engineering.
 
 *   Catchphrase is 100% Free software.
-*   Write your game logic as Python code.
-*   Notify the Catchphrase parser of your command syntax.
-*   Craft character dialogue via simple screenplay files.
+*   Your game logic is Python code.
+*   Character dialogue lives in separate screenplay files.
 *   Catchphrase renders your story in pure HTML5 and CSS3. No Javascript is necessary.
-*   You can host on the network or play it locally in a terminal.
-    Exactly the same code, without any modification.
+*   Web serve over the network or play by text in a terminal.
 
 Why not `see how it's done`_?
 
