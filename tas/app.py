@@ -58,7 +58,7 @@ async def get_frame(request):
         story.render_frame_to_html(
             animation,
             options=story.drama.active,
-            title=title,
+            prompt=story.drama.prompt, title=title,
             commands=not story.presenter.pending,
         )
     )
