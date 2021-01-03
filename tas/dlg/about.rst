@@ -33,9 +33,9 @@ Catchphrase is unique in the way it lets you layer beautifully-written dialogue 
 Your Interactive Story will be a work of art, and at the same time a piece of great engineering.
 
 *   Catchphrase is 100% Free software.
-*   You write your game logic as Python code.
-*   You notify the Catchphrase parser of your command syntax.
-*   You craft character dialogue via simple screenplay files.
+*   Write your game logic as Python code.
+*   Notify the Catchphrase parser of your command syntax.
+*   Craft character dialogue via simple screenplay files.
 *   Catchphrase renders your story in pure HTML5 and CSS3. No Javascript is necessary.
 *   You can host on the network or play it locally in a terminal.
     Exactly the same code, without any modification.
