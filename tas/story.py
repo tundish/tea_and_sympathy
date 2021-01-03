@@ -62,7 +62,7 @@ def parser():
 def main(args):
     story = Story(**vars(args))
     results = []
-    while story.drama.active:
+    while story.drama.active and story.refresh_target("/") == "/":
         rv = list(Presenter.build_shots(*results, shot="Epilogue"))
         n, presenter = Presenter.build_from_folder(
             *Presenter.build_shots(*results, shot="Epilogue"),
