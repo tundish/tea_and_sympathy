@@ -2,13 +2,6 @@
 
 /*  Base    */
 
-@font-face {
-font-family: "Tenderness";
-src: local("Tenderness"), local("Tenderness-Regular"),
-    url(/fonts/Tenderness.otf) format("opentype");
-font-weight: 100 950;
-}
-
 /*  Grid and Flex */
 
 body {
@@ -23,7 +16,6 @@ height: 100vh;
 }
 
 .catchphrase-banner {
-font-family: var(--titles);
 grid-area: banner;
 }
 
@@ -58,13 +50,11 @@ grid-template-areas:
 /*  Objects  */
 
 .catchphrase-reveal blockquote header {
-font-family: var(--system);
 font-size: 1.1rem;
 font-weight: lighter;
 }
 
 .catchphrase-reveal p {
-font-family: var(--detail);
 font-size: 1.3rem;
 }
 
@@ -74,18 +64,33 @@ font-size: 1.3rem;
 
 /*  Theme   */
 
-body {
-font-family: var(--detail);
-}
-
-h1, h2 {
-font-family: var(--titles);
-}
-
-a {
-font-family: var(--detail);
-}
-
 button {
 display: none;
 }
+
+input {
+color: var(--catchphrase-colour-shadows, grey);
+font-size: 1.2rem;
+width: 42rem;
+}
+
+.catchphrase-banner h1 {
+color: var(--catchphrase-colour-midtone, silver);
+display: flex inline;
+flex-direction: column;
+font-size: 2rem;
+font-weight: bold;
+}
+
+.catchphrase-banner h1 span:nth-child(4n+1)::first-letter {
+color: var(--catchphrase-colour-gravity, darkslategrey);
+}
+
+.catchphrase-banner h1 span:nth-child(4n+2)::first-letter {
+color: var(--catchphrase-colour-hilight, powderblue);
+}
+
+.catchphrase-banner h1 span:nth-child(4n+3) {
+color: var(--catchphrase-colour-shadows, grey);
+}
+

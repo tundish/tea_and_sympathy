@@ -51,7 +51,7 @@ Caution
 
     I am going to swear.
 
-.. property:: DRAMA.prompt Type 'quit' if you don't want adult language
+.. property:: DRAMA.prompt Type a command. Do 'quit' if you don't want adult language.
 
 Cold
 ----

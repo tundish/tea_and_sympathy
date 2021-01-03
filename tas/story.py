@@ -46,17 +46,20 @@ class Story(Renderer):
             return refresh_state
 
     def __init__(self, cfg=None, **kwargs):
-        # TODO: a heapq
         self.drama = TeaAndSympathy(**kwargs)
-        self.definitions = {}
-        story_section = {}
-        self.settings = Settings(**dict(self.definitions, **story_section))
+        self.definitions = {
+            "catchphrase-colour-washout": "hsl(50, 0%, 100%, 1.0)",
+            "catchphrase-colour-shadows": "hsl(37, 93%, 12%, 0.7)",
+            "catchphrase-colour-midtone": "hsl(86, 93%, 12%, 0.7)",
+            "catchphrase-colour-hilight": "hsl(224, 70%, 16%, 0.7)",
+            "catchphrase-colour-glamour": "hsl(76, 80%, 35%, 1.0)",
+            "catchphrase-colour-gravity": "hsl(36, 20%, 18%, 1.0)",
+        }
+        self.settings = Settings(**self.definitions)
 
 
 def parser():
-    rv = argparse.ArgumentParser()
-    rv.add_argument("--profanity", default=False, action="store_true", help="Permit adult language.")
-    return rv
+    return argparse.ArgumentParser()
 
 
 def main(args):
