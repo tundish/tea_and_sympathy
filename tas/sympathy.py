@@ -32,7 +32,7 @@ class TeaAndSympathy(TeaTime):
             pkg="tas.dlg",
             description="Tea and Sympathy",
             metadata={},
-            paths=["early.rst", "kettle.rst", "thanks.rst"],
+            paths=["early.rst", "kettle.rst", "thanks.rst", "weblinks.rst"],
             interludes=None
         )
 
@@ -52,5 +52,8 @@ class TeaAndSympathy(TeaTime):
         exit | finish | stop | quit
 
         """
-        for i in self.lookup[Character]:
-            i.state = Acting.passive
+        for i in self.ensemble:
+            if isinstance(i, Character):
+                i.state = Acting.passive
+        yield ""
+        print(self.lookup)
