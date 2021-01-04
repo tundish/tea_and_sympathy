@@ -38,7 +38,10 @@ class Similar(Stateful):
         super().__init__(**kwargs)
         self.other = other or self
 
-    def get_state(self, **kwargs):
-        return self.other.get_state(**kwargs)
+    def get_state(self, typ=int, default=0):
+        if self.other is self:
+            return super().get_state(typ, default)
+        else:
+            return self.other.get_state(typ, default)
 
 

@@ -28,6 +28,7 @@ from turberfield.catchphrase.drama import Drama
 from turberfield.dialogue.types import Stateful
 
 from tas.types import Named
+from tas.types import Similar
 
 
 @enum.unique
@@ -38,7 +39,7 @@ class Acting(enum.Enum):
 
 class Location(enum.Enum):
     DRAWER = ["drawer"]
-    FRIDGE = ["fridge"]
+    FRIDGE = ["fridge"]  # FIXME
     SHELF= ["shelf"]
     SINK = ["sink"]
     HOB = ["hob", "cooker"]
@@ -51,7 +52,7 @@ class Located(Stateful):
     def location(self):
         return self.get_state(Location)
 
-class Liquid(Named, Located):
+class Liquid(Named, Similar):
 
     @property
     def heat(self):
@@ -64,8 +65,8 @@ class Liquid(Named, Located):
 
 
 class Feature(Named, Located): pass
-class Item(Named, Located): pass
-class Mass(Named, Located): pass
+class Item(Named, Similar): pass
+class Mass(Named, Similar): pass
 
 
 class Space(Named, Located):
