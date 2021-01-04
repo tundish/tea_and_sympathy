@@ -18,10 +18,6 @@
    :states: tas.tea.Location.HOB
             100
 
-.. entity:: MUG
-   :types:  tas.tea.Space
-   :states: tas.tea.Location.COUNTER
-
 .. entity:: DRAMA
    :types:  turberfield.catchphrase.drama.Drama
 
@@ -55,11 +51,35 @@ Input
 Sloppy
 ------
 
-.. condition:: MUG.state tas.tea.Location.COUNTER
+.. condition:: DRAMA.outcomes[tidy] False
 
 [NPC]_
 
     You left the teabag in.
+    We must have run out of milk.
+    Uggh. Sugar.
+
+Milky
+-----
+
+.. condition:: DRAMA.outcomes[milky] False
+
+[NPC]_
+
+    You left the teabag in.
+    We must have run out of milk.
+    Uggh. Sugar.
+
+Sugary
+------
+
+.. condition:: DRAMA.outcomes[sugary] True
+
+[NPC]_
+
+    You left the teabag in.
+    We must have run out of milk.
+    Uggh. Sugar.
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name

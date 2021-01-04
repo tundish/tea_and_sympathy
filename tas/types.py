@@ -30,3 +30,15 @@ class Named(DataObject):
 
 class Character(Named, Stateful): pass
 
+class Similar(Stateful):
+
+    """An object which derives its state from another. """
+
+    def __init__(self, other=None, **kwargs):
+        super().__init__(**kwargs)
+        self.other = other or self
+
+    def get_state(self, **kwargs):
+        return self.other.get_state(**kwargs)
+
+

@@ -132,6 +132,7 @@ class TeaTime(Drama):
         self.active.add(self.do_drop_item)
         self.active.add(self.do_pour_liquid)
         self.active.add(self.do_put_the_kettle_on)
+        self.outcomes = defaultdict(bool)
 
     def __call__(self, fn, *args, **kwargs):
         kettle = next(iter(self.lookup["kettle"]))

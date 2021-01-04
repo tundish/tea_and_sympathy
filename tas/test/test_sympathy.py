@@ -94,7 +94,9 @@ class DialogueTests(unittest.TestCase):
 
     def test_thanks(self):
         next(iter(self.drama.lookup["kettle"])).state = 100
-        next(iter(self.drama.lookup["mug"])).state = Location.COUNTER
+        mug = next(iter(self.drama.lookup["mug"]))
+        mug.state = Location.COUNTER
+        print(mug.contents)
         fn, args, kwargs = self.drama.interpret(self.drama.match("look"))
         results = list(self.drama(fn, *args, **kwargs))
         n, presenter = Presenter.build_from_folder(
