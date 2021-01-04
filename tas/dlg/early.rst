@@ -68,7 +68,7 @@ Cold
 Spam
 ----
 
-.. condition:: DRAMA.turns 5
+.. condition:: DRAMA.turns 2
 
 [NPC]_
 
@@ -101,7 +101,7 @@ Stupidly
 Every day
 ---------
 
-.. condition:: DRAMA.turns 5
+.. condition:: DRAMA.turns 6
 
 [PLAYER]_
 
@@ -115,7 +115,7 @@ Every day
 Waiting
 -------
 
-.. condition:: DRAMA.turns 2
+.. condition:: DRAMA.turns 8
 
 [NPC]_
 
@@ -126,6 +126,7 @@ Idea
 
 .. condition:: DRAMA.turns 2
 .. condition:: DRAMA.turns 4
+.. condition:: DRAMA.turns 7
 
 [PLAYER]_
 

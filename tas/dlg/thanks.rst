@@ -18,10 +18,9 @@
    :states: tas.tea.Location.HOB
             100
 
-.. entity:: HOB
-   :types:  tas.tea.Feature
-   :states: tas.tea.Location.HOB
-            tas.tea.Acting.passive
+.. entity:: MUG
+   :types:  tas.tea.Space
+   :states: tas.tea.Location.COUNTER
 
 .. entity:: DRAMA
    :types:  turberfield.catchphrase.drama.Drama
@@ -45,8 +44,6 @@ Input
 1
 -
 
-.. condition:: KETTLE.state 80
-
 [PLAYER]_
 
     Here's your tea.
@@ -55,6 +52,14 @@ Input
 
     Thanks, |PLAYER_NAME|.
 
+Sloppy
+------
+
+.. condition:: MUG.state tas.tea.Location.COUNTER
+
+[NPC]_
+
+    You left the teabag in.
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name

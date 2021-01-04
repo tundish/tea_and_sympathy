@@ -19,6 +19,7 @@
 
 import unittest
 
+from tas.tea import Acting
 from tas.tea import Location
 from tas.sympathy import TeaAndSympathy
 
@@ -77,8 +78,23 @@ class DialogueTests(unittest.TestCase):
         self.assertEqual("early.rst", self.drama.folder.paths[n])
         self.assertIs(None, presenter.frames[-1][Model.Line][-1].persona)
 
+    def test_kettle(self):
+        next(iter(self.drama.lookup["kettle"])).state = 20
+        next(iter(self.drama.lookup["hob"])).state = Acting.active
+        fn, args, kwargs = self.drama.interpret(self.drama.match("look"))
+        results = list(self.drama(fn, *args, **kwargs))
+        n, presenter = Presenter.build_from_folder(
+            *Presenter.build_shots(*results, shot="Epilogue"),
+            folder=self.drama.folder,
+            ensemble=self.ensemble,
+            strict=True
+        )
+        self.assertEqual("kettle.rst", self.drama.folder.paths[n])
+        self.assertIs(None, presenter.frames[-1][Model.Line][-1].persona)
+
     def test_thanks(self):
         next(iter(self.drama.lookup["kettle"])).state = 100
+        next(iter(self.drama.lookup["mug"])).state = Location.COUNTER
         fn, args, kwargs = self.drama.interpret(self.drama.match("look"))
         results = list(self.drama(fn, *args, **kwargs))
         n, presenter = Presenter.build_from_folder(

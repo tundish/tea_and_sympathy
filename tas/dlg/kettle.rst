@@ -76,7 +76,7 @@ Input
 
     He's not answering though.
 
-5
+3
 -
 
 .. condition:: KETTLE.state 40
@@ -87,7 +87,7 @@ Input
 
     Bollocks to it.
 
-6
+4
 -
 
 .. condition:: KETTLE.state 50
@@ -110,10 +110,80 @@ Input
 
     I wanted an early night.
 
-7
+5
 -
 
 .. condition:: KETTLE.state 60
+
+[PLAYER]_
+
+    You didn't go over to Mattie's then?
+
+[NPC]_
+
+    No.
+
+    He's being very unreliable at the moment.
+
+[PLAYER]_
+
+    Unreliable is about the best you can hope for.
+
+[NPC]_
+
+    Ha ha ha.
+
+6
+-
+
+.. condition:: KETTLE.state 70
+
+[PLAYER]_
+
+    You didn't go over to Mattie's then?
+
+[NPC]_
+
+    No.
+
+    He's being very unreliable at the moment.
+
+[PLAYER]_
+
+    Unreliable is about the best you can hope for.
+
+[NPC]_
+
+    Ha ha ha.
+
+
+7
+-
+
+.. condition:: KETTLE.state 80
+
+[PLAYER]_
+
+    You didn't go over to Mattie's then?
+
+[NPC]_
+
+    No.
+
+    He's being very unreliable at the moment.
+
+[PLAYER]_
+
+    Unreliable is about the best you can hope for.
+
+[NPC]_
+
+    Ha ha ha.
+
+8
+-
+
+.. condition:: KETTLE.state 90
 
 [PLAYER]_
 

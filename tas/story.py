@@ -82,7 +82,7 @@ def main(args):
                 print(line)
                 time.sleep(duration)
         else:
-            cmd = input("{0}: ".format(story.drama.prompt))
+            cmd = input("{0} ".format(story.drama.prompt))
             fn, args, kwargs = story.drama.interpret(story.drama.match(cmd))
             results = list(story.drama(fn, *args, **kwargs))
 
