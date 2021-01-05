@@ -142,7 +142,7 @@ class TeaTests(unittest.TestCase):
         fn, args, kwargs = drama.interpret(drama.match("pour water in the mug"))
         self.assertEqual(drama.do_pour_liquid, fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertFalse(any("teabag" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
+        self.assertFalse(any("water" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
 
     def test_disallowed(self):
         drama = TeaTime()

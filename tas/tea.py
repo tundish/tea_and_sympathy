@@ -52,35 +52,6 @@ class TeaTime(Drama):
 
     validator = re.compile("[\\w ]+")
 
-    def prioritise(self, match):
-        """
-        This method is a comparator for drama parser matches .
-        It creates a score from the objects in the keyword arguments.
-        It operates two measures:
-            * location priority of the objects
-            * their average temperature
-
-        """
-        fn, args, kwargs = match
-        if not kwargs:
-            return (0, 0)
-
-        location_priorities = {i: n for n, i in enumerate(Location)}
-        location_priority = statistics.mean(
-            location_priorities[i] if isinstance(i, Location) else location_priorities[i.get_state(Location)]
-            for i in kwargs.values()
-        )
-        try:
-            return (
-                location_priority,
-                statistics.mean(
-                    i.state for obj in kwargs.values()
-                    for i in (obj.contents(self.ensemble) if hasattr(obj, "contents") else [])
-                )
-            )
-        except statistics.StatisticsError:
-            return (location_priority, statistics.mean(getattr(obj, "state", 0) for obj in kwargs.values()))
-
     @staticmethod
     def build():
         rv = [
@@ -121,6 +92,35 @@ class TeaTime(Drama):
             hob.state = Acting.passive
 
         yield from super().__call__(fn, *args, **kwargs)
+
+    def prioritise(self, match):
+        """
+        This method is a comparator for drama parser matches .
+        It creates a score from the objects in the keyword arguments.
+        It operates two measures:
+            * location priority of the objects
+            * their average temperature
+
+        """
+        fn, args, kwargs = match
+        if not kwargs:
+            return (0, 0)
+
+        location_priorities = {i: n for n, i in enumerate(Location)}
+        location_priority = statistics.mean(
+            location_priorities[i] if isinstance(i, Location) else location_priorities[i.get_state(Location)]
+            for i in kwargs.values()
+        )
+        try:
+            return (
+                location_priority,
+                statistics.mean(
+                    i.state for obj in kwargs.values()
+                    for i in (obj.contents(self.ensemble) if hasattr(obj, "contents") else [])
+                )
+            )
+        except statistics.StatisticsError:
+            return (location_priority, statistics.mean(getattr(obj, "state", 0) for obj in kwargs.values()))
 
     def interpret(self, options):
         prioritised = sorted(options, key=self.prioritise, reverse=True)
@@ -233,11 +233,6 @@ class TeaTime(Drama):
         dst.state = max(src.state, dst.state)
         src.state = dst.state
         src.parent = dst
-        #dst.contents[src.names[0]].add(src)
-        #src.state = dst.get_state(Location)
-        #for s in dst.contents.values():
-        #    for obj in s:
-        #        obj.state = max(obj.state, dst.state)
 
         heat = getattr(src, "heat", "")
         if "kettle" in dst.names:
@@ -254,10 +249,6 @@ class TeaTime(Drama):
         put {src.names[0]} into {dst.names[1]} | put {src.names[0]} into {dst.names[1]}
 
         """
-        #dst.contents[src.names[0]].add(src)
-        #src.state = dst.get_state(Location)
-        #dst.state = max(src.state, dst.state)
-
         colour = getattr(dst, "colour", "")
         yield f"You pour the {src.names[0]} into the {colour} {dst.name}."
         src.parent = dst
@@ -272,17 +263,8 @@ class TeaTime(Drama):
 
         """
         colour = getattr(dst, "colour", "")
-        #if "mug" in dst.names:
-        #    dst.state == Location.COUNTER
-        #    if dst.contents[src.names[0]]:
-        #        yield f"There's enough {src.names[0]}s in the {colour} {dst.names[0]} already."
-        #        return
-
         yield f"You drop the {src.names[0]} into the {colour} {dst.name}."
         src.parent = dst
-        #dst.contents[src.names[0]].add(src)
-        #src.state = dst.get_state(Location)
-        #src.state = max(src.state, dst.state)
         yield f"The {src.names[0]} is in the {colour} {dst.name}."
 
     def do_heat_space(self, this, text, /, *, obj: Space):
