@@ -222,15 +222,12 @@ class TeaTests(unittest.TestCase):
                 dlg = "\n".join(drama(fn, *args, **kwargs))
 
         bin_ = next(iter(drama.lookup["bin"]))
-        self.assertTrue(any("teabag" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
+        self.assertFalse(any("teabag" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
         self.assertEqual(100, mug.state, drama.lookup["mug"])
 
-        teabag = next(
-            i for i in drama.lookup["tea"]
-            if i.get_state(Location) == Location.SINK
-        )
-        self.assertIn("teabag", bin_.contents)
-        self.assertEqual(100, teabag.state)
+        teabag = next((i for i in bin_.contents(drama.ensemble) if "teabag" in getattr(i, "names", [])), None)
+        self.assertTrue(teabag)
+        self.assertEqual(bin_.state, teabag.state)
 
     def test_full_story(self):
         drama = TeaTime()
@@ -273,14 +270,10 @@ class TeaTests(unittest.TestCase):
                 mugs = [i for i in drama.lookup["mug"] if i.get_state(Location) == Location.COUNTER]
                 self.assertEqual(1, len(mugs))
 
-        self.assertTrue(any("teabag" in getattr(i, "names", []) for i in mugs[0].contents(drama.ensemble)))
+        self.assertFalse(any("teabag" in getattr(i, "names", []) for i in mugs[0].contents(drama.ensemble)))
         self.assertEqual(100, mugs[0].state, drama.lookup["mug"])
-        print(vars(mugs[0]))
 
         bin_ = next(iter(drama.lookup["bin"]))
-        teabag = next(
-            i for i in drama.lookup["tea"]
-            if i.get_state(Location) == Location.SINK
-        )
-        self.assertIn("teabag", bin_.contents)
-        self.assertEqual(100, teabag.state)
+        teabag = next((i for i in bin_.contents(drama.ensemble) if "teabag" in getattr(i, "names", [])), None)
+        self.assertTrue(teabag)
+        self.assertEqual(bin_.state, teabag.state)

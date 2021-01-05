@@ -230,10 +230,11 @@ class TeaTime(Drama):
         colour = getattr(dst, "colour", "")
         yield f"You pour the {heat} {src.names[0]} into the {colour} {dst.name}."
 
+        dst.state = max(src.state, dst.state)
+        src.state = dst.state
         src.parent = dst
         #dst.contents[src.names[0]].add(src)
         #src.state = dst.get_state(Location)
-        #dst.state = max(src.state, dst.state)
         #for s in dst.contents.values():
         #    for obj in s:
         #        obj.state = max(obj.state, dst.state)
