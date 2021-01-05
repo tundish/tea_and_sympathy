@@ -28,20 +28,45 @@ class Named(DataObject):
     def name(self):
         return random.choice(getattr(self, "names", []))
 
-class Character(Named, Stateful): pass
 
-class Similar(Stateful):
+class Component(Stateful):
 
     """An object which derives its state from another. """
 
-    def __init__(self, other=None, **kwargs):
+    def __init__(self, parent=None, **kwargs):
         super().__init__(**kwargs)
-        self.other = other or self
+        self.parent = parent or self
 
     def get_state(self, typ=int, default=0):
-        if self.other is self:
+        if self.parent is self:
             return super().get_state(typ, default)
         else:
-            return self.other.get_state(typ, default)
+            return self.parent.get_state(typ, default)
+
+class Character(Named, Stateful): pass
+class Feature(Named, Stateful): pass
 
 
+class Space(Named, Stateful):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def contents(self, ensemble):
+        return [i for i in ensemble if getattr(i, "parent", None) is self]
+
+
+class Liquid(Named, Component):
+
+    @property
+    def heat(self):
+        if self.state <= 20:
+            return "cold"
+        elif self.state >= 60:
+            return "hot"
+        else:
+            return "warm"
+
+
+class Item(Named, Component): pass
+class Mass(Named, Component): pass

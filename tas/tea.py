@@ -27,8 +27,11 @@ import statistics
 from turberfield.catchphrase.drama import Drama
 from turberfield.dialogue.types import Stateful
 
-from tas.types import Named
-from tas.types import Similar
+from tas.types import Feature
+from tas.types import Item
+from tas.types import Liquid
+from tas.types import Mass
+from tas.types import Space
 
 
 @enum.unique
@@ -39,48 +42,17 @@ class Acting(enum.Enum):
 
 class Location(enum.Enum):
     DRAWER = ["drawer"]
-    FRIDGE = ["fridge"]  # FIXME
+    FRIDGE = ["fridge"]
     SHELF= ["shelf"]
     SINK = ["sink"]
     HOB = ["hob", "cooker"]
     COUNTER = ["counter"]
 
-
-class Located(Stateful):
-
-    @property
-    def location(self):
-        return self.get_state(Location)
-
-class Liquid(Named, Similar):
-
-    @property
-    def heat(self):
-        if self.state <= 20:
-            return "cold"
-        elif self.state >= 60:
-            return "hot"
-        else:
-            return "warm"
-
-
-class Feature(Named, Located): pass
-class Item(Named, Similar): pass
-class Mass(Named, Similar): pass
-
-
-class Space(Named, Located):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.contents = defaultdict(set)
-
-
 class TeaTime(Drama):
 
     validator = re.compile("[\\w ]+")
 
-    @staticmethod
-    def prioritise(match):
+    def prioritise(self, match):
         """
         This method is a comparator for drama parser matches .
         It creates a score from the objects in the keyword arguments.
@@ -102,7 +74,8 @@ class TeaTime(Drama):
             return (
                 location_priority,
                 statistics.mean(
-                    i.state for obj in kwargs.values() for s in getattr(obj, "contents", {}).values() for i in s
+                    i.state for obj in kwargs.values()
+                    for i in (obj.contents(self.ensemble) if hasattr(obj, "contents") else [])
                 )
             )
         except statistics.StatisticsError:
@@ -138,12 +111,12 @@ class TeaTime(Drama):
     def __call__(self, fn, *args, **kwargs):
         kettle = next(iter(self.lookup["kettle"]))
         hob = next(iter(self.lookup["hob"]))
-        if kettle.contents["water"] and hob.get_state(Acting) == Acting.active:
+        if any("water" in i.names for i in kettle.contents(self.ensemble)) and hob.get_state(Acting) == Acting.active:
             if kettle.get_state(Location) == Location.HOB:
                 kettle.set_state(min(kettle.state + 10, 100))
-                for s in kettle.contents.values():
-                    for obj in s:
-                        obj.state = kettle.state
+                #for s in kettle.contents.values():
+                #    for obj in s:
+                #        obj.state = kettle.state
         if kettle.state == 100:
             hob.state = Acting.passive
 
@@ -246,7 +219,7 @@ class TeaTime(Drama):
         """
         kettle = next(iter(self.lookup["kettle"]))
         if "mug" in dst.names:
-            if dst.contents["teabag"] and kettle.state < 100:
+            if set(dst.contents(self.ensemble)).intersection(self.lookup["teabag"]) and kettle.state < 100:
                 yield "That's not how to make tea."
                 return
 
@@ -257,12 +230,13 @@ class TeaTime(Drama):
         colour = getattr(dst, "colour", "")
         yield f"You pour the {heat} {src.names[0]} into the {colour} {dst.name}."
 
-        dst.contents[src.names[0]].add(src)
-        src.state = dst.get_state(Location)
-        dst.state = max(src.state, dst.state)
-        for s in dst.contents.values():
-            for obj in s:
-                obj.state = max(obj.state, dst.state)
+        src.parent = dst
+        #dst.contents[src.names[0]].add(src)
+        #src.state = dst.get_state(Location)
+        #dst.state = max(src.state, dst.state)
+        #for s in dst.contents.values():
+        #    for obj in s:
+        #        obj.state = max(obj.state, dst.state)
 
         heat = getattr(src, "heat", "")
         if "kettle" in dst.names:
@@ -279,12 +253,13 @@ class TeaTime(Drama):
         put {src.names[0]} into {dst.names[1]} | put {src.names[0]} into {dst.names[1]}
 
         """
-        dst.contents[src.names[0]].add(src)
-        src.state = dst.get_state(Location)
-        dst.state = max(src.state, dst.state)
+        #dst.contents[src.names[0]].add(src)
+        #src.state = dst.get_state(Location)
+        #dst.state = max(src.state, dst.state)
 
         colour = getattr(dst, "colour", "")
         yield f"You pour the {src.names[0]} into the {colour} {dst.name}."
+        src.parent = dst
         yield f"The {src.names[0]} is in the {colour} {dst.name}."
 
     def do_drop_item(self, this, text, /, *, src: Item, dst: Space):
@@ -296,16 +271,17 @@ class TeaTime(Drama):
 
         """
         colour = getattr(dst, "colour", "")
-        if "mug" in dst.names:
-            dst.state == Location.COUNTER
-            if dst.contents[src.names[0]]:
-                yield f"There's enough {src.names[0]}s in the {colour} {dst.names[0]} already."
-                return
+        #if "mug" in dst.names:
+        #    dst.state == Location.COUNTER
+        #    if dst.contents[src.names[0]]:
+        #        yield f"There's enough {src.names[0]}s in the {colour} {dst.names[0]} already."
+        #        return
 
         yield f"You drop the {src.names[0]} into the {colour} {dst.name}."
-        dst.contents[src.names[0]].add(src)
-        src.state = dst.get_state(Location)
-        src.state = max(src.state, dst.state)
+        src.parent = dst
+        #dst.contents[src.names[0]].add(src)
+        #src.state = dst.get_state(Location)
+        #src.state = max(src.state, dst.state)
         yield f"The {src.names[0]} is in the {colour} {dst.name}."
 
     def do_heat_space(self, this, text, /, *, obj: Space):
