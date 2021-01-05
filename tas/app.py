@@ -31,8 +31,6 @@ import tas
 from tas.story import Story
 
 
-# TODO: Protect me from rude words.
-
 async def get_frame(request):
     story = request.app["story"][0]
     try:
@@ -82,6 +80,7 @@ async def post_command(request):
             strict=True
         )
     raise web.HTTPFound("/")
+
 
 def build_app(args):
     app = web.Application()
