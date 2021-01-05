@@ -40,7 +40,10 @@ class DramaTests(unittest.TestCase):
                 fn, args, kwargs = drama.interpret(drama.match("check the kettle"))
                 dlg = "\n".join(drama(fn, *args, **kwargs))
                 self.assertEqual(n, kettle.state)
-                self.assertEqual(n, next(iter(kettle.contents["water"])).state)
+                self.assertEqual(
+                    n,
+                    next(i for i in kettle.contents(drama.ensemble) if "water" in getattr(i, "names", [])).state
+                )
                 self.assertEqual(Location.HOB, kettle.get_state(Location))
 
         self.assertEqual(2, len([i for i in drama.ensemble if "water" in getattr(i, "names", [])]))
@@ -54,7 +57,10 @@ class DramaTests(unittest.TestCase):
         self.assertEqual(drama.do_pour_liquid, fn, drama.active)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         mug = kwargs["dst"]
-        self.assertEqual(100, next(iter(mug.contents["water"])).state, mug)
+        self.assertEqual(
+            100,
+            next(i for i in mug.contents(drama.ensemble) if "water" in getattr(i, "names", [])).state
+        )
         self.assertEqual(Location.COUNTER, mug.get_state(Location))
         self.assertEqual(Location.HOB, kettle.get_state(Location))
 
@@ -96,7 +102,6 @@ class DialogueTests(unittest.TestCase):
         next(iter(self.drama.lookup["kettle"])).state = 100
         mug = next(iter(self.drama.lookup["mug"]))
         mug.state = Location.COUNTER
-        print(mug.contents)
         fn, args, kwargs = self.drama.interpret(self.drama.match("look"))
         results = list(self.drama(fn, *args, **kwargs))
         n, presenter = Presenter.build_from_folder(

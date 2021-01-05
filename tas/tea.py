@@ -309,7 +309,9 @@ class TeaTime(Drama):
             obj for obj in self.ensemble
             if "mug" in getattr(obj, "names", [])
             and obj.get_state(Location) == Location.COUNTER
-            and (obj.contents["milk"] or obj.contents["water"])
+            and {"milk", "water"}.intersection(
+                {n for i in obj.contents(self.ensemble) for n in getattr(i, "names", [])}
+            )
         }
         spoons = {
             i for i in self.ensemble

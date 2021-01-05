@@ -66,7 +66,7 @@ class TeaTests(unittest.TestCase):
         self.assertEqual(drama.do_pour_liquid, fn, drama.active)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         water = kwargs["src"]
-        self.assertTrue(mug.contents["water"], mug)
+        self.assertTrue(any("water" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
 
     def test_milk_in_mug(self):
         drama = TeaTime()
@@ -93,7 +93,7 @@ class TeaTests(unittest.TestCase):
         fn, args, kwargs = drama.interpret(drama.match("pour milk in the mug"))
         self.assertEqual(drama.do_pour_liquid, fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(mug.contents["milk"], mug)
+        self.assertTrue(any("milk" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
 
         fn, args, kwargs = drama.interpret(drama.match("stir milk"))
         self.assertTrue(fn)
@@ -117,7 +117,7 @@ class TeaTests(unittest.TestCase):
         ))
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(mug.contents["sugar"])
+        self.assertTrue(any("sugar" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
         self.assertTrue(drama.outcomes["sugary"])
 
     def test_no_cold_water_in_mug(self):
@@ -138,11 +138,11 @@ class TeaTests(unittest.TestCase):
         mug = kwargs["dst"]
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(mug.contents["teabag"])
+        self.assertTrue(any("teabag" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
         fn, args, kwargs = drama.interpret(drama.match("pour water in the mug"))
         self.assertEqual(drama.do_pour_liquid, fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertFalse(mug.contents["water"])
+        self.assertFalse(any("teabag" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
 
     def test_disallowed(self):
         drama = TeaTime()
@@ -162,11 +162,11 @@ class TeaTests(unittest.TestCase):
         hob = next(iter(drama.lookup["hob"]))
         kettle = next(iter(drama.lookup["kettle"]))
         self.assertEqual(20, kettle.state)
-        self.assertFalse(kettle.contents)
+        self.assertFalse(kettle.contents(drama.ensemble))
         fn, args, kwargs = drama.interpret(drama.match("put the kettle on"))
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(kettle.contents)
+        self.assertTrue(kettle.contents(drama.ensemble))
         self.assertTrue(Acting.active, hob.get_state(Acting))
 
     def test_kettle_two_step(self):
@@ -174,16 +174,16 @@ class TeaTests(unittest.TestCase):
         hob = next(i for i in drama.ensemble if "hob" in i.names)
         kettle = next(i for i in drama.ensemble if "kettle" in i.names)
         self.assertEqual(20, kettle.state)
-        self.assertFalse(kettle.contents)
+        self.assertFalse(kettle.contents(drama.ensemble))
         fn, args, kwargs = drama.interpret(drama.match("fill the kettle"))
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         self.assertEqual(kettle.state, 20)
-        self.assertTrue(kettle.contents)
+        self.assertTrue(kettle.contents(drama.ensemble))
         fn, args, kwargs = drama.interpret(drama.match("boil the kettle"))
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(kettle.contents)
+        self.assertTrue(kettle.contents(drama.ensemble))
         self.assertTrue(Acting.active, hob.get_state(Acting))
 
     def test_make_a_brew(self):
@@ -191,11 +191,11 @@ class TeaTests(unittest.TestCase):
         hob = next(iter(drama.lookup["hob"]))
         kettle = next(iter(drama.lookup["kettle"]))
         self.assertEqual(20, kettle.state)
-        self.assertFalse(kettle.contents)
+        self.assertFalse(kettle.contents(drama.ensemble))
         fn, args, kwargs = drama.interpret(drama.match("put the kettle on"))
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(kettle.contents)
+        self.assertTrue(kettle.contents(drama.ensemble))
         self.assertTrue(Acting.active, hob.get_state(Acting))
         for n in range(30, 110, 10):
             with self.subTest(n=n):
@@ -222,7 +222,7 @@ class TeaTests(unittest.TestCase):
                 dlg = "\n".join(drama(fn, *args, **kwargs))
 
         bin_ = next(iter(drama.lookup["bin"]))
-        self.assertTrue(mug.contents["teabag"])
+        self.assertTrue(any("teabag" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
         self.assertEqual(100, mug.state, drama.lookup["mug"])
 
         teabag = next(
@@ -236,7 +236,7 @@ class TeaTests(unittest.TestCase):
         drama = TeaTime()
         kettle = next(iter(drama.lookup["kettle"]))
         self.assertEqual(20, kettle.state)
-        self.assertFalse(kettle.contents)
+        self.assertFalse(kettle.contents(drama.ensemble))
         for cmd in [
             "get a mug", "put the kettle on",
             "find some tea", "put the teabag in the mug",
@@ -273,7 +273,7 @@ class TeaTests(unittest.TestCase):
                 mugs = [i for i in drama.lookup["mug"] if i.get_state(Location) == Location.COUNTER]
                 self.assertEqual(1, len(mugs))
 
-        self.assertTrue(mugs[0].contents["teabag"], mugs[0])
+        self.assertTrue(any("teabag" in getattr(i, "names", []) for i in mugs[0].contents(drama.ensemble)))
         self.assertEqual(100, mugs[0].state, drama.lookup["mug"])
         print(vars(mugs[0]))
 
