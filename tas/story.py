@@ -76,12 +76,10 @@ def main(args):
     story = Story(**vars(args))
     results = []
     while story.drama.active and story.refresh_target("/") == "/":
-        rv = list(Presenter.build_shots(*results, shot="Epilogue"))
-        n, presenter = Presenter.build_from_folder(
-            *Presenter.build_shots(*results, shot="Epilogue"),
-            folder=story.drama.folder,
-            ensemble=story.drama.ensemble + [story.settings],
-            strict=True
+        drama_dialogue = list(story.drama.build_dialogue(*results))
+        n, presenter = story.build_presenter(
+            story.drama.folder, *drama_dialogue,
+            ensemble=story.drama.ensemble + [story.drama, story.settings]
         )
 
         for frame in presenter.frames:
