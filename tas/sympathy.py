@@ -17,9 +17,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from collections import defaultdict
+
 from turberfield.dialogue.model import SceneScript
 
 from tas.tea import Acting
+from tas.tea import Location
 from tas.tea import TeaTime
 from tas.types import Character
 
@@ -45,7 +48,24 @@ class TeaAndSympathy(TeaTime):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.outcomes = defaultdict(bool)
         self.active.add(self.do_quit)
+
+    def __call__(self, fn, *args, **kwargs):
+        yield from super().__call__(fn, *args, **kwargs)
+        try:
+            mugs = [i for i in self.lookup["mug"] if i.get_state(Location) == Location.COUNTER]
+            contents = [i.contents(self.ensemble) for i in mugs]
+            self.outcomes["brewed"] = any(i for i in self.lookup["tea"] if i.state == 100)
+            self.outcomes["untidy"] = any(i for c in contents for i in c if "tea" in getattr(i, "names", []))
+            self.outcomes["stingy"] = not any(i for c in contents for i in c if "milk" in getattr(i, "names", []))
+            self.outcomes["sugary"] = any(i for c in contents for i in c if "sugar" in getattr(i, "names", []))
+            self.outcomes["served"] = (
+                self.outcomes["brewed"] and not self.outcomes["untidy"] and not self.outcomes["stingy"]
+            )
+        except StopIteration:
+            pass
+
 
     def do_quit(self, this, text, /, **kwargs):
         """

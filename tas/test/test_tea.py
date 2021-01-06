@@ -107,7 +107,6 @@ class TeaTests(unittest.TestCase):
         dlg = "\n".join(drama(fn, *args, **kwargs))
         fn, args, kwargs = drama.interpret(drama.match("find mug"))
         mug = kwargs["obj"]
-        self.assertFalse(drama.outcomes["sugary"])
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         self.assertIn(drama.do_pour_mass, drama.active)
@@ -118,7 +117,6 @@ class TeaTests(unittest.TestCase):
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         self.assertTrue(any("sugar" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
-        self.assertTrue(drama.outcomes["sugary"])
 
     def test_no_cold_water_in_mug(self):
         drama = TeaTime()

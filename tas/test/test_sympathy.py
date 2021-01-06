@@ -23,6 +23,7 @@ from tas.tea import Acting
 from tas.tea import Location
 from tas.sympathy import TeaAndSympathy
 
+from turberfield.catchphrase.parser import CommandParser
 from turberfield.catchphrase.presenter import Presenter
 from turberfield.catchphrase.render import Settings
 from turberfield.dialogue.model import Model
@@ -32,6 +33,9 @@ class DramaTests(unittest.TestCase):
 
     def test_make_a_brew(self):
         drama = TeaAndSympathy()
+        self.assertFalse(drama.outcomes["brewed"])
+        self.assertFalse(drama.outcomes["stingy"])
+
         kettle = next(iter(drama.lookup["kettle"]))
         fn, args, kwargs = drama.interpret(drama.match("put the kettle on"))
         dlg = "\n".join(drama(fn, *args, **kwargs))
@@ -52,8 +56,9 @@ class DramaTests(unittest.TestCase):
         dlg = "\n".join(drama(fn, *args, **kwargs))
         mug = kwargs["obj"]
         self.assertEqual(Location.COUNTER, mug.get_state(Location))
+        self.assertTrue(drama.outcomes["stingy"])
 
-        fn, args, kwargs = drama.interpret(drama.match("pour water in the mug"))
+        fn, args, kwargs = drama.interpret(drama.match("pour water into the mug"))
         self.assertEqual(drama.do_pour_liquid, fn, drama.active)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         mug = kwargs["dst"]
@@ -61,8 +66,36 @@ class DramaTests(unittest.TestCase):
             100,
             next(i for i in mug.contents(drama.ensemble) if "water" in getattr(i, "names", [])).state
         )
-        self.assertEqual(Location.COUNTER, mug.get_state(Location))
-        self.assertEqual(Location.HOB, kettle.get_state(Location))
+        self.assertFalse(drama.outcomes["brewed"])
+        fn, args, kwargs = drama.interpret(drama.match("drop a teabag in the mug"))
+        dlg = "\n".join(drama(fn, *args, **kwargs))
+        self.assertTrue(drama.outcomes["brewed"])
+
+        self.assertTrue(drama.outcomes["stingy"])
+        fn, args, kwargs = drama.interpret(drama.match("pour some milk into the mug"))
+        dlg = "\n".join(drama(fn, *args, **kwargs))
+        self.assertFalse(drama.outcomes["stingy"])
+
+    def test_sugar_in_mug(self):
+        drama = TeaAndSympathy()
+        sugar = next(i for i in drama.ensemble if "sugar" in i.names)
+        fn, args, kwargs = drama.interpret(drama.match("find sugar"))
+        self.assertTrue(fn)
+        dlg = "\n".join(drama(fn, *args, **kwargs))
+        fn, args, kwargs = drama.interpret(drama.match("find mug"))
+        mug = kwargs["obj"]
+        self.assertFalse(drama.outcomes["sugary"])
+        self.assertTrue(fn)
+        dlg = "\n".join(drama(fn, *args, **kwargs))
+        self.assertIn(drama.do_pour_mass, drama.active)
+        fn, args, kwargs = drama.interpret(drama.match("put sugar in the mug"))
+        self.assertTrue(fn, "\n".join(
+            c for f in drama.active for c, (fn, args) in CommandParser.expand_commands(f, drama.ensemble)
+        ))
+        self.assertTrue(fn)
+        dlg = "\n".join(drama(fn, *args, **kwargs))
+        self.assertTrue(any("sugar" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
+        self.assertTrue(drama.outcomes["sugary"])
 
 
 class DialogueTests(unittest.TestCase):
@@ -76,7 +109,7 @@ class DialogueTests(unittest.TestCase):
         fn, args, kwargs = self.drama.interpret(self.drama.match("look"))
         results = list(self.drama(fn, *args, **kwargs))
         n, presenter = Presenter.build_from_folder(
-            *Presenter.build_shots(*results, shot="Epilogue"),
+            *self.drama.build_shots(*results, shot="Epilogue"),
             folder=self.drama.folder,
             ensemble=self.ensemble,
             strict=True

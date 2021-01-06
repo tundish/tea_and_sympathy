@@ -18,7 +18,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-from collections import defaultdict
 from collections import Counter
 import enum
 import re
@@ -77,17 +76,14 @@ class TeaTime(Drama):
         self.active.add(self.do_drop_item)
         self.active.add(self.do_pour_liquid)
         self.active.add(self.do_put_the_kettle_on)
-        self.outcomes = defaultdict(bool)
 
     def __call__(self, fn, *args, **kwargs):
         kettle = next(iter(self.lookup["kettle"]))
         hob = next(iter(self.lookup["hob"]))
-        if any("water" in i.names for i in kettle.contents(self.ensemble)) and hob.get_state(Acting) == Acting.active:
-            if kettle.get_state(Location) == Location.HOB:
+        if any("water" in i.names for i in kettle.contents(self.ensemble)):
+            if kettle.get_state(Location) == Location.HOB and hob.get_state(Acting) == Acting.active:
                 kettle.set_state(min(kettle.state + 10, 100))
-                #for s in kettle.contents.values():
-                #    for obj in s:
-                #        obj.state = kettle.state
+
         if kettle.state == 100:
             hob.state = Acting.passive
 

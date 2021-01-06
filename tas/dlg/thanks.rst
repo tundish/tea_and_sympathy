@@ -37,38 +37,32 @@ Input
 
 .. property:: DRAMA.prompt ?
 
-1
--
+Brewed
+------
+
+.. condition:: DRAMA.outcomes[brewed] True
 
 [PLAYER]_
 
     Here's your tea.
 
-[NPC]_
-
-    Thanks, |PLAYER_NAME|.
-
-Sloppy
+Untidy
 ------
 
-.. condition:: DRAMA.outcomes[tidy] False
+.. condition:: DRAMA.outcomes[untidy] True
 
 [NPC]_
 
     You left the teabag in.
-    We must have run out of milk.
-    Uggh. Sugar.
 
-Milky
------
+Stingy
+------
 
-.. condition:: DRAMA.outcomes[milky] False
+.. condition:: DRAMA.outcomes[stingy] True
 
 [NPC]_
 
-    You left the teabag in.
     We must have run out of milk.
-    Uggh. Sugar.
 
 Sugary
 ------
@@ -77,9 +71,22 @@ Sugary
 
 [NPC]_
 
-    You left the teabag in.
-    We must have run out of milk.
     Uggh. Sugar.
+
+Served
+------
+
+.. condition:: DRAMA.outcomes[served] True
+
+[PLAYER]_
+
+    There you go.
+
+[NPC]_
+
+    Thanks, |PLAYER_NAME|.
+
+.. property:: DRAMA.prompt Well done. You may 'quit' now.
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
