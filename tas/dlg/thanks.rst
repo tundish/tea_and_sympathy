@@ -37,6 +37,8 @@ Input
 
 .. property:: DRAMA.prompt ?
 
+{0}
+
 Brewed
 ------
 
