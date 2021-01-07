@@ -21,6 +21,7 @@ import argparse
 import sys
 import time
 
+from turberfield.catchphrase.drama import Drama
 from turberfield.catchphrase.presenter import Presenter
 from turberfield.catchphrase.render import Renderer
 from turberfield.catchphrase.render import Settings
@@ -36,24 +37,16 @@ version = tas.__version__
 
 class Story(Renderer):
 
-    def build_presenter(self, folder, /, *args, ensemble=[], strict=True, roles=1):
+    @staticmethod
+    def build_presenter(folder, /, *args, ensemble=[], strict=True, roles=1):
         for n, p in enumerate(folder.paths):
-            folder_dialogue = Presenter.load_dialogue(folder.pkg, p)
-            text = self.drama.safe_substitute(folder_dialogue, *args)
+            folder_dialogue = Drama.load_dialogue(folder.pkg, p)
+            text = Drama.write_dialogue(folder_dialogue, *args)
             rv = Presenter.build_from_text(text, ensemble=ensemble, strict=strict, roles=roles, path=p)
             if rv:
                 return (n, rv)
         else:
             return (None, None)
-
-    def refresh_target(self, url):
-        refresh_state = getattr(self.settings, "catchphrase-states-refresh", "inherit").lower()
-        if refresh_state == "none":
-            return None
-        elif refresh_state == "inherit":
-            return url
-        else:
-            return refresh_state
 
     def __init__(self, cfg=None, **kwargs):
         self.drama = TeaAndSympathy(**kwargs)
@@ -67,6 +60,22 @@ class Story(Renderer):
         }
         self.settings = Settings(**self.definitions)
 
+    def refresh_target(self, url):
+        refresh_state = getattr(self.settings, "catchphrase-states-refresh", "inherit").lower()
+        if refresh_state == "none":
+            return None
+        elif refresh_state == "inherit":
+            return url
+        else:
+            return refresh_state
+
+    def represent(self, lines):
+        n, presenter = self.build_presenter(
+            self.drama.folder, *lines,
+            ensemble=self.drama.ensemble + [self.drama, self.settings]
+        )
+        return presenter
+
 
 def parser():
     return argparse.ArgumentParser()
@@ -74,14 +83,9 @@ def parser():
 
 def main(args):
     story = Story(**vars(args))
-    results = []
+    lines = []
     while story.drama.active and story.refresh_target("/") == "/":
-        drama_dialogue = list(story.drama.build_dialogue(*results))
-        n, presenter = story.build_presenter(
-            story.drama.folder, *drama_dialogue,
-            ensemble=story.drama.ensemble + [story.drama, story.settings]
-        )
-
+        presenter = story.represent(lines)
         for frame in presenter.frames:
             animation = presenter.animate(frame)
             if not animation:
@@ -92,7 +96,7 @@ def main(args):
         else:
             cmd = input("{0} ".format(story.drama.prompt))
             fn, args, kwargs = story.drama.interpret(story.drama.match(cmd))
-            results = list(story.drama(fn, *args, **kwargs))
+            lines = list(story.drama(fn, *args, **kwargs))
 
 
 def run():
