@@ -37,7 +37,6 @@ Input
 
 .. property:: DRAMA.prompt ?
 
-{0}
 
 Brewed
 ------
@@ -93,3 +92,4 @@ Served
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
 
+{0}
