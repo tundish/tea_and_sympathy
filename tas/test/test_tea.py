@@ -74,7 +74,7 @@ class TeaTests(unittest.TestCase):
         self.assertTrue(fn)
         spoon = kwargs["obj"]
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertEqual(Location.COUNTER, spoon.get_state(Location))
+        self.assertEqual(Location.counter, spoon.get_state(Location))
 
         milk = next(i for i in drama.ensemble if "milk" in i.names)
         fn, args, kwargs = drama.interpret(drama.match("find milk"))
@@ -85,7 +85,7 @@ class TeaTests(unittest.TestCase):
         mug = kwargs["obj"]
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertEqual(Location.COUNTER, mug.get_state(Location))
+        self.assertEqual(Location.counter, mug.get_state(Location))
 
         fn, args, kwargs = drama.interpret(drama.match("stir milk"))
         self.assertFalse(fn)
@@ -147,7 +147,7 @@ class TeaTests(unittest.TestCase):
         fn, args, kwargs = drama.interpret(drama.match("find a mug"))
         dlg = "\n".join(drama(fn, *args, **kwargs))
         mug = kwargs["obj"]
-        self.assertEqual(Location.COUNTER, mug.get_state(Location))
+        self.assertEqual(Location.counter, mug.get_state(Location))
         for n, cmd in enumerate([
             "put hob in kettle",
         ]):
@@ -204,7 +204,7 @@ class TeaTests(unittest.TestCase):
         fn, args, kwargs = drama.interpret(drama.match("find a mug"))
         dlg = "\n".join(drama(fn, *args, **kwargs))
         mug = kwargs["obj"]
-        self.assertEqual(Location.COUNTER, mug.get_state(Location))
+        self.assertEqual(Location.counter, mug.get_state(Location))
         for n, cmd in enumerate([
             "find some tea", "put teabag in mug", "pour hot water into mug",
             "find spoon", "stir tea", "put the teabag in the bin"
@@ -244,7 +244,7 @@ class TeaTests(unittest.TestCase):
                 fn, args, kwargs = drama.interpret(options)
                 self.assertTrue(fn)
                 dlg = "\n".join(drama(fn, *args, **kwargs))
-                mugs = [i for i in drama.lookup["mug"] if i.get_state(Location) == Location.COUNTER]
+                mugs = [i for i in drama.lookup["mug"] if i.get_state(Location) == Location.counter]
                 self.assertEqual(1, len(mugs))
 
         self.assertEqual(80, kettle.state)
@@ -265,7 +265,7 @@ class TeaTests(unittest.TestCase):
                 fn, args, kwargs = drama.interpret(options)
                 self.assertTrue(fn)
                 dlg = "\n".join(drama(fn, *args, **kwargs))
-                mugs = [i for i in drama.lookup["mug"] if i.get_state(Location) == Location.COUNTER]
+                mugs = [i for i in drama.lookup["mug"] if i.get_state(Location) == Location.counter]
                 self.assertEqual(1, len(mugs))
 
         self.assertFalse(any("teabag" in getattr(i, "names", []) for i in mugs[0].contents(drama.ensemble)))

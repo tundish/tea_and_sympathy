@@ -13,17 +13,17 @@
    :types:  tas.types.Character
    :states: tas.tea.Acting.passive
 
-.. entity:: KETTLE
-   :types:  tas.tea.Space
-   :states: tas.tea.Location.HOB
-
 .. entity:: HOB
    :types:  tas.tea.Feature
-   :states: tas.tea.Location.HOB
+   :states: tas.tea.Location.hob
             tas.tea.Acting.active
 
+.. entity:: KETTLE
+   :types:  tas.tea.Space
+   :states: tas.tea.Location.hob
+
 .. entity:: DRAMA
-   :types:  turberfield.catchphrase.drama.Drama
+   :types:  tas.sympathy.TeaAndSympathy
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings

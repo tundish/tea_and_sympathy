@@ -15,16 +15,16 @@
 
 .. entity:: KETTLE
    :types:  tas.tea.Space
-   :states: tas.tea.Location.HOB
+   :states: tas.tea.Location.hob
             20
 
 .. entity:: HOB
    :types:  tas.tea.Feature
-   :states: tas.tea.Location.HOB
+   :states: tas.tea.Location.hob
             tas.tea.Acting.passive
 
 .. entity:: DRAMA
-   :types:  turberfield.catchphrase.drama.Drama
+   :types:  tas.sympathy.TeaAndSympathy
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings

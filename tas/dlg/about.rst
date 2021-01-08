@@ -30,7 +30,7 @@ This is a technical demo and teaching example for the `turberfield-catchphrase`_
 A modern, web-native Python library you can download and install today. It's there_ for you to use.
 
 Catchphrase is unique in the way it lets you layer beautifully-written dialogue on top of well-tested game logic.
-Your Interactive Story will be a work of art, and at the same time a great piece of engineering.
+Your Interactive Story will be a work of art, and at the same time a nice piece of engineering.
 
 *   Catchphrase is 100% Free software.
 *   Your game logic is Python code.

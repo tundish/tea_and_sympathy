@@ -9,8 +9,9 @@ Change Log
 0.2.0
 =====
 
-* Add outcomes.
-* Align with turberfield-catchphrase 0.9.0 .
+* Added outcomes.
+* Aligned with turberfield-catchphrase 0.10.0 .
+* Lots of refactors and fixes.
 
 0.1.0
 =====

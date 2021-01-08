@@ -15,14 +15,11 @@
 
 .. entity:: KETTLE
    :types:  tas.tea.Space
-   :states: tas.tea.Location.HOB
+   :states: tas.tea.Location.hob
             100
 
 .. entity:: DRAMA
-   :types:  turberfield.catchphrase.drama.Drama
-
-.. entity:: SETTINGS
-   :types:  turberfield.catchphrase.render.Settings
+   :types:  tas.sympathy.TeaAndSympathy
 
 
 Thanks
@@ -37,6 +34,7 @@ Input
 
 .. property:: DRAMA.prompt ?
 
+{0}
 
 Brewed
 ------
@@ -65,15 +63,6 @@ Stingy
 
     We must have run out of milk.
 
-Sugary
-------
-
-.. condition:: DRAMA.outcomes[sugary] True
-
-[NPC]_
-
-    Uggh. Sugar.
-
 Served
 ------
 
@@ -89,7 +78,17 @@ Served
 
 .. property:: DRAMA.prompt Well done. You may 'quit' now.
 
+Sugary
+------
+
+.. condition:: DRAMA.outcomes[sugary] True
+
+[NPC]_
+
+    Uggh. Sugar.
+
+    Anyway.
+
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
 
-{0}

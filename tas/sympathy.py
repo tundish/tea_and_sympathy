@@ -54,9 +54,9 @@ class TeaAndSympathy(TeaTime):
     def __call__(self, fn, *args, **kwargs):
         yield from super().__call__(fn, *args, **kwargs)
         try:
-            mugs = [i for i in self.lookup["mug"] if i.get_state(Location) == Location.COUNTER]
+            mugs = [i for i in self.lookup["mug"] if i.get_state(Location) == Location.counter]
             contents = [i.contents(self.ensemble) for i in mugs]
-            self.outcomes["brewed"] = any(i for i in self.lookup["tea"] if i.state == 100)
+            self.outcomes["brewed"] = self.outcomes["brewed"] or any(i for i in self.lookup["tea"] if i.state == 100)
             self.outcomes["untidy"] = any(i for c in contents for i in c if "tea" in getattr(i, "names", []))
             self.outcomes["stingy"] = not any(i for c in contents for i in c if "milk" in getattr(i, "names", []))
             self.outcomes["sugary"] = any(i for c in contents for i in c if "sugar" in getattr(i, "names", []))

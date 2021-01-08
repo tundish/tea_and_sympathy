@@ -26,7 +26,7 @@ class Named(DataObject):
 
     @property
     def name(self):
-        return random.choice(getattr(self, "names", []))
+        return random.choice(getattr(self, "names", [""]))
 
 
 class Component(Stateful):

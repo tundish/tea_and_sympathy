@@ -49,14 +49,14 @@ class DramaTests(unittest.TestCase):
                     n,
                     next(i for i in kettle.contents(drama.ensemble) if "water" in getattr(i, "names", [])).state
                 )
-                self.assertEqual(Location.HOB, kettle.get_state(Location))
+                self.assertEqual(Location.hob, kettle.get_state(Location))
 
         self.assertEqual(2, len([i for i in drama.ensemble if "water" in getattr(i, "names", [])]))
 
         fn, args, kwargs = drama.interpret(drama.match("find mug"))
         dlg = "\n".join(drama(fn, *args, **kwargs))
         mug = kwargs["obj"]
-        self.assertEqual(Location.COUNTER, mug.get_state(Location))
+        self.assertEqual(Location.counter, mug.get_state(Location))
         self.assertTrue(drama.outcomes["stingy"])
 
         fn, args, kwargs = drama.interpret(drama.match("pour water into the mug"))
@@ -128,11 +128,11 @@ class DialogueTests(unittest.TestCase):
     def test_thanks(self):
         next(iter(self.drama.lookup["kettle"])).state = 100
         mug = next(iter(self.drama.lookup["mug"]))
-        mug.state = Location.COUNTER
+        mug.state = Location.counter
         fn, args, kwargs = self.drama.interpret(self.drama.match("look"))
         results = list(self.drama(fn, *args, **kwargs))
         drama_dialogue = list(self.drama.build_dialogue(*results))
         n, presenter = self.story.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
         self.assertEqual("thanks.rst", self.drama.folder.paths[n])
-        self.assertIs(None, presenter.frames[-1][Model.Line][-1].persona, vars(presenter))
+        self.assertTrue(presenter.frames[-1][Model.Line][-1].persona, vars(presenter))
 

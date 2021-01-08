@@ -40,12 +40,12 @@ class Acting(enum.Enum):
 
 
 class Location(enum.Enum):
-    DRAWER = ["drawer"]
-    FRIDGE = ["fridge"]
-    SHELF= ["shelf"]
-    SINK = ["sink"]
-    HOB = ["hob", "cooker"]
-    COUNTER = ["counter"]
+    drawer = ["drawer"]
+    fridge = ["fridge"]
+    shelf= ["shelf"]
+    sink = ["sink"]
+    hob = ["hob", "cooker"]
+    counter = ["counter"]
 
 class TeaTime(Drama):
 
@@ -54,18 +54,18 @@ class TeaTime(Drama):
     @staticmethod
     def build():
         rv = [
-            Liquid(names=["milk"]).set_state(Location.FRIDGE, 4),
-            Liquid(names=["water", "tap"]).set_state(Location.SINK, 20),
-            Mass(names=["sugar"]).set_state(Location.SHELF),
-            Space(names=["kettle"]).set_state(Location.HOB, 20),
-            Feature(names=["hob"]).set_state(Location.HOB, Acting.passive),
-            Space(names=["mug"], colour="red").set_state(Location.SHELF, 10),
-            Space(names=["mug"], colour="white").set_state(Location.SHELF, 10),
-            Space(names=["mug"], colour="yellow").set_state(Location.SHELF, 10),
-            Space(names=["bin", "rubbish", "trash"]).set_state(Location.SINK),
+            Liquid(names=["milk"]).set_state(Location.fridge, 4),
+            Liquid(names=["water", "tap"]).set_state(Location.sink, 20),
+            Mass(names=["sugar"]).set_state(Location.shelf),
+            Space(names=["kettle"]).set_state(Location.hob, 20),
+            Feature(names=["hob"]).set_state(Location.hob, Acting.passive),
+            Space(names=["mug"], colour="red").set_state(Location.shelf, 10),
+            Space(names=["mug"], colour="white").set_state(Location.shelf, 10),
+            Space(names=["mug"], colour="yellow").set_state(Location.shelf, 10),
+            Space(names=["bin", "rubbish", "trash"]).set_state(Location.sink),
         ]
-        rv.extend([Space(names=["spoon"], n=n).set_state(Location.DRAWER) for n in range(2)])
-        rv.extend([Item(names=["teabag", "tea"], n=n).set_state(Location.SHELF, 20) for n in range(2)])
+        rv.extend([Space(names=["spoon"], n=n).set_state(Location.drawer) for n in range(2)])
+        rv.extend([Item(names=["teabag", "tea"], n=n).set_state(Location.shelf, 20) for n in range(2)])
         return rv
 
     def __init__(self, *args, **kwargs):
@@ -81,7 +81,7 @@ class TeaTime(Drama):
         kettle = next(iter(self.lookup["kettle"]))
         hob = next(iter(self.lookup["hob"]))
         if any("water" in i.names for i in kettle.contents(self.ensemble)):
-            if kettle.get_state(Location) == Location.HOB and hob.get_state(Acting) == Acting.active:
+            if kettle.get_state(Location) == Location.hob and hob.get_state(Acting) == Acting.active:
                 kettle.set_state(min(kettle.state + 10, 100))
 
         if kettle.state == 100:
@@ -154,7 +154,7 @@ class TeaTime(Drama):
         else:
             location = locn.value[0]
             at_the = {
-                Location.DRAWER: "in the", Location.FRIDGE: "in the", Location.SHELF: "up on the"
+                Location.drawer: "in the", Location.fridge: "in the", Location.shelf: "up on the"
             }.get(locn, "at the")
             yield "Looking {0} {1}, you see:\n".format(at_the, location)
             yield from terms
@@ -172,15 +172,15 @@ class TeaTime(Drama):
         """
         found_in = obj.get_state(Location)
         found_in_name = found_in.value[0]
-        moved_to = Location.COUNTER
+        moved_to = Location.counter
         from_the = "from out of the" if found_in in (
-            Location.DRAWER, Location.FRIDGE, Location.SINK
+            Location.drawer, Location.fridge, Location.sink
         ) else "from off the"
 
         colour = getattr(obj, "colour", "")
         yield f"You get the {colour} {obj.name} {from_the} {found_in_name}."
 
-        obj.set_state(Location.COUNTER)
+        obj.set_state(Location.counter)
         obj.state = max(20, obj.state)
         if isinstance(obj, Mass):
             self.active.add(self.do_pour_mass)
@@ -219,8 +219,8 @@ class TeaTime(Drama):
                 yield "That's not how to make tea."
                 return
 
-        if "water" in src.names and src.get_state(Location) == Location.SINK:
-            self.add(Liquid(names=["water", "tap"]).set_state(Location.SINK, 20))
+        if "water" in src.names and src.get_state(Location) == Location.sink:
+            self.add(Liquid(names=["water", "tap"]).set_state(Location.sink, 20))
 
         heat = getattr(src, "heat", "")
         colour = getattr(dst, "colour", "")
@@ -270,7 +270,7 @@ class TeaTime(Drama):
         heat {obj.names[0]}
 
         """
-        obj.set_state(Location.HOB)
+        obj.set_state(Location.hob)
         hob = next(iter(self.lookup["hob"]))
         hob.state = Acting.active
         yield f"The {obj.name} is on the hob."
@@ -287,14 +287,14 @@ class TeaTime(Drama):
         mugs = {
             obj for obj in self.ensemble
             if "mug" in getattr(obj, "names", [])
-            and obj.get_state(Location) == Location.COUNTER
+            and obj.get_state(Location) == Location.counter
             and {"milk", "water"}.intersection(
                 {n for i in obj.contents(self.ensemble) for n in getattr(i, "names", [])}
             )
         }
         spoons = {
             i for i in self.ensemble
-            if "spoon" in getattr(i, "names", []) and i.get_state(Location) == Location.COUNTER
+            if "spoon" in getattr(i, "names", []) and i.get_state(Location) == Location.counter
         }
         if mugs and spoons:
             yield from (("You put a spoon in the {0.colour} mug and stir it.".format(mug) for mug in mugs))

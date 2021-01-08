@@ -40,11 +40,7 @@ async def get_frame(request):
             animation = story.presenter.animate(frame)
     except (AttributeError, IndexError):
         story.drama.input_text = ""
-        n, story.presenter = Presenter.build_from_folder(
-            folder=story.drama.folder,
-            ensemble=story.drama.ensemble + [story.settings],
-            strict=True
-        )
+        story.presenter = story.represent()
         frame = story.presenter.frames.pop(0)
         animation = story.presenter.animate(frame)
 
@@ -72,13 +68,8 @@ async def post_command(request):
         raise web.HTTPUnauthorized(reason="User sent invalid command.")
     else:
         fn, args, kwargs = story.drama.interpret(story.drama.match(cmd))
-        results = story.drama(fn, *args, **kwargs)
-        n, story.presenter = Presenter.build_from_folder(
-            *Presenter.build_shots(*results, shot="Epilogue"),
-            folder=story.drama.folder,
-            ensemble=story.drama.ensemble + [story.settings],
-            strict=True
-        )
+        lines = story.drama(fn, *args, **kwargs)
+        story.presenter = story.represent(lines)
     raise web.HTTPFound("/")
 
 

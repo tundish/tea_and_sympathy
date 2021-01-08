@@ -36,6 +36,14 @@ version = tas.__version__
 
 
 class Story(Renderer):
+    """
+    Some methods of this class are likely to end up in a later
+    version of the Catchphrase library.
+
+    You should keep a regular eye on https://github.com/tundish/turberfield-catchphrase
+    to spot new releases.
+
+    """
 
     @staticmethod
     def build_presenter(folder, /, *args, ensemble=[], strict=True, roles=1):
@@ -69,7 +77,7 @@ class Story(Renderer):
         else:
             return refresh_state
 
-    def represent(self, lines):
+    def represent(self, lines=[]):
         n, presenter = self.build_presenter(
             self.drama.folder, *lines,
             ensemble=self.drama.ensemble + [self.drama, self.settings]
