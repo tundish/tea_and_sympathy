@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.3.0
+=====
+
+* First public release.
+
 0.2.0
 =====
 

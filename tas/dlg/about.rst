@@ -4,6 +4,7 @@
 :made_at:   2021-01-03
 :project:   Tea and Sympathy
 :version:   |VERSION|
+:category:  static
 
 .. entity:: PLAYER
    :types:  tas.types.Character

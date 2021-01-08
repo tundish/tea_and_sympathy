@@ -53,9 +53,7 @@ Input
 
 [NPC]_
 
-    I've got work.
-
-    I have to go to work.
+    I have to go to in to work.
 
 [PLAYER]_
 
@@ -100,6 +98,11 @@ Input
 
     Couldn't sleep.
 
+5
+-
+
+.. condition:: KETTLE.state 60
+
 [NPC]_
 
     Did you go out?
@@ -109,29 +112,6 @@ Input
     Went for drinks after work. So tedious though.
 
     I wanted an early night.
-
-5
--
-
-.. condition:: KETTLE.state 60
-
-[PLAYER]_
-
-    You didn't go over to Mattie's then?
-
-[NPC]_
-
-    No.
-
-    He's being very unreliable at the moment.
-
-[PLAYER]_
-
-    Unreliable is about the best you can hope for.
-
-[NPC]_
-
-    Ha ha ha.
 
 6
 -
@@ -162,23 +142,11 @@ Input
 
 .. condition:: KETTLE.state 80
 
-[PLAYER]_
-
-    You didn't go over to Mattie's then?
-
 [NPC]_
 
-    No.
+    He's doing deliveries every night now.
 
-    He's being very unreliable at the moment.
-
-[PLAYER]_
-
-    Unreliable is about the best you can hope for.
-
-[NPC]_
-
-    Ha ha ha.
+    He's trying to save up some money.
 
 8
 -
@@ -187,21 +155,11 @@ Input
 
 [PLAYER]_
 
-    You didn't go over to Mattie's then?
+    Maybe he's saving up for a ring.
 
 [NPC]_
 
-    No.
-
-    He's being very unreliable at the moment.
-
-[PLAYER]_
-
-    Unreliable is about the best you can hope for.
-
-[NPC]_
-
-    Ha ha ha.
+    Saving up for a new moped, more like.
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name

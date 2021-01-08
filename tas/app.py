@@ -54,7 +54,7 @@ async def get_frame(request):
             animation,
             options=story.drama.active,
             prompt=story.drama.prompt, title=title,
-            commands=not story.presenter.pending,
+            commands=not(story.presenter.pending or "static" in story.presenter.metadata.get("category", []))
         )
     )
     return web.Response(text=rv, content_type="text/html")
