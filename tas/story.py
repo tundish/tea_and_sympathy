@@ -77,6 +77,14 @@ class Story(Renderer):
         else:
             return refresh_state
 
+    @property
+    def dwell(self):
+        return float(getattr(self.settings, "catchphrase-timing-dwell", "0.3"))
+
+    @property
+    def pause(self):
+        return float(getattr(self.settings, "catchphrase-timing-pause", "1.0"))
+
     def represent(self, lines=[]):
         n, presenter = self.build_presenter(
             self.drama.folder, *lines,

@@ -24,7 +24,7 @@ from tas.story import Story
 
 class StoryTests(unittest.TestCase):
 
-    def test_refresh(self):
+    def test_timing(self):
         story = Story()
         self.assertEqual(0.3, story.dwell)        
         self.assertEqual(1.0, story.pause)        
