@@ -34,9 +34,11 @@ from tas.types import Space
 
 
 @enum.unique
-class Acting(enum.Enum):
-    passive = 0
-    active = 1
+class Motivation(enum.Enum):
+
+    acting = 0
+    paused = 1
+    player = 2
 
 
 class Location(enum.Enum):
@@ -58,7 +60,7 @@ class TeaTime(Drama):
             Liquid(names=["water", "tap"]).set_state(Location.sink, 20),
             Mass(names=["sugar"]).set_state(Location.shelf),
             Space(names=["kettle"]).set_state(Location.hob, 20),
-            Feature(names=["hob"]).set_state(Location.hob, Acting.passive),
+            Feature(names=["hob"]).set_state(Location.hob, Motivation.paused),
             Space(names=["mug"], colour="red").set_state(Location.shelf, 10),
             Space(names=["mug"], colour="white").set_state(Location.shelf, 10),
             Space(names=["mug"], colour="yellow").set_state(Location.shelf, 10),
@@ -81,11 +83,11 @@ class TeaTime(Drama):
         kettle = next(iter(self.lookup["kettle"]))
         hob = next(iter(self.lookup["hob"]))
         if any("water" in i.names for i in kettle.contents(self.ensemble)):
-            if kettle.get_state(Location) == Location.hob and hob.get_state(Acting) == Acting.active:
+            if kettle.get_state(Location) == Location.hob and hob.get_state(Motivation) == Motivation.acting:
                 kettle.set_state(min(kettle.state + 10, 100))
 
         if kettle.state == 100:
-            hob.state = Acting.passive
+            hob.state = Motivation.paused
 
         yield from super().__call__(fn, *args, **kwargs)
 
@@ -272,7 +274,7 @@ class TeaTime(Drama):
         """
         obj.set_state(Location.hob)
         hob = next(iter(self.lookup["hob"]))
-        hob.state = Acting.active
+        hob.state = Motivation.acting
         yield f"The {obj.name} is on the hob."
         yield f"The water is at {obj.state}°."
 

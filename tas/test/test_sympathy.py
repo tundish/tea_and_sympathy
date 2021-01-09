@@ -20,7 +20,7 @@
 import unittest
 
 from tas.story import Story
-from tas.tea import Acting
+from tas.tea import Motivation
 from tas.tea import Location
 from tas.sympathy import TeaAndSympathy
 
@@ -117,7 +117,7 @@ class DialogueTests(unittest.TestCase):
 
     def test_kettle(self):
         next(iter(self.drama.lookup["kettle"])).state = 20
-        next(iter(self.drama.lookup["hob"])).state = Acting.active
+        next(iter(self.drama.lookup["hob"])).state = Motivation.acting
         fn, args, kwargs = self.drama.interpret(self.drama.match("look"))
         results = self.drama(fn, *args, **kwargs)
         drama_dialogue = list(self.drama.build_dialogue(*results))

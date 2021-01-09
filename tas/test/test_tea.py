@@ -19,7 +19,7 @@
 
 import unittest
 
-from tas.tea import Acting
+from tas.tea import Motivation
 from tas.tea import Location
 from tas.tea import TeaTime
 
@@ -165,7 +165,7 @@ class TeaTests(unittest.TestCase):
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         self.assertTrue(kettle.contents(drama.ensemble))
-        self.assertTrue(Acting.active, hob.get_state(Acting))
+        self.assertTrue(Motivation.acting, hob.get_state(Motivation))
 
     def test_kettle_two_step(self):
         drama = TeaTime()
@@ -182,7 +182,7 @@ class TeaTests(unittest.TestCase):
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         self.assertTrue(kettle.contents(drama.ensemble))
-        self.assertTrue(Acting.active, hob.get_state(Acting))
+        self.assertTrue(Motivation.acting, hob.get_state(Motivation))
 
     def test_make_a_brew(self):
         drama = TeaTime()
@@ -194,7 +194,7 @@ class TeaTests(unittest.TestCase):
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         self.assertTrue(kettle.contents(drama.ensemble))
-        self.assertTrue(Acting.active, hob.get_state(Acting))
+        self.assertTrue(Motivation.acting, hob.get_state(Motivation))
         for n in range(30, 110, 10):
             with self.subTest(n=n):
                 fn, args, kwargs = drama.interpret(drama.match("check the kettle"))

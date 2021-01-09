@@ -7,16 +7,16 @@
 
 .. entity:: PLAYER
    :types:  tas.types.Character
-   :states: tas.tea.Acting.active
+   :states: tas.tea.Motivation.acting
 
 .. entity:: NPC
    :types:  tas.types.Character
-   :states: tas.tea.Acting.passive
+   :states: tas.tea.Motivation.paused
 
 .. entity:: HOB
    :types:  tas.tea.Feature
    :states: tas.tea.Location.hob
-            tas.tea.Acting.active
+            tas.tea.Motivation.acting
 
 .. entity:: KETTLE
    :types:  tas.tea.Space

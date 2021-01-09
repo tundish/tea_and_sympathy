@@ -21,7 +21,7 @@ from collections import defaultdict
 
 from turberfield.dialogue.model import SceneScript
 
-from tas.tea import Acting
+from tas.tea import Motivation
 from tas.tea import Location
 from tas.tea import TeaTime
 from tas.types import Character
@@ -42,8 +42,8 @@ class TeaAndSympathy(TeaTime):
     def build(self):
         yield from super().build()
         yield from [
-            Character(names=["Sophie"]).set_state(Acting.passive),
-            Character(names=["Louise"]).set_state(Acting.active),
+            Character(names=["Sophie"]).set_state(Motivation.paused),
+            Character(names=["Louise"]).set_state(Motivation.acting),
         ]
 
     def __init__(self, *args, **kwargs):
@@ -74,5 +74,5 @@ class TeaAndSympathy(TeaTime):
         """
         for i in self.ensemble:
             if isinstance(i, Character):
-                i.state = Acting.passive
+                i.state = Motivation.paused
         yield ""
