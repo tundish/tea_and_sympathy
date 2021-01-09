@@ -133,6 +133,6 @@ class DialogueTests(unittest.TestCase):
         results = list(self.drama(fn, *args, **kwargs))
         drama_dialogue = list(self.drama.build_dialogue(*results))
         n, presenter = self.story.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
-        self.assertEqual("thanks.rst", self.drama.folder.paths[n])
+        self.assertEqual("made.rst", self.drama.folder.paths[n])
         self.assertTrue(presenter.frames[-1][Model.Line][-1].persona, vars(presenter))
 
