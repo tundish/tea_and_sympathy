@@ -100,20 +100,24 @@ def parser():
 def main(args):
     story = Story(**vars(args))
     lines = []
-    while story.drama.active and story.refresh_target("/") == "/":
+    while story.drama.active:
         presenter = story.represent(lines)
         for frame in presenter.frames:
-            animation = presenter.animate(frame)
+            animation = presenter.animate(frame, dwell=presenter.dwell, pause=presenter.pause)
             if not animation:
                 continue
             for line, duration in story.render_frame_to_terminal(animation):
-                print(line)
+                print(line, "\n")
                 time.sleep(duration)
+
         else:
+
+            if story.drama.outcomes["finish"]:
+                break
+
             cmd = input("{0} ".format(story.drama.prompt))
             fn, args, kwargs = story.drama.interpret(story.drama.match(cmd))
             lines = list(story.drama(fn, *args, **kwargs))
-
 
 def run():
     p = parser()
