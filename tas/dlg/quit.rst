@@ -38,7 +38,7 @@ Your Interactive Story will be a work of art, and at the same time a nice piece 
 *   Your game logic is Python code.
 *   Character dialogue lives in separate screenplay files.
 *   Catchphrase renders your story in pure HTML5 and CSS3. No Javascript is necessary.
-*   Web serve over the network or play by text in a terminal.
+*   Host Web mode for a browser interface or play old-school in the terminal.
 
 © 2021 D Haynes.
 

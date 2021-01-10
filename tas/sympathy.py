@@ -94,7 +94,7 @@ class TeaAndSympathy(TeaTime):
         yield "Maybe you could make her a cup of tea."
         yield from super().do_help(this, text)
         yield "Start with *look around*."
-        yield "Character dialogue may contain some hints."
+        yield "The character dialogue may give you some hints."
         yield "To see how things are coming along, use the *check* command."
 
     def do_refuse(self, this, text, /, **kwargs):
