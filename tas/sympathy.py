@@ -63,6 +63,15 @@ class TeaAndSympathy(TeaTime):
             self.outcomes["served"] = (
                 self.outcomes["brewed"] and not self.outcomes["untidy"] and not self.outcomes["stingy"]
             )
+            self.outcomes["finish"] = all(
+                i.get_state(Motivation) == Motivation.paused
+                for i in self.ensemble if isinstance(i, Character)
+            )
+            self.outcomes["paused"] = (
+                any(i.get_state(Motivation) == Motivation.paused
+                for i in self.ensemble if isinstance(i, Character))
+                and not self.outcomes["finish"]
+            )
         except StopIteration:
             pass
 
