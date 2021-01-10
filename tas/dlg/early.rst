@@ -39,6 +39,7 @@ Input
 |INPUT_TEXT|
 
 .. |INPUT_TEXT| property:: DRAMA.input_text
+.. property:: SETTINGS.catchphrase-reveal-extends both
 
 Caution
 -------
@@ -51,7 +52,7 @@ Caution
 
     I am going to swear.
 
-.. property:: DRAMA.prompt Type a command. Do 'quit' if you don't want adult language.
+.. property:: DRAMA.prompt Type 'help'. Or 'quit' if you don't want adult language.
 
 Cold
 ----

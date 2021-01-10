@@ -41,6 +41,7 @@ Input
 
 
 .. property:: DRAMA.prompt ?
+.. property:: SETTINGS.catchphrase-reveal-extends both
 
 1
 -

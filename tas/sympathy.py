@@ -83,7 +83,14 @@ class TeaAndSympathy(TeaTime):
         for i in self.ensemble:
             if isinstance(i, Character) and i.get_state(Motivation) != Motivation.player:
                 i.state = Motivation.paused
+
+        yield "*Help*"
+        yield "You are woken early one Sunday morning."
+        yield "Your flatmate is up and anxious."
+        yield "Maybe you could make her a cup of tea."
         yield from super().do_help(this, text)
+        yield "Start with *look around*."
+        yield "To see how things are coming along, use the *check* command."
 
     def do_quit(self, this, text, /, **kwargs):
         """

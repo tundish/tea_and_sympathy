@@ -55,6 +55,10 @@ font-size: 1.1rem;
 font-weight: lighter;
 }
 
+.catchphrase-reveal li {
+animation-fill-mode: var(--catchphrase-reveal-extends, both);
+}
+
 .catchphrase-reveal p {
 font-size: 1.3rem;
 }

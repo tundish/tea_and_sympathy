@@ -26,6 +26,7 @@ Info
 ----
 
 .. property:: SETTINGS.catchphrase-colour-gravity hsl(113.33, 96.92%, 12.75%)
+.. property:: SETTINGS.catchphrase-reveal-extends both
 
 This is a technical demo and teaching example for the `turberfield-catchphrase`_ package.
 A modern, web-native Python library you can download and install today. It's there_ for you to use.

@@ -65,6 +65,7 @@ class Story(Renderer):
             "catchphrase-colour-hilight": "hsl(203.06, 97.3%, 56.47%)",
             "catchphrase-colour-glamour": "hsl(353.33, 96.92%, 12.75%)",
             "catchphrase-colour-gravity": "hsl(293.33, 96.92%, 12.75%)",
+            "catchphrase-reveal-extends": "both",
         }
         self.settings = Settings(**self.definitions)
 

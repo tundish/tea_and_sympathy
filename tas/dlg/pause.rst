@@ -4,6 +4,8 @@
 :made_at:   2021-01-10
 :project:   Tea and Sympathy
 :version:   |VERSION|
+:dwell:     0
+:pause:     0
 
 .. entity:: PLAYER
    :types:  tas.types.Character
@@ -13,15 +15,19 @@
    :types:  tas.types.Character
    :states: tas.tea.Motivation.paused
 
+.. entity:: DRAMA
+   :types:  tas.sympathy.TeaAndSympathy
+
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings
 
 
-Help
-====
+Paused
+======
 
-Info
-----
+{0}
 
-.. property:: SETTINGS.catchphrase-colour-gravity hsl(209.33, 96.92%, 12.75%)
 .. property:: NPC.state tas.tea.Motivation.acting
+.. property:: DRAMA.prompt ?
+.. property:: SETTINGS.catchphrase-reveal-extends none
+.. property:: SETTINGS.catchphrase-colour-gravity hsl(209.33, 96.92%, 12.75%)

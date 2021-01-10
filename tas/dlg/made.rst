@@ -33,6 +33,7 @@ Input
 .. |INPUT_TEXT| property:: DRAMA.input_text
 
 .. property:: DRAMA.prompt ?
+.. property:: SETTINGS.catchphrase-reveal-extends both
 
 {0}
 
