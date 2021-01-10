@@ -7,11 +7,11 @@
 
 .. entity:: PLAYER
    :types:  tas.types.Character
-   :states: tas.tea.Motivation.acting
+   :states: tas.tea.Motivation.player
 
 .. entity:: NPC
    :types:  tas.types.Character
-   :states: tas.tea.Motivation.paused
+   :states: tas.tea.Motivation.acting
 
 .. entity:: HOB
    :types:  tas.tea.Feature

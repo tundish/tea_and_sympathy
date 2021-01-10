@@ -42,8 +42,8 @@ class TeaAndSympathy(TeaTime):
     def build(self):
         yield from super().build()
         yield from [
-            Character(names=["Sophie"]).set_state(Motivation.paused),
-            Character(names=["Louise"]).set_state(Motivation.acting),
+            Character(names=["Sophie"]).set_state(Motivation.acting),
+            Character(names=["Louise"]).set_state(Motivation.player),
         ]
 
     def __init__(self, *args, **kwargs):
