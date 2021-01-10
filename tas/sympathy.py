@@ -52,7 +52,11 @@ class TeaAndSympathy(TeaTime):
         self.active.add(self.do_quit)
 
     def __call__(self, fn, *args, **kwargs):
-        yield from super().__call__(fn, *args, **kwargs)
+        lines = list(super().__call__(fn, *args, **kwargs))
+        if any(self.refusal in i for i in lines):
+            yield from self.do_refuse(self.do_refuse, self.input_text, **kwargs)
+        else:
+            yield from lines
         try:
             mugs = [i for i in self.lookup["mug"] if i.get_state(Location) == Location.counter]
             contents = [i.contents(self.ensemble) for i in mugs]
@@ -84,13 +88,27 @@ class TeaAndSympathy(TeaTime):
             if isinstance(i, Character) and i.get_state(Motivation) != Motivation.player:
                 i.state = Motivation.paused
 
-        yield "*Help*"
+        yield "**Help**"
         yield "You are woken early one Sunday morning."
         yield "Your flatmate is up and anxious."
         yield "Maybe you could make her a cup of tea."
         yield from super().do_help(this, text)
         yield "Start with *look around*."
+        yield "Character dialogue may contain some hints."
         yield "To see how things are coming along, use the *check* command."
+
+    def do_refuse(self, this, text, /, **kwargs):
+        """
+        refuse
+
+        """
+        self.prompt = "If you're stuck, try 'help' or 'history'."
+        for i in self.ensemble:
+            if isinstance(i, Character) and i.get_state(Motivation) != Motivation.player:
+                i.state = Motivation.paused
+
+        yield text
+        yield self.refusal
 
     def do_quit(self, this, text, /, **kwargs):
         """

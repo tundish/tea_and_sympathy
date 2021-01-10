@@ -27,7 +27,6 @@ Paused
 
 {0}
 
-.. property:: NPC.state tas.tea.Motivation.acting
 .. property:: DRAMA.prompt ?
-.. property:: SETTINGS.catchphrase-reveal-extends none
+.. property:: NPC.state tas.tea.Motivation.acting
 .. property:: SETTINGS.catchphrase-colour-gravity hsl(209.33, 96.92%, 12.75%)

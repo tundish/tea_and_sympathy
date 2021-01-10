@@ -39,7 +39,6 @@ Input
 |INPUT_TEXT|
 
 .. |INPUT_TEXT| property:: DRAMA.input_text
-.. property:: SETTINGS.catchphrase-reveal-extends both
 
 Caution
 -------
