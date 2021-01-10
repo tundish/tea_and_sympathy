@@ -35,7 +35,7 @@ class TeaAndSympathy(TeaTime):
             pkg="tas.dlg",
             description="Tea and Sympathy",
             metadata={},
-            paths=["early.rst", "kettle.rst", "made.rst", "quit.rst"],
+            paths=["early.rst", "kettle.rst", "made.rst", "pause.rst", "quit.rst"],
             interludes=None
         )
 
@@ -66,6 +66,15 @@ class TeaAndSympathy(TeaTime):
         except StopIteration:
             pass
 
+    def do_help(self, this, text, /, **kwargs):
+        """
+        help | ?
+
+        """
+        for i in self.ensemble:
+            if isinstance(i, Character) and i.get_state(Motivation) != Motivation.player:
+                i.state = Motivation.paused
+        yield from super().do_help(this, text)
 
     def do_quit(self, this, text, /, **kwargs):
         """

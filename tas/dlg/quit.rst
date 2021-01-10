@@ -1,10 +1,9 @@
 .. |VERSION| property:: tas.story.version
 
 :author:    D Haynes
-:made_at:   2021-01-03
+:made_at:   2021-01-10
 :project:   Tea and Sympathy
 :version:   |VERSION|
-:category:  static
 
 .. entity:: PLAYER
    :types:  tas.types.Character
@@ -21,10 +20,9 @@
 About
 =====
 
-Repo
+Info
 ----
 
-.. property:: SETTINGS.catchphrase-states-refresh none
 .. property:: SETTINGS.catchphrase-colour-gravity hsl(113.33, 96.92%, 12.75%)
 
 This is a technical demo and teaching example for the `turberfield-catchphrase`_ package.
