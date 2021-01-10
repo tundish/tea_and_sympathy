@@ -44,7 +44,7 @@ class Motivation(enum.Enum):
 class Location(enum.Enum):
     drawer = ["drawer"]
     fridge = ["fridge"]
-    shelf= ["shelf"]
+    shelf = ["shelf"]
     sink = ["sink"]
     hob = ["hob", "cooker"]
     counter = ["counter"]
