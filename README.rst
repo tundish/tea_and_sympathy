@@ -34,7 +34,7 @@ You should see a prompt like this (your user name will differ)::
 Prerequisites
 -------------
 
-Download and install Python from https://www.python.org/ .
+Download and install Python from https://www.python.org/ . You need Python version 3.8 or higher.
 Make sure to check the option to add `python` to your environment path.
 This makes command line operation more easy.
 
@@ -63,9 +63,9 @@ Virtual Environment
 
     C:\Users\author\catchphrase-app\Scripts\pip install aiohttp
 
-#. Install Catchphrase::
+#. Install (or update) Catchphrase::
 
-    C:\Users\author\catchphrase-app\Scripts\pip install turberfield-catchphrase
+    C:\Users\author\catchphrase-app\Scripts\pip install -U turberfield-catchphrase
 
 Download
 --------
@@ -98,7 +98,7 @@ Linux-like way.
 I encourage you to move to a Linux operating system when you are able. 
 You can try one out at little cost on a `Raspberry Pi`_ or similar device.
 
-Here are the install instructions for Linux.
+Here are the install instructions for Linux. You need Python version 3.8 or higher.
 
 Virtual Environment
 -------------------
@@ -115,9 +115,9 @@ Virtual Environment
 
     ~/catchphrase-app/bin/pip install aiohttp
 
-#. Install Catchphrase::
+#. Install (or update) Catchphrase::
 
-    ~/catchphrase-app/bin/pip install turberfield-catchphrase
+    ~/catchphrase-app/bin/pip install -U turberfield-catchphrase
 
 Download
 --------
