@@ -24,4 +24,4 @@ Info
 ----
 
 .. property:: SETTINGS.catchphrase-colour-gravity hsl(209.33, 96.92%, 12.75%)
-
+.. property:: NPC.state tas.tea.Motivation.acting
