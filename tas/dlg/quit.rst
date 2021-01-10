@@ -4,7 +4,7 @@
 :made_at:   2021-01-10
 :project:   Tea and Sympathy
 :version:   |VERSION|
-:dwell:     0
+:dwell:     0.2
 :pause:     1
 
 .. entity:: PLAYER
@@ -39,9 +39,9 @@ Your Interactive Story will be a work of art, and at the same time a nice piece 
 *   Catchphrase renders your story in pure HTML5 and CSS3. No Javascript is necessary.
 *   Web serve over the network or play by text in a terminal.
 
-Why not `see how it's done`_?
-
 © 2021 D Haynes.
+
+Why not `see how it's done`_?
 
 .. _turberfield-catchphrase: https://github.com/tundish/turberfield-catchphrase
 .. _there: https://pypi.org/project/turberfield-catchphrase/

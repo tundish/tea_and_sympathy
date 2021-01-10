@@ -37,7 +37,7 @@ async def get_frame(request):
         animation = None
         while not animation:
             frame = story.presenter.frames.pop(0)
-            animation = story.presenter.animate(frame)
+            animation = story.presenter.animate(frame, dwell=story.presenter.dwell, pause=story.presenter.pause)
     except (AttributeError, IndexError):
         story.drama.input_text = ""
         story.presenter = story.represent()
@@ -45,7 +45,9 @@ async def get_frame(request):
         animation = story.presenter.animate(frame)
 
     refresh = Presenter.refresh_animations(animation, min_val=2) if story.presenter.pending else None
-    refresh_target = story.refresh_target("/")
+    refresh_target = story.refresh_target("/") if not (
+        story.drama.outcomes["finish"] or story.drama.outcomes["paused"]
+    ) else None
     title = next(iter(story.presenter.metadata.get("project", ["Tea and Sympathy"])), "Tea and Sympathy")
     rv = story.render_body_html(title=title, next_=refresh_target, refresh=refresh).format(
         '<link rel="stylesheet" href="/css/theme/tas.css" />',
@@ -54,7 +56,7 @@ async def get_frame(request):
             animation,
             options=story.drama.active,
             prompt=story.drama.prompt, title=title,
-            commands=not(story.presenter.pending or "static" in story.presenter.metadata.get("category", []))
+            commands=not (story.presenter.pending or story.drama.outcomes["finish"])
         )
     )
     return web.Response(text=rv, content_type="text/html")
