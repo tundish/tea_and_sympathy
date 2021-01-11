@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.5.0
+=====
+
+* Added a `history` commmand to work as a `Transcript <https://github.com/tundish/tea-and-sympathy/issues/2>`_.
+
 0.4.0
 =====
 

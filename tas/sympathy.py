@@ -18,6 +18,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from collections import defaultdict
+from collections import namedtuple
 
 from turberfield.dialogue.model import SceneScript
 
@@ -28,6 +29,8 @@ from tas.types import Character
 
 
 class TeaAndSympathy(TeaTime):
+
+    Result = namedtuple("Result", ["fn", "args", "kwargs", "lines"])
 
     @property
     def folder(self):
@@ -46,9 +49,16 @@ class TeaAndSympathy(TeaTime):
             Character(names=["Louise"]).set_state(Motivation.player),
         ]
 
+    def pause(self, *args):
+        args = args or [Motivation.acting]
+        for i in self.ensemble:
+            if isinstance(i, Character) and i.get_state(Motivation) in args:
+                i.state = Motivation.paused
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.outcomes = defaultdict(bool)
+        self.active.add(self.do_history)
         self.active.add(self.do_quit)
 
     def __call__(self, fn, *args, **kwargs):
@@ -56,6 +66,7 @@ class TeaAndSympathy(TeaTime):
         if any(self.refusal in i for i in lines):
             yield from self.do_refuse(self.do_refuse, self.input_text, **kwargs)
         else:
+            self.history.append(self.Result(*self.history.pop(-1), lines=lines))
             yield from lines
         try:
             mugs = [i for i in self.lookup["mug"] if i.get_state(Location) == Location.counter]
@@ -84,9 +95,7 @@ class TeaAndSympathy(TeaTime):
         help | ?
 
         """
-        for i in self.ensemble:
-            if isinstance(i, Character) and i.get_state(Motivation) != Motivation.player:
-                i.state = Motivation.paused
+        self.pause()
 
         yield "**Help**"
         yield "You are woken early one Sunday morning."
@@ -97,15 +106,24 @@ class TeaAndSympathy(TeaTime):
         yield "The character dialogue may give you some hints."
         yield "To see how things are coming along, use the *check* command."
 
+    def do_history(self, this, text, /, **kwargs):
+        """
+        history
+
+        """
+        self.pause()
+        yield "**History**"
+        for i in self.history:
+            if isinstance(i, self.Result):
+                yield "*{0[0]}*".format(i.args)
+
     def do_refuse(self, this, text, /, **kwargs):
         """
         refuse
 
         """
         self.prompt = "If you're stuck, try 'help' or 'history'."
-        for i in self.ensemble:
-            if isinstance(i, Character) and i.get_state(Motivation) != Motivation.player:
-                i.state = Motivation.paused
+        self.pause()
 
         yield text
         yield self.refusal
@@ -115,7 +133,5 @@ class TeaAndSympathy(TeaTime):
         exit | finish | stop | quit
 
         """
-        for i in self.ensemble:
-            if isinstance(i, Character):
-                i.state = Motivation.paused
+        self.pause(Motivation.acting, Motivation.player)
         yield ""
