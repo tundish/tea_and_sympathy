@@ -111,7 +111,7 @@ class DialogueTests(unittest.TestCase):
         fn, args, kwargs = self.drama.interpret(self.drama.match("look"))
         results = self.drama(fn, *args, **kwargs)
         drama_dialogue = list(self.drama.build_dialogue(*results))
-        n, presenter = self.story.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
+        n, presenter = Presenter.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
         self.assertEqual("early.rst", self.drama.folder.paths[n])
         self.assertIs(None, presenter.frames[-1][Model.Line][-1].persona)
 
@@ -121,7 +121,7 @@ class DialogueTests(unittest.TestCase):
         fn, args, kwargs = self.drama.interpret(self.drama.match("look"))
         results = self.drama(fn, *args, **kwargs)
         drama_dialogue = list(self.drama.build_dialogue(*results))
-        n, presenter = self.story.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
+        n, presenter = Presenter.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
         self.assertEqual("kettle.rst", self.drama.folder.paths[n])
         self.assertIs(None, presenter.frames[-1][Model.Line][-1].persona)
 
@@ -132,7 +132,7 @@ class DialogueTests(unittest.TestCase):
         fn, args, kwargs = self.drama.interpret(self.drama.match("look"))
         results = list(self.drama(fn, *args, **kwargs))
         drama_dialogue = list(self.drama.build_dialogue(*results))
-        n, presenter = self.story.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
+        n, presenter = Presenter.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
         self.assertEqual("made.rst", self.drama.folder.paths[n])
         self.assertTrue(presenter.frames[-1][Model.Line][-1].persona, vars(presenter))
 
@@ -140,15 +140,15 @@ class DialogueTests(unittest.TestCase):
         fn, args, kwargs = self.drama.interpret(self.drama.match("help"))
         results = list(self.drama(fn, *args, **kwargs))
         drama_dialogue = list(self.drama.build_dialogue(*results))
-        n, presenter = self.story.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
+        n, presenter = Presenter.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
         self.assertEqual("pause.rst", self.drama.folder.paths[n])
-        self.assertIs(None, presenter.frames[-1][Model.Line][-1].persona, vars(presenter))
+        self.assertIsInstance(presenter.frames[-1][Model.Line][-1].persona, TeaAndSympathy, vars(presenter))
 
     def test_quit(self):
         fn, args, kwargs = self.drama.interpret(self.drama.match("quit"))
         results = list(self.drama(fn, *args, **kwargs))
         drama_dialogue = list(self.drama.build_dialogue(*results))
-        n, presenter = self.story.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
+        n, presenter = Presenter.build_presenter(self.drama.folder, *drama_dialogue, ensemble=self.ensemble)
         self.assertEqual("quit.rst", self.drama.folder.paths[n])
         self.assertIs(None, presenter.frames[-1][Model.Line][-1].persona, vars(presenter))
 

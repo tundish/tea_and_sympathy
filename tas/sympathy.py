@@ -30,8 +30,6 @@ from tas.types import Character
 
 class TeaAndSympathy(TeaTime):
 
-    Result = namedtuple("Result", ["fn", "args", "kwargs", "lines"])
-
     @property
     def folder(self):
         return SceneScript.Folder(
@@ -66,7 +64,6 @@ class TeaAndSympathy(TeaTime):
         if any(self.refusal in i for i in lines):
             yield from self.do_refuse(self.do_refuse, self.input_text, **kwargs)
         else:
-            self.history.append(self.Result(*self.history.pop(-1), lines=lines))
             yield from lines
         try:
             mugs = [i for i in self.lookup["mug"] if i.get_state(Location) == Location.counter]
@@ -97,12 +94,12 @@ class TeaAndSympathy(TeaTime):
         """
         self.pause()
 
-        yield "**Help**"
+        yield "[DRAMA]_"
         yield "You are woken early one Sunday morning."
         yield "Your flatmate is up and anxious."
         yield "Maybe you could make her a cup of tea."
         yield from super().do_help(this, text)
-        yield "Start with *look around*."
+        yield "Start with a *look around*."
         yield "The character dialogue may give you some hints."
         yield "To see how things are coming along, use the *check* command."
 
@@ -112,10 +109,8 @@ class TeaAndSympathy(TeaTime):
 
         """
         self.pause()
-        yield "**History**"
-        for i in self.history:
-            if isinstance(i, self.Result):
-                yield "*{0[0]}*".format(i.args)
+        yield "[DRAMA]_"
+        yield from ("*{0.args[0]}*".format(i) for i in self.history)
 
     def do_refuse(self, this, text, /, **kwargs):
         """
@@ -125,6 +120,7 @@ class TeaAndSympathy(TeaTime):
         self.prompt = "If you're stuck, try 'help' or 'history'."
         self.pause()
 
+        yield "[DRAMA]_"
         yield text
         yield self.refusal
 

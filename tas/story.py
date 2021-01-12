@@ -45,17 +45,6 @@ class Story(Renderer):
 
     """
 
-    @staticmethod
-    def build_presenter(folder, /, *args, ensemble=[], strict=True, roles=1):
-        for n, p in enumerate(folder.paths):
-            folder_dialogue = Drama.load_dialogue(folder.pkg, p)
-            text = Drama.write_dialogue(folder_dialogue, *args)
-            rv = Presenter.build_from_text(text, ensemble=ensemble, strict=strict, roles=roles, path=p)
-            if rv:
-                return (n, rv)
-        else:
-            return (None, None)
-
     def __init__(self, cfg=None, **kwargs):
         self.drama = TeaAndSympathy(**kwargs)
         self.definitions = {
@@ -78,16 +67,8 @@ class Story(Renderer):
         else:
             return refresh_state
 
-    @property
-    def dwell(self):
-        return float(getattr(self.settings, "catchphrase-timing-dwell", "0.3"))
-
-    @property
-    def pause(self):
-        return float(getattr(self.settings, "catchphrase-timing-pause", "1.0"))
-
     def represent(self, lines=[]):
-        n, presenter = self.build_presenter(
+        n, presenter = Presenter.build_presenter(
             self.drama.folder, *lines,
             ensemble=self.drama.ensemble + [self.drama, self.settings]
         )
