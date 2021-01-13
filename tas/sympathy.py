@@ -117,6 +117,7 @@ class TeaAndSympathy(TeaTime):
         refuse
 
         """
+        # FIXME: This doeasn't work.
         self.prompt = "If you're stuck, try 'help' or 'history'."
         self.pause()
 

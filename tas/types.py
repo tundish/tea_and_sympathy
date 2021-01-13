@@ -22,11 +22,15 @@ import random
 from turberfield.dialogue.types import DataObject
 from turberfield.dialogue.types import Stateful
 
+
 class Named(DataObject):
 
     @property
     def name(self):
         return random.choice(getattr(self, "names", [""]))
+
+    def describe(self):
+        yield self.name
 
 
 class Component(Stateful):
@@ -42,6 +46,7 @@ class Component(Stateful):
             return super().get_state(typ, default)
         else:
             return self.parent.get_state(typ, default)
+
 
 class Character(Named, Stateful): pass
 class Feature(Named, Stateful): pass
