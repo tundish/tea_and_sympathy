@@ -20,6 +20,7 @@
 
 from collections import Counter
 import enum
+import random
 import re
 import statistics
 
@@ -30,6 +31,7 @@ from tas.types import Feature
 from tas.types import Item
 from tas.types import Liquid
 from tas.types import Mass
+from tas.types import Named
 from tas.types import Space
 
 
@@ -48,6 +50,24 @@ class Location(enum.Enum):
     sink = ["sink"]
     hob = ["hob", "cooker"]
     counter = ["counter"]
+
+    @property
+    def away(self):
+        return {
+            Location.drawer: ["out", "from out of"],
+            Location.fridge: ["out", "from out of"],
+            Location.sink: ["from out of"],
+            Location.shelf: ["down from", "off"]
+        }.get(self, ["from off", "off"])
+
+    @property
+    def into(self):
+        return {
+            Location.drawer: ["in"],
+            Location.fridge: ["in"],
+            Location.shelf: ["up on", "on"]
+        }.get(self, ["at"])
+
 
 class TeaTime(Drama):
 
@@ -72,9 +92,10 @@ class TeaTime(Drama):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.active.add(self.do_look)
+        self.active.add(self.do_search)
         self.active.add(self.do_examine)
         self.active.add(self.do_find)
-        self.active.add(self.do_look)
         self.active.add(self.do_drop_item)
         self.active.add(self.do_pour_liquid)
         self.active.add(self.do_put_the_kettle_on)
@@ -137,7 +158,17 @@ class TeaTime(Drama):
         items = "\n".join("* the {0}".format(i.value[0].capitalize()) for i in list(Location))
         yield f"""You look around. You see:\n\n{items}\n"""
 
-    def do_examine(self, this, text, /, *, locn: Location):
+    def do_examine(self, this, text, /, *, obj: Named):
+        """
+        examine {obj.names[0]} | check {obj.names[0]} | inspect {obj.names[0]} | search {obj.names[0]}
+        examine {obj.names[1]} | check {obj.names[1]} | inspect {obj.names[1]} | search {obj.names[1]}
+
+        """
+        found_in = obj.get_state(Location)
+        found_in_name = found_in.value[0]
+        yield ""
+
+    def do_search(self, this, text, /, *, locn: Location):
         """
         examine {locn.value[0]} | check {locn.value[0]} | inspect {locn.value[0]} | search {locn.value[0]}
         examine {locn.value[1]} | check {locn.value[1]} | inspect {locn.value[1]} | search {locn.value[1]}
@@ -154,11 +185,7 @@ class TeaTime(Drama):
             kettle = next(i for i in self.ensemble if "kettle" in getattr(i, "names", []))
             yield from self.do_heat_space(self.do_heat_space, text, kettle)
         else:
-            location = locn.value[0]
-            at_the = {
-                Location.drawer: "in the", Location.fridge: "in the", Location.shelf: "up on the"
-            }.get(locn, "at the")
-            yield "Looking {0} {1}, you see:\n".format(at_the, location)
+            yield "Looking {0.into[0]} the {0.value[0]}, you see:\n".format(locn)
             yield from terms
 
     def do_find(self, this, text, /, *, obj: [Item, Liquid, Mass, Space]):
@@ -173,21 +200,17 @@ class TeaTime(Drama):
 
         """
         found_in = obj.get_state(Location)
-        found_in_name = found_in.value[0]
         moved_to = Location.counter
-        from_the = "from out of the" if found_in in (
-            Location.drawer, Location.fridge, Location.sink
-        ) else "from off the"
 
         colour = getattr(obj, "colour", "")
-        yield f"You get the {colour} {obj.name} {from_the} {found_in_name}."
+        yield f"You get the {colour} {obj.name} {found_in.away[0]} the {found_in.value[0]}."
 
         obj.set_state(Location.counter)
         obj.state = max(20, obj.state)
         if isinstance(obj, Mass):
             self.active.add(self.do_pour_mass)
 
-        yield f"The {colour} {obj.name} is on the {moved_to.value[0]}."
+        yield f"The {colour} {obj.name} is {moved_to.into[0]} the {moved_to.value[0]}."
 
     def do_pour_liquid(self, this, text, /, *, src: Liquid, dst: Space):
         """
@@ -268,7 +291,6 @@ class TeaTime(Drama):
     def do_heat_space(self, this, text, /, *, obj: Space):
         """
         boil {obj.names[0]}
-        check {obj.names[0]}
         heat {obj.names[0]}
 
         """

@@ -26,6 +26,19 @@ from tas.tea import TeaTime
 from turberfield.catchphrase.parser import CommandParser
 
 
+class LocationTests(unittest.TestCase):
+
+    def test_prepositions_away(self):
+        self.assertIn("out", Location.drawer.away)
+        self.assertIn("off", Location.shelf.away)
+        self.assertIn("down from", Location.shelf.away)
+
+    def test_prepositions_into(self):
+        self.assertIn("in", Location.drawer.into)
+        self.assertIn("on", Location.shelf.into)
+        self.assertIn("up on", Location.shelf.into)
+
+
 class TeaTests(unittest.TestCase):
 
     def test_initial(self):
