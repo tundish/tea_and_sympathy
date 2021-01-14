@@ -155,8 +155,8 @@ class TeaTime(Drama):
         x
 
         """
-        items = "\n".join("* the {0}".format(i.value[0].capitalize()) for i in list(Location))
-        yield f"""You look around. You see:\n\n{items}\n"""
+        yield "You look around. You see:"
+        yield from ("* the {0}".format(i.value[0].capitalize()) for i in list(Location))
 
     def do_examine(self, this, text, /, *, obj: Named):
         """
