@@ -66,7 +66,7 @@ class Location(enum.Enum):
             Location.drawer: ["in"],
             Location.fridge: ["in"],
             Location.shelf: ["up on", "on"]
-        }.get(self, ["at"])
+        }.get(self, ["on"])
 
 
 class TeaTime(Drama):
@@ -158,15 +158,25 @@ class TeaTime(Drama):
         yield "You look around. You see:"
         yield from ("* the {0}".format(i.value[0].capitalize()) for i in list(Location))
 
-    def do_examine(self, this, text, /, *, obj: Named):
+    def do_examine(self, this, text, /, *, obj: [Feature, Item, Liquid, Mass, Space]):
         """
         examine {obj.names[0]} | check {obj.names[0]} | inspect {obj.names[0]} | search {obj.names[0]}
         examine {obj.names[1]} | check {obj.names[1]} | inspect {obj.names[1]} | search {obj.names[1]}
 
         """
-        found_in = obj.get_state(Location)
-        found_in_name = found_in.value[0]
-        yield ""
+        locn = obj.get_state(Location)
+        adj = getattr(obj, "colour", "") or getattr(obj, "heat", "")
+        yield f"The {adj} {obj.names[0]} is {locn.into[0]} the {locn.value[0]}"
+
+        if isinstance(obj, Space):
+            contents = obj.contents(self.ensemble)
+            if contents:
+                yield "It contains:"
+                for i in contents:
+                    adj = getattr(i, "colour", "") or getattr(i, "heat", "")
+                    yield f"* {adj} {i.names[0]}"
+            else:
+                yield "It's empty."
 
     def do_search(self, this, text, /, *, locn: Location):
         """
@@ -180,13 +190,9 @@ class TeaTime(Drama):
             if isinstance(i, Stateful)
             and i.get_state(Location) == locn
         )
-        terms = ["* {0}{1}".format(k.capitalize(), "s" if v > 1 else "") for k, v in counts.items()]
-        if "kettle" in terms and self.do_heat_space in self.active:
-            kettle = next(i for i in self.ensemble if "kettle" in getattr(i, "names", []))
-            yield from self.do_heat_space(self.do_heat_space, text, kettle)
-        else:
-            yield "Looking {0.into[0]} the {0.value[0]}, you see:\n".format(locn)
-            yield from terms
+        yield "Looking {0.into[0]} the {0.value[0]}, you see:".format(locn)
+        for k, v in counts.items():
+            yield "* {0}{1}".format(k.capitalize(), "s" if v > 1 else "")
 
     def do_find(self, this, text, /, *, obj: [Item, Liquid, Mass, Space]):
         """
@@ -297,7 +303,8 @@ class TeaTime(Drama):
         obj.set_state(Location.hob)
         hob = next(iter(self.lookup["hob"]))
         hob.state = Motivation.acting
-        yield f"The {obj.name} is on the hob."
+        kettle = next(iter(self.lookup["kettle"]))
+        yield from self.do_examine(self.do_examine, text, obj=kettle)
         yield f"The water is at {obj.state}°."
 
     def do_stir(self, this, text, /, *, obj: [Item, Liquid]):

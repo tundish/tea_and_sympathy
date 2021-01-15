@@ -24,13 +24,15 @@ from turberfield.dialogue.types import Stateful
 
 
 class Named(DataObject):
+    """
+
+    See https://pypi.org/project/inflect/ for grammar support.
+
+    """
 
     @property
     def name(self):
         return random.choice(getattr(self, "names", [""]))
-
-    def describe(self):
-        yield self.name
 
 
 class Component(Stateful):
