@@ -166,7 +166,7 @@ class TeaTime(Drama):
         """
         locn = obj.get_state(Location)
         adj = getattr(obj, "colour", "") or getattr(obj, "heat", "")
-        yield f"The {adj} {obj.names[0]} is {locn.into[0]} the {locn.value[0]}"
+        yield f"The {adj} {obj.names[0]} is {locn.into[0]} the {locn.value[0]}."
 
         if isinstance(obj, Space):
             contents = obj.contents(self.ensemble)
@@ -184,15 +184,12 @@ class TeaTime(Drama):
         examine {locn.value[1]} | check {locn.value[1]} | inspect {locn.value[1]} | search {locn.value[1]}
 
         """
-        counts = Counter(
-            i.names[0]
-            for i in self.ensemble
-            if isinstance(i, Stateful)
-            and i.get_state(Location) == locn
-        )
+        items = [i for i in self.ensemble if isinstance(i, Stateful) and i.get_state(Location) == locn]
+        counts = Counter(i.names[0] for i in items)
         yield "Looking {0.into[0]} the {0.value[0]}, you see:".format(locn)
-        for k, v in counts.items():
-            yield "* {0}{1}".format(k.capitalize(), "s" if v > 1 else "")
+        for i in items:
+            if not getattr(i, "parent", None):
+                yield "* {0}{1}".format(i.names[0].capitalize(), "s" if counts[i.names[0]] > 1 else "")
 
     def do_find(self, this, text, /, *, obj: [Item, Liquid, Mass, Space]):
         """
@@ -205,11 +202,10 @@ class TeaTime(Drama):
         pick up {obj.colour} {obj.names[0]} | pick up {obj.colour} {obj.names[1]}
 
         """
-        found_in = obj.get_state(Location)
-        moved_to = Location.counter
+        locn = obj.get_state(Location)
 
         colour = getattr(obj, "colour", "")
-        yield f"You get the {colour} {obj.name} {found_in.away[0]} the {found_in.value[0]}."
+        yield f"You get the {colour} {obj.name} {locn.away[0]} the {locn.value[0]}."
 
         if "kettle" not in obj.names:
             obj.set_state(Location.counter)
@@ -218,7 +214,8 @@ class TeaTime(Drama):
         if isinstance(obj, Mass):
             self.active.add(self.do_pour_mass)
 
-        yield f"The {colour} {obj.name} is {moved_to.into[0]} the {moved_to.value[0]}."
+        locn = obj.get_state(Location)
+        yield f"The {colour} {obj.name} is {locn.into[0]} the {locn.value[0]}."
 
     def do_pour_liquid(self, this, text, /, *, src: Liquid, dst: Space):
         """
@@ -249,7 +246,7 @@ class TeaTime(Drama):
         kettle = next(iter(self.lookup["kettle"]))
         if "mug" in dst.names:
             if set(dst.contents(self.ensemble)).intersection(self.lookup["teabag"]) and kettle.state < 100:
-                yield "That's not how to make tea."
+                yield "To make tea, you need the water hotter."
                 return
 
         if "water" in src.names and src.get_state(Location) == Location.sink:

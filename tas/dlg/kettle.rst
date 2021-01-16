@@ -160,7 +160,7 @@ Input
 
 [NPC]_
 
-    Saving up for a new moped, more like.
+    Saving up for another moped, more likely.
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
