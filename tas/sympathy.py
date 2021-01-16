@@ -101,7 +101,8 @@ class TeaAndSympathy(TeaTime):
         yield from super().do_help(this, text)
         yield "Start with a *look around*."
         yield "The character dialogue may give you some hints."
-        yield "To see how things are coming along, use the *check* command."
+        yield "To see how things are coming along, you can *check* an object."
+        yield "To see a list of past actions, use the *history* command."
 
     def do_history(self, this, text, /, **kwargs):
         """
@@ -110,6 +111,7 @@ class TeaAndSympathy(TeaTime):
         """
         self.pause()
         yield "[DRAMA]_"
+        yield "So far, it's been like this."
         yield from ("*{0.args[0]}*".format(i) for i in self.history)
 
     def do_refuse(self, this, text, /, **kwargs):
