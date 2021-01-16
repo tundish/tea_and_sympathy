@@ -211,7 +211,9 @@ class TeaTime(Drama):
         colour = getattr(obj, "colour", "")
         yield f"You get the {colour} {obj.name} {found_in.away[0]} the {found_in.value[0]}."
 
-        obj.set_state(Location.counter)
+        if "kettle" not in obj.names:
+            obj.set_state(Location.counter)
+
         obj.state = max(20, obj.state)
         if isinstance(obj, Mass):
             self.active.add(self.do_pour_mass)

@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import random
 import unittest
 
 from tas.story import Story
@@ -152,3 +153,25 @@ class DialogueTests(unittest.TestCase):
         self.assertEqual("quit.rst", self.drama.folder.paths[n])
         self.assertIs(None, presenter.frames[-1][Model.Line][-1].persona, vars(presenter))
 
+
+class FuzzTests(unittest.TestCase):
+
+    def test_random_walk(self):
+        story = Story()
+        ensemble = story.drama.ensemble + [story.drama, Settings()]
+        for i in range(64):
+            commands = {
+                cmd for fn in story.drama.active for cmd, _ in CommandParser.expand_commands(fn, ensemble=ensemble)
+            }
+            self.assertIn("help", commands)
+            self.assertIn("history", commands)
+            command = random.choice(list(commands))
+            fn, args, kwargs = story.drama.interpret(story.drama.match(command))
+            lines = list(story.drama(fn, *args, **kwargs))
+            presenter = story.represent(lines)
+            self.assertTrue(presenter, story.drama.history)
+            for frame in presenter.frames:
+                animation = presenter.animate(frame, dwell=presenter.dwell, pause=presenter.pause)
+                if not animation:
+                    continue
+                list(story.render_frame_to_terminal(animation))

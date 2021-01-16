@@ -72,7 +72,7 @@ class Story(Renderer):
             self.drama.folder, *lines,
             ensemble=self.drama.ensemble + [self.drama, self.settings]
         )
-        if not(presenter.dwell or presenter.pause):
+        if presenter and not(presenter.dwell or presenter.pause):
             setattr(self.settings, "catchphrase-reveal-extends", "none")
         else:
             setattr(self.settings, "catchphrase-reveal-extends", "both")
