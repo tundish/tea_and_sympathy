@@ -186,10 +186,10 @@ class TeaTime(Drama):
         """
         items = [i for i in self.ensemble if isinstance(i, Stateful) and i.get_state(Location) == locn]
         counts = Counter(i.names[0] for i in items)
+        unhidden = {i.names[0] for i in items if getattr(i, "parent", i) == i}
         yield "Looking {0.into[0]} the {0.value[0]}, you see:".format(locn)
-        for i in items:
-            if getattr(i, "parent", i) == i:
-                yield "* {0}{1}".format(i.names[0].capitalize(), "s" if counts[i.names[0]] > 1 else "")
+        for i in unhidden:
+                yield "* {0}{1}".format(i.capitalize(), "s" if counts[i] > 1 else "")
 
     def do_find(self, this, text, /, *, obj: [Item, Liquid, Mass, Space]):
         """

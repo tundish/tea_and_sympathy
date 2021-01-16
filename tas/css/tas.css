@@ -22,6 +22,7 @@ grid-area: banner;
 main {
 grid-area: speech;
 height: 80vh;
+overflow-y: var(--catchphrase-states-scrolls, visible);
 }
 
 nav {

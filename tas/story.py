@@ -74,8 +74,10 @@ class Story(Renderer):
         )
         if presenter and not(presenter.dwell or presenter.pause):
             setattr(self.settings, "catchphrase-reveal-extends", "none")
+            setattr(self.settings, "catchphrase-states-scrolls", "scroll")
         else:
             setattr(self.settings, "catchphrase-reveal-extends", "both")
+            setattr(self.settings, "catchphrase-states-scrolls", "visible")
 
         return presenter
 
