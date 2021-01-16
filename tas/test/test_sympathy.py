@@ -169,7 +169,8 @@ class FuzzTests(unittest.TestCase):
             fn, args, kwargs = story.drama.interpret(story.drama.match(command))
             lines = list(story.drama(fn, *args, **kwargs))
             presenter = story.represent(lines)
-            self.assertTrue(presenter, story.drama.history)
+            with self.subTest(i=i, command=command):
+                self.assertTrue(presenter, story.drama.history)
             for frame in presenter.frames:
                 animation = presenter.animate(frame, dwell=presenter.dwell, pause=presenter.pause)
                 if not animation:
