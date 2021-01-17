@@ -162,6 +162,15 @@ Input
 
     Saving up for another moped, more likely.
 
+9
+-
+
+.. condition:: KETTLE.state 100
+
+[NPC]_
+
+    Kettle's boiling.
+
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
 

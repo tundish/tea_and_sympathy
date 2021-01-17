@@ -107,9 +107,6 @@ class TeaTime(Drama):
             if kettle.get_state(Location) == Location.hob and hob.get_state(Motivation) == Motivation.acting:
                 kettle.set_state(min(kettle.state + 10, 100))
 
-        if kettle.state == 100:
-            hob.state = Motivation.paused
-
         yield from super().__call__(fn, *args, **kwargs)
 
     def prioritise(self, match):
@@ -247,9 +244,13 @@ class TeaTime(Drama):
         """
         kettle = next(iter(self.lookup["kettle"]))
         if "mug" in dst.names:
-            if set(dst.contents(self.ensemble)).intersection(self.lookup["teabag"]) and kettle.state < 100:
-                yield "To make tea, you need the water hotter."
-                return
+            if set(dst.contents(self.ensemble)).intersection(self.lookup["teabag"]):
+                if kettle.state < 100:
+                    yield "To make tea, you need the water hotter."
+                    return
+                else:
+                    hob = next(iter(self.lookup["hob"]))
+                    hob.state = Motivation.paused
 
         if "water" in src.names and src.get_state(Location) == Location.sink:
             self.add(Liquid(names=["water", "tap"]).set_state(Location.sink, 20))

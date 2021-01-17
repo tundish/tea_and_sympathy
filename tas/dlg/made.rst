@@ -13,6 +13,11 @@
    :types:  tas.types.Character
    :states: tas.tea.Motivation.acting
 
+.. entity:: HOB
+   :types:  tas.tea.Feature
+   :states: tas.tea.Location.hob
+            tas.tea.Motivation.paused
+
 .. entity:: KETTLE
    :types:  tas.tea.Space
    :states: tas.tea.Location.hob
