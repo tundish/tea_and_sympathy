@@ -101,7 +101,7 @@ class TeaTests(unittest.TestCase):
         self.assertEqual(drama.do_pour_liquid, fn, drama.active)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         water = kwargs["src"]
-        self.assertTrue(any("water" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
+        self.assertFalse(any("water" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
 
     def test_milk_in_mug(self):
         drama = TeaTime()

@@ -13,6 +13,7 @@ Change Log
 * Static pages have a scrollbar.
 * `Better reporting on object inspection <https://github.com/tundish/tea-and-sympathy/issues/5>`_.
 * More tests and an `improved object model <https://github.com/tundish/tea-and-sympathy/issues/6>`_.
+* Fix a bug with pouring hot water.
 * Aligned with turberfield-catchphrase 0.13.0 .
 
 0.4.0
