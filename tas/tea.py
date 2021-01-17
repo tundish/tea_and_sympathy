@@ -175,6 +175,8 @@ class TeaTime(Drama):
                 for i in contents:
                     adj = getattr(i, "colour", "") or getattr(i, "heat", "")
                     yield f"* {adj} {i.names[0]}"
+                    if isinstance(i, Liquid):
+                        yield f"The {i.names[0]} is at {i.state}°."
             else:
                 yield "It's empty."
 
@@ -304,7 +306,6 @@ class TeaTime(Drama):
         hob.state = Motivation.acting
         kettle = next(iter(self.lookup["kettle"]))
         yield from self.do_examine(self.do_examine, text, obj=kettle)
-        yield f"The water is at {obj.state}°."
 
     def do_stir(self, this, text, /, *, obj: [Item, Liquid]):
         """

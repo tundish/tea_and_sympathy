@@ -66,6 +66,28 @@ class TeaTests(unittest.TestCase):
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         self.assertIn("Kettle", dlg)
+        self.assertEqual(3, len(dlg.splitlines()), dlg)
+
+    def test_examine_kettle_empty(self):
+        drama = TeaTime()
+        options = list(drama.match("examine kettle", ensemble=list(Location)))
+        fn, args, kwargs = drama.interpret(options)
+        self.assertTrue(fn)
+        dlg = "\n".join(drama(fn, *args, **kwargs))
+        self.assertIn("kettle", dlg)
+        self.assertEqual(2, len(dlg.splitlines()), dlg)
+
+    def test_examine_kettle_filled(self):
+        drama = TeaTime()
+        fn, args, kwargs = drama.interpret(drama.match("fill kettle with water"))
+        dlg = "\n".join(drama(fn, *args, **kwargs))
+
+        options = list(drama.match("examine kettle", ensemble=list(Location)))
+        fn, args, kwargs = drama.interpret(options)
+        self.assertTrue(fn)
+        dlg = "\n".join(drama(fn, *args, **kwargs))
+        self.assertIn("kettle", dlg)
+        self.assertEqual(4, len(dlg.splitlines()), dlg)
 
     def test_cold_water_in_mug(self):
         drama = TeaTime()
