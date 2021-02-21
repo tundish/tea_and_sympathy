@@ -6,6 +6,12 @@
 Change Log
 ::::::::::
 
+0.6.0
+=====
+
+* Explicitly add drama ensemble from build method.
+* Other fixes to align with catchphrase 0.14.0.
+
 0.5.0
 =====
 

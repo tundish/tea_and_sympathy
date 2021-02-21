@@ -73,9 +73,9 @@ class TeaTime(Drama):
 
     validator = re.compile("[\\w ]+")
 
-    @staticmethod
-    def build():
-        rv = [
+    def build(self):
+        yield from super().build()
+        yield from [
             Liquid(names=["milk"]).set_state(Location.fridge, 4),
             Liquid(names=["water", "tap"]).set_state(Location.sink, 20),
             Mass(names=["sugar"]).set_state(Location.shelf),
@@ -86,12 +86,12 @@ class TeaTime(Drama):
             Space(names=["mug"], colour="yellow").set_state(Location.shelf, 10),
             Space(names=["bin", "rubbish", "trash"]).set_state(Location.sink),
         ]
-        rv.extend([Space(names=["spoon"], n=n).set_state(Location.drawer) for n in range(2)])
-        rv.extend([Item(names=["teabag", "tea"], n=n).set_state(Location.shelf, 20) for n in range(2)])
-        return rv
+        yield from [Space(names=["spoon"], n=n).set_state(Location.drawer) for n in range(2)]
+        yield from [Item(names=["teabag", "tea"], n=n).set_state(Location.shelf, 20) for n in range(2)]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.active.add(self.do_help)
         self.active.add(self.do_look)
         self.active.add(self.do_search)
         self.active.add(self.do_examine)

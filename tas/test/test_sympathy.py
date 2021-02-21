@@ -35,6 +35,8 @@ class DramaTests(unittest.TestCase):
 
     def test_make_a_brew(self):
         drama = TeaAndSympathy()
+        for i in drama.build():
+            drama.add(i)
         self.assertFalse(drama.outcomes["brewed"])
         self.assertFalse(drama.outcomes["stingy"])
 
@@ -80,6 +82,8 @@ class DramaTests(unittest.TestCase):
 
     def test_sugar_in_mug(self):
         drama = TeaAndSympathy()
+        for i in drama.build():
+            drama.add(i)
         sugar = next(i for i in drama.ensemble if "sugar" in i.names)
         fn, args, kwargs = drama.interpret(drama.match("find sugar"))
         self.assertTrue(fn)

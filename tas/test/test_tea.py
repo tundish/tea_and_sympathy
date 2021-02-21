@@ -43,6 +43,8 @@ class TeaTests(unittest.TestCase):
 
     def test_initial(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         self.assertTrue(drama.active)
         self.assertTrue("help" in "".join([i.__doc__ for i in drama.active]))
         self.assertTrue("look" in "".join([i.__doc__ for i in drama.active]))
@@ -53,6 +55,8 @@ class TeaTests(unittest.TestCase):
 
     def test_examine_drawer(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         options = list(drama.match("examine drawer", ensemble=list(Location)))
         fn, args, kwargs = drama.interpret(options)
         self.assertTrue(fn)
@@ -61,6 +65,8 @@ class TeaTests(unittest.TestCase):
 
     def test_examine_hob(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         options = list(drama.match("examine hob", ensemble=list(Location)))
         fn, args, kwargs = drama.interpret(options)
         self.assertTrue(fn)
@@ -70,6 +76,8 @@ class TeaTests(unittest.TestCase):
 
     def test_examine_kettle_empty(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         options = list(drama.match("examine kettle", ensemble=list(Location)))
         fn, args, kwargs = drama.interpret(options)
         self.assertTrue(fn)
@@ -79,6 +87,8 @@ class TeaTests(unittest.TestCase):
 
     def test_examine_kettle_filled(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         fn, args, kwargs = drama.interpret(drama.match("fill kettle with water"))
         dlg = "\n".join(drama(fn, *args, **kwargs))
 
@@ -91,6 +101,8 @@ class TeaTests(unittest.TestCase):
 
     def test_cold_water_in_mug(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         fn, args, kwargs = drama.interpret(drama.match("find mug"))
         self.assertIn("obj", kwargs, kwargs)
         mug = kwargs["obj"]
@@ -105,6 +117,8 @@ class TeaTests(unittest.TestCase):
 
     def test_milk_in_mug(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         fn, args, kwargs = drama.interpret(drama.match("find spoon"))
         self.assertTrue(fn)
         spoon = kwargs["obj"]
@@ -136,6 +150,8 @@ class TeaTests(unittest.TestCase):
 
     def test_sugar_in_mug(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         sugar = next(i for i in drama.ensemble if "sugar" in i.names)
         fn, args, kwargs = drama.interpret(drama.match("find sugar"))
         self.assertTrue(fn)
@@ -155,6 +171,8 @@ class TeaTests(unittest.TestCase):
 
     def test_no_cold_water_in_mug(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         water = next(i for i in drama.ensemble if "water" in i.names)
         fn, args, kwargs = drama.interpret(drama.match("find mug"))
         mug = kwargs["obj"]
@@ -179,6 +197,8 @@ class TeaTests(unittest.TestCase):
 
     def test_disallowed(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         fn, args, kwargs = drama.interpret(drama.match("find a mug"))
         dlg = "\n".join(drama(fn, *args, **kwargs))
         mug = kwargs["obj"]
@@ -192,6 +212,8 @@ class TeaTests(unittest.TestCase):
 
     def test_kettle_one_step(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         hob = next(iter(drama.lookup["hob"]))
         kettle = next(iter(drama.lookup["kettle"]))
         self.assertEqual(20, kettle.state)
@@ -204,6 +226,8 @@ class TeaTests(unittest.TestCase):
 
     def test_kettle_two_step(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         hob = next(i for i in drama.ensemble if "hob" in i.names)
         kettle = next(i for i in drama.ensemble if "kettle" in i.names)
         self.assertEqual(20, kettle.state)
@@ -221,6 +245,8 @@ class TeaTests(unittest.TestCase):
 
     def test_make_a_brew(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         hob = next(iter(drama.lookup["hob"]))
         kettle = next(iter(drama.lookup["kettle"]))
         self.assertEqual(20, kettle.state)
@@ -264,6 +290,8 @@ class TeaTests(unittest.TestCase):
 
     def test_full_story(self):
         drama = TeaTime()
+        for i in drama.build():
+            drama.add(i)
         kettle = next(iter(drama.lookup["kettle"]))
         self.assertEqual(20, kettle.state)
         self.assertFalse(kettle.contents(drama.ensemble))

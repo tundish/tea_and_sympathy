@@ -58,6 +58,8 @@ class TeaAndSympathy(TeaTime):
         self.outcomes = defaultdict(bool)
         self.active.add(self.do_history)
         self.active.add(self.do_quit)
+        self.refusal = "That's not an option right now."
+        self.input_text = ""
 
     def __call__(self, fn, *args, **kwargs):
         lines = list(super().__call__(fn, *args, **kwargs))
