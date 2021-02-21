@@ -10,6 +10,7 @@ Change Log
 =====
 
 * Explicitly add drama ensemble from build method.
+* Add prompt attribute to drama object.
 * Other fixes to align with catchphrase 0.14.0.
 
 0.5.0

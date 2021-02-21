@@ -60,6 +60,7 @@ class TeaAndSympathy(TeaTime):
         self.active.add(self.do_quit)
         self.refusal = "That's not an option right now."
         self.input_text = ""
+        self.prompt = "?"
 
     def __call__(self, fn, *args, **kwargs):
         lines = list(super().__call__(fn, *args, **kwargs))
