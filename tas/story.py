@@ -23,6 +23,8 @@ import time
 
 from turberfield.catchphrase.drama import Drama
 from turberfield.catchphrase.presenter import Presenter
+from turberfield.catchphrase.render import Action
+from turberfield.catchphrase.render import Parameter
 from turberfield.catchphrase.render import Renderer
 from turberfield.catchphrase.render import Settings
 
@@ -59,6 +61,14 @@ class Story(Renderer):
             "catchphrase-reveal-extends": "both",
         }
         self.settings = Settings(**self.definitions)
+
+    @property
+    def actions(self):
+        yield Action(
+            "cmd", None, "/drama/cmd/", [], "post",
+            [Parameter("cmd", True, self.drama.validator, [self.drama.prompt], ">")],
+            "Enter"
+        )
 
     def refresh_target(self, url):
         refresh_state = getattr(self.settings, "catchphrase-states-refresh", "inherit").lower()

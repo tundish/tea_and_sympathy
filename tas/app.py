@@ -49,15 +49,15 @@ async def get_frame(request):
         story.drama.outcomes["finish"] or story.drama.outcomes["paused"]
     ) else None
     title = next(iter(story.presenter.metadata.get("project", ["Tea and Sympathy"])), "Tea and Sympathy")
+    controls = [
+        "\n".join(story.render_action_form(action, autofocus=not n))
+        for n, action in enumerate(story.actions)
+        if not (story.presenter.pending or story.drama.outcomes["finish"])
+    ]
     rv = story.render_body_html(title=title, next_=refresh_target, refresh=refresh).format(
         '<link rel="stylesheet" href="/css/theme/tas.css" />',
         story.render_dict_to_css(vars(story.settings)),
-        story.render_frame_to_html(
-            animation,
-            options=story.drama.active,
-            prompt=story.drama.prompt, title=title,
-            commands=not (story.presenter.pending or story.drama.outcomes["finish"])
-        )
+        story.render_animated_frame_to_html(animation, controls)
     )
     return web.Response(text=rv, content_type="text/html")
 
