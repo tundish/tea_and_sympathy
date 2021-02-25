@@ -2,7 +2,7 @@
 #   encoding: utf-8
 
 # This is a technical demo and teaching example for the turberfield-catchphrase library.
-# Copyright (C) 2021 D. Haynes
+# Copyright (C) 2021 D E Haynes
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as

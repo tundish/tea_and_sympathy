@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.8.0
+=====
+
+* Restore refusal on unmatched command.
+
 0.7.0
 =====
 

@@ -1,6 +1,6 @@
 .. |VERSION| property:: tas.story.version
 
-:author:    D Haynes
+:author:    D E Haynes
 :made_at:   2020-11-23
 :project:   Tea and Sympathy
 :version:   |VERSION|

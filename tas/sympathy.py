@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 # This is a technical demo and teaching example for the turberfield-catchphrase library.
-# Copyright (C) 2021 D. Haynes
+# Copyright (C) 2021 D E Haynes
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -63,11 +63,13 @@ class TeaAndSympathy(TeaTime):
         self.prompt = "?"
 
     def __call__(self, fn, *args, **kwargs):
-        lines = list(super().__call__(fn, *args, **kwargs))
-        if any(self.refusal in i for i in lines):
+        try:
+            lines = list(super().__call__(fn, *args, **kwargs))
+        except TypeError:
             yield from self.do_refuse(self.do_refuse, self.input_text, **kwargs)
         else:
             yield from lines
+
         try:
             mugs = [i for i in self.lookup["mug"] if i.get_state(Location) == Location.counter]
             contents = [i.contents(self.ensemble) for i in mugs]

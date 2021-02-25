@@ -1,6 +1,6 @@
 .. |VERSION| property:: tas.story.version
 
-:author:    D Haynes
+:author:    D E Haynes
 :made_at:   2021-01-10
 :project:   Tea and Sympathy
 :version:   |VERSION|
@@ -40,7 +40,7 @@ Your Interactive Story will be a work of art, and at the same time a nice piece 
 *   Catchphrase renders your story in pure HTML5 and CSS3. No Javascript is necessary.
 *   Host Web mode for a browser interface or play old-school in the terminal.
 
-© 2021 D Haynes.
+© 2021 D E Haynes.
 
 Why not `see how it's done`_?
 
