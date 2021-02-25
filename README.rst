@@ -70,10 +70,10 @@ Virtual Environment
 Download
 --------
 
-#. Download the `repository as a zip file <https://github.com/tundish/tea-and-sympathy/archive/master.zip>`_.
+#. Download the `repository as a zip file <https://github.com/tundish/tea_and_sympathy/archive/master.zip>`_.
    Unzip it to a local directory.
 
-#. `cd` to `tea-and-sympathy`.
+#. `cd` to `tea_and_sympathy`.
 
 Run
 ---
@@ -122,10 +122,10 @@ Virtual Environment
 Download
 --------
 
-#. Download the `repository as a zip file <https://github.com/tundish/tea-and-sympathy/archive/master.zip>`_.
+#. Download the `repository as a zip file <https://github.com/tundish/tea_and_sympathy/archive/master.zip>`_.
    Unzip it to a local directory.
 
-#. `cd` to `tea-and-sympathy`.
+#. `cd` to `tea_and_sympathy`.
 
 Run
 ---
