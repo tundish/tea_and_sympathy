@@ -87,6 +87,16 @@ Ignore them
 
     I can't though, it's the Electricity.
 
+Idea
+----
+
+.. condition:: DRAMA.turns 4
+
+[PLAYER]_
+
+    I'll put the kettle on.
+
+
 Stupidly
 --------
 
@@ -111,6 +121,15 @@ Every day
 
     They are doing it every day now. I swear to God.
 
+Calm
+----
+
+.. condition:: DRAMA.turns 7
+
+[PLAYER]_
+
+    I'll put the kettle on.
+
 
 Waiting
 -------
@@ -120,19 +139,6 @@ Waiting
 [NPC]_
 
     Where is he?
-
-Idea
-----
-
-.. condition:: DRAMA.turns 2
-.. condition:: DRAMA.turns 4
-.. condition:: DRAMA.turns 7
-
-[PLAYER]_
-
-    I'll put the kettle on.
-
-.. property:: DRAMA.prompt ?
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name

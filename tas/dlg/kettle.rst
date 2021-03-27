@@ -145,7 +145,7 @@ Input
 
 [NPC]_
 
-    He's doing deliveries every night now.
+    He's doing his deliveries every night now.
 
     He's trying to save up some money.
 

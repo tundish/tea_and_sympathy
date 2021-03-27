@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.9.0
+=====
+
+* Align with catchphrase 0.17.0.
+
 0.8.0
 =====
 

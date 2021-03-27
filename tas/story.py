@@ -80,7 +80,7 @@ class Story(Renderer):
             return refresh_state
 
     def represent(self, lines=[]):
-        n, presenter = Presenter.build_presenter(
+        presenter = Presenter.build_presenter(
             self.drama.folder, *lines,
             ensemble=self.drama.ensemble + [self.drama, self.settings]
         )
