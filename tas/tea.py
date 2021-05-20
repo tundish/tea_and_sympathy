@@ -107,7 +107,7 @@ class TeaTime(Drama):
             if kettle.get_state(Location) == Location.hob and hob.get_state(Motivation) == Motivation.acting:
                 kettle.set_state(min(kettle.state + 10, 100))
 
-        yield from super().__call__(fn, *args, **kwargs)
+        return super().__call__(fn, *args, **kwargs)
 
     def prioritise(self, match):
         """
@@ -152,15 +152,12 @@ class TeaTime(Drama):
         x
 
         """
-        yield "You look around. You see:"
-        yield from ("* the {0}".format(i.value[0].capitalize()) for i in list(Location))
+        return "\n".join(list(
+            "You look around. You see:",
+            *("* the {0}".format(i.value[0].capitalize()) for i in list(Location))
+        ))
 
-    def do_examine(self, this, text, /, *, obj: [Item, Liquid, Mass, Space]):
-        """
-        examine {obj.names[0]} | check {obj.names[0]} | inspect {obj.names[0]} | search {obj.names[0]}
-        examine {obj.names[1]} | check {obj.names[1]} | inspect {obj.names[1]} | search {obj.names[1]}
-
-        """
+    def say_examine(self, obj):
         locn = obj.get_state(Location)
         adj = getattr(obj, "colour", "") or getattr(obj, "heat", "")
         yield f"The {adj} {obj.names[0]} is {locn.into[0]} the {locn.value[0]}."
@@ -177,6 +174,14 @@ class TeaTime(Drama):
             else:
                 yield "It's empty."
 
+    def do_examine(self, this, text, /, *, obj: [Item, Liquid, Mass, Space]):
+        """
+        examine {obj.names[0]} | check {obj.names[0]} | inspect {obj.names[0]} | search {obj.names[0]}
+        examine {obj.names[1]} | check {obj.names[1]} | inspect {obj.names[1]} | search {obj.names[1]}
+
+        """
+        return "\n".join(self.say_examine(obj))
+
     def do_search(self, this, text, /, *, locn: Location):
         """
         examine {locn.value[0]} | check {locn.value[0]} | inspect {locn.value[0]} | search {locn.value[0]}
@@ -186,9 +191,10 @@ class TeaTime(Drama):
         items = [i for i in self.ensemble if isinstance(i, Stateful) and i.get_state(Location) == locn]
         counts = Counter(i.names[0] for i in items)
         unhidden = {i.names[0] for i in items if getattr(i, "parent", i) == i}
-        yield "Looking {0.into[0]} the {0.value[0]}, you see:".format(locn)
-        for i in unhidden:
-                yield "* {0}{1}".format(i.capitalize(), "s" if counts[i] > 1 else "")
+        return "\n".join(list(
+            "Looking {0.into[0]} the {0.value[0]}, you see:".format(locn),
+            *("* {0}{1}".format(i.capitalize(), "s" if counts[i] > 1 else "") for i in unhidden)
+        ))
 
     def do_find(self, this, text, /, *, obj: [Item, Liquid, Mass, Space]):
         """

@@ -64,11 +64,9 @@ class TeaAndSympathy(TeaTime):
 
     def __call__(self, fn, *args, **kwargs):
         try:
-            lines = list(super().__call__(fn, *args, **kwargs))
+            rv = super().__call__(fn, *args, **kwargs)
         except TypeError:
-            yield from self.do_refuse(self.do_refuse, self.input_text, **kwargs)
-        else:
-            yield from lines
+            rv = self.do_refuse(self.do_refuse, self.input_text, **kwargs)
 
         try:
             mugs = [i for i in self.lookup["mug"] if i.get_state(Location) == Location.counter]
@@ -91,6 +89,8 @@ class TeaAndSympathy(TeaTime):
             )
         except StopIteration:
             pass
+        finally:
+            return rv
 
     def do_help(self, this, text, /, **kwargs):
         """

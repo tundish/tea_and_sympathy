@@ -79,9 +79,9 @@ class Story(Renderer):
         else:
             return refresh_state
 
-    def represent(self, lines=[]):
+    def represent(self, results=None):
         presenter = Presenter.build_presenter(
-            self.drama.folder, *lines,
+            self.drama.folder, results,
             ensemble=self.drama.ensemble + [self.drama, self.settings]
         )
         if presenter and not(presenter.dwell or presenter.pause):
@@ -95,21 +95,27 @@ class Story(Renderer):
 
 
 def parser():
-    return argparse.ArgumentParser()
+    rv = argparse.ArgumentParser()
+    rv.add_argument(
+        "--quick", action="store_true", default=False,
+        help="Don't perform timed animations."
+    )
+    return rv
 
 
 def main(args):
     story = Story(**vars(args))
-    lines = []
+    results = None
     while story.drama.active:
-        presenter = story.represent(lines)
+        presenter = story.represent(results)
         for frame in presenter.frames:
             animation = presenter.animate(frame, dwell=presenter.dwell, pause=presenter.pause)
             if not animation:
                 continue
             for line, duration in story.render_frame_to_terminal(animation):
                 print(line, "\n")
-                time.sleep(duration)
+                if not args.quick:
+                    time.sleep(duration)
 
         else:
 
@@ -118,7 +124,7 @@ def main(args):
 
             cmd = input("{0} ".format(story.drama.prompt))
             fn, args, kwargs = story.drama.interpret(story.drama.match(cmd))
-            lines = list(story.drama(fn, *args, **kwargs))
+            results = list(story.drama(fn, *args, **kwargs))
 
 def run():
     p = parser()
