@@ -60,7 +60,7 @@ class TeaTests(unittest.TestCase):
         options = list(drama.match("examine drawer", ensemble=list(Location)))
         fn, args, kwargs = drama.interpret(options)
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        dlg = drama(fn, *args, **kwargs)
         self.assertIn("Spoons", dlg)
 
     def test_examine_hob(self):
@@ -70,7 +70,7 @@ class TeaTests(unittest.TestCase):
         options = list(drama.match("examine hob", ensemble=list(Location)))
         fn, args, kwargs = drama.interpret(options)
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        dlg = drama(fn, *args, **kwargs)
         self.assertIn("Kettle", dlg)
         self.assertEqual(3, len(dlg.splitlines()), dlg)
 
@@ -81,7 +81,7 @@ class TeaTests(unittest.TestCase):
         options = list(drama.match("examine kettle", ensemble=list(Location)))
         fn, args, kwargs = drama.interpret(options)
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        dlg = drama(fn, *args, **kwargs)
         self.assertIn("kettle", dlg)
         self.assertEqual(2, len(dlg.splitlines()), dlg)
 
@@ -95,7 +95,7 @@ class TeaTests(unittest.TestCase):
         options = list(drama.match("examine kettle", ensemble=list(Location)))
         fn, args, kwargs = drama.interpret(options)
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        dlg = drama(fn, *args, **kwargs)
         self.assertIn("kettle", dlg)
         self.assertEqual(4, len(dlg.splitlines()), dlg)
 
