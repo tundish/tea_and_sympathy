@@ -118,9 +118,12 @@ class TeaAndSympathy(TeaTime):
 
         """
         self.pause()
-        yield "[DRAMA]_"
-        yield "So far, it's been like this."
-        yield from ("*{0.args[0]}*".format(i) for i in self.history)
+        return textwrap.dedent("""
+        [DRAMA]_
+        So far, it's been like this.
+        """) + "\n".join(
+            ("*{0.args[0]}*".format(i) for i in self.history)
+        )
 
     def do_refuse(self, this, text, /, **kwargs):
         """
