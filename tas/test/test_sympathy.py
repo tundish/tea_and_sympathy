@@ -168,6 +168,7 @@ class FuzzTests(unittest.TestCase):
             command = random.choice(list(commands))
             fn, args, kwargs = story.drama.interpret(story.drama.match(command))
             result = story.drama(fn, *args, **kwargs)
+            print(result)
             presenter = story.represent(result)
             with self.subTest(i=i, command=command):
                 self.assertTrue(presenter, story.drama.history)

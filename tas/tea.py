@@ -210,7 +210,7 @@ class TeaTime(Drama):
         locn = obj.get_state(Location)
 
         colour = getattr(obj, "colour", "")
-        yield f"You get the {colour} {obj.name} {locn.away[0]} the {locn.value[0]}."
+        pre = f"You get the {colour} {obj.name} {locn.away[0]} the {locn.value[0]}."
 
         if "kettle" not in obj.names:
             obj.set_state(Location.counter)
@@ -220,7 +220,8 @@ class TeaTime(Drama):
             self.active.add(self.do_pour_mass)
 
         locn = obj.get_state(Location)
-        yield f"The {colour} {obj.name} is {locn.into[0]} the {locn.value[0]}."
+        post = f"The {colour} {obj.name} is {locn.into[0]} the {locn.value[0]}."
+        return "\n".join((pre, post))
 
     def do_pour_liquid(self, this, text, /, *, src: Liquid, dst: Space):
         """
@@ -251,8 +252,7 @@ class TeaTime(Drama):
         kettle = next(iter(self.lookup["kettle"]))
         if "mug" in dst.names and "water" in src.names:
             if kettle.state < 100:
-                yield "To make tea, you need the water hotter."
-                return
+                return "To make tea, you need the water hotter."
             else:
                 hob = next(iter(self.lookup["hob"]))
                 hob.state = Motivation.paused
@@ -262,7 +262,7 @@ class TeaTime(Drama):
 
         heat = getattr(src, "heat", "")
         colour = getattr(dst, "colour", "")
-        yield f"You pour the {heat} {src.names[0]} into the {colour} {dst.name}."
+        pre = f"You pour the {heat} {src.names[0]} into the {colour} {dst.name}."
 
         dst.state = max(src.state, dst.state)
         src.state = dst.state
@@ -273,7 +273,8 @@ class TeaTime(Drama):
             self.active.add(self.do_heat_space)
         else:
             self.active.add(self.do_stir)
-        yield f"The {src.names[0]} in the {colour} {dst.name} is {heat} ."
+        post = f"The {src.names[0]} in the {colour} {dst.name} is {heat} ."
+        return "\n".join((pre, post))
 
     def do_pour_mass(self, this, text, /, *, src: Mass, dst: Space):
         """
@@ -284,9 +285,11 @@ class TeaTime(Drama):
 
         """
         colour = getattr(dst, "colour", "")
-        yield f"You pour the {src.names[0]} into the {colour} {dst.name}."
         src.parent = dst
-        yield f"The {src.names[0]} is in the {colour} {dst.name}."
+        return (
+            f"You pour the {src.names[0]} into the {colour} {dst.name}.\n"
+            f"The {src.names[0]} is in the {colour} {dst.name}."
+        )
 
     def do_drop_item(self, this, text, /, *, src: Item, dst: Space):
         """
@@ -297,9 +300,11 @@ class TeaTime(Drama):
 
         """
         colour = getattr(dst, "colour", "")
-        yield f"You drop the {src.names[0]} into the {colour} {dst.name}."
         src.parent = dst
-        yield f"The {src.names[0]} is in the {colour} {dst.name}."
+        return (
+            f"You drop the {src.names[0]} into the {colour} {dst.name}.\n"
+            f"The {src.names[0]} is in the {colour} {dst.name}."
+        )
 
     def do_heat_space(self, this, text, /, *, obj: Space):
         """
@@ -311,7 +316,7 @@ class TeaTime(Drama):
         hob = next(iter(self.lookup["hob"]))
         hob.state = Motivation.acting
         kettle = next(iter(self.lookup["kettle"]))
-        yield from self.do_examine(self.do_examine, text, obj=kettle)
+        return self.do_examine(self.do_examine, text, obj=kettle)
 
     def do_stir(self, this, text, /, *, obj: [Item, Liquid]):
         """
@@ -334,9 +339,9 @@ class TeaTime(Drama):
             if "spoon" in getattr(i, "names", []) and i.get_state(Location) == Location.counter
         }
         if mugs and spoons:
-            yield from (("You put a spoon in the {0.colour} mug and stir it.".format(mug) for mug in mugs))
+            return "\n".join(("You put a spoon in the {0.colour} mug and stir it.".format(mug) for mug in mugs))
         else:
-            yield self.refusal
+            return self.refusal
 
     def do_put_the_kettle_on(self, this, text, *args):
         """
@@ -346,5 +351,5 @@ class TeaTime(Drama):
         kettle = next(iter(self.lookup["kettle"]))
         tap = next(iter(self.lookup["tap"]))
         list(self.do_pour_liquid(self.do_pour_liquid, text, src=tap, dst=kettle))
-        yield from self.do_heat_space(self.do_heat_space, text, obj=kettle)
         self.active.discard(this)
+        return self.do_heat_space(self.do_heat_space, text, obj=kettle)
