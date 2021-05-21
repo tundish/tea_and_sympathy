@@ -143,4 +143,7 @@ Waiting
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
 
+Legacy
+------
+
 {0}

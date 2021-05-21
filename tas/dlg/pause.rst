@@ -25,6 +25,9 @@
 Paused
 ======
 
+Legacy
+------
+
 {0}
 
 .. property:: DRAMA.prompt ?

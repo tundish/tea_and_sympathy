@@ -103,8 +103,8 @@ def parser():
     return rv
 
 
-def main(args):
-    story = Story(**vars(args))
+def main(opts):
+    story = Story(**vars(opts))
     results = None
     while story.drama.active:
         presenter = story.represent(results)
@@ -114,7 +114,7 @@ def main(args):
                 continue
             for line, duration in story.render_frame_to_terminal(animation):
                 print(line, "\n")
-                if not args.quick:
+                if not opts.quick:
                     time.sleep(duration)
 
         else:

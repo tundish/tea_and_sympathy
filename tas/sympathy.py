@@ -19,6 +19,7 @@
 
 from collections import defaultdict
 from collections import namedtuple
+import textwrap
 
 from turberfield.dialogue.model import SceneScript
 
@@ -99,15 +100,17 @@ class TeaAndSympathy(TeaTime):
         """
         self.pause()
 
-        yield "[DRAMA]_"
-        yield "You are woken early one Sunday morning."
-        yield "Your flatmate is up and anxious."
-        yield "Maybe you could make her a cup of tea."
-        yield from super().do_help(this, text)
-        yield "Start with a *look around*."
-        yield "The character dialogue may give you some hints."
-        yield "To see how things are coming along, you can *check* an object."
-        yield "To see a list of past actions, use the *history* command."
+        return textwrap.dedent("""
+            [DRAMA]_
+            You are woken early one Sunday morning.
+            Your flatmate is up and anxious.
+            Maybe you could make her a cup of tea.
+            {0}
+            Start with a *look around*."
+            The character dialogue may give you some hints."
+            To see how things are coming along, you can *check* an object."
+            To see a list of past actions, use the *history* command.
+        """).format(super().do_help(this, text))
 
     def do_history(self, this, text, /, **kwargs):
         """
@@ -128,9 +131,7 @@ class TeaAndSympathy(TeaTime):
         self.prompt = "If you're stuck, try 'help' or 'history'."
         self.pause()
 
-        yield "[DRAMA]_"
-        yield text
-        yield self.refusal
+        return "\n".join(("[DRAMA]_", text, self.refusal))
 
     def do_quit(self, this, text, /, **kwargs):
         """
@@ -138,4 +139,3 @@ class TeaAndSympathy(TeaTime):
 
         """
         self.pause(Motivation.acting, Motivation.player)
-        yield ""

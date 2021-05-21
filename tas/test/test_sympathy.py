@@ -143,11 +143,12 @@ class DialogueTests(unittest.TestCase):
         results = list(self.drama(fn, *args, **kwargs))
         presenter = Presenter.build_presenter(self.drama.folder, results, ensemble=self.ensemble)
         self.assertEqual("pause.rst", self.drama.folder.paths[presenter.index])
+        print(presenter.frames)
         self.assertIsInstance(presenter.frames[-1][Model.Line][-1].persona, TeaAndSympathy, vars(presenter))
 
     def test_quit(self):
         fn, args, kwargs = self.drama.interpret(self.drama.match("quit"))
-        results = list(self.drama(fn, *args, **kwargs))
+        results = self.drama(fn, *args, **kwargs)
         presenter = Presenter.build_presenter(self.drama.folder, results, ensemble=self.ensemble)
         self.assertEqual("quit.rst", self.drama.folder.paths[presenter.index])
         self.assertIs(None, presenter.frames[-1][Model.Line][-1].persona, vars(presenter))
@@ -166,8 +167,8 @@ class FuzzTests(unittest.TestCase):
             self.assertIn("history", commands)
             command = random.choice(list(commands))
             fn, args, kwargs = story.drama.interpret(story.drama.match(command))
-            lines = list(story.drama(fn, *args, **kwargs))
-            presenter = story.represent(lines)
+            result = story.drama(fn, *args, **kwargs)
+            presenter = story.represent(result)
             with self.subTest(i=i, command=command):
                 self.assertTrue(presenter, story.drama.history)
             for frame in presenter.frames:
