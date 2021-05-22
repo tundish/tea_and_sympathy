@@ -140,10 +140,10 @@ class DialogueTests(unittest.TestCase):
 
     def test_pause(self):
         fn, args, kwargs = self.drama.interpret(self.drama.match("help"))
-        results = list(self.drama(fn, *args, **kwargs))
+        results = self.drama(fn, *args, **kwargs)
         presenter = Presenter.build_presenter(self.drama.folder, results, ensemble=self.ensemble)
         self.assertEqual("pause.rst", self.drama.folder.paths[presenter.index])
-        print(presenter.frames)
+        print(presenter.text)
         self.assertIsInstance(presenter.frames[-1][Model.Line][-1].persona, TeaAndSympathy, vars(presenter))
 
     def test_quit(self):

@@ -100,17 +100,18 @@ class TeaAndSympathy(TeaTime):
         """
         self.pause()
 
-        return textwrap.dedent("""
+        return textwrap.dedent(f"""
             [DRAMA]_
-            You are woken early one Sunday morning.
-            Your flatmate is up and anxious.
-            Maybe you could make her a cup of tea.
-            {0}
-            Start with a *look around*."
-            The character dialogue may give you some hints."
-            To see how things are coming along, you can *check* an object."
-            To see a list of past actions, use the *history* command.
-        """).format(super().do_help(this, text))
+
+                You are woken early one Sunday morning.
+                Your flatmate is up and anxious.
+                Maybe you could make her a cup of tea.
+                {super().do_help(this, text)}
+                Start with a *look around*."
+                The character dialogue may give you some hints."
+                To see how things are coming along, you can *check* an object."
+                To see a list of past actions, use the *history* command.
+        """)
 
     def do_history(self, this, text, /, **kwargs):
         """
