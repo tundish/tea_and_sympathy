@@ -93,25 +93,18 @@ class TeaAndSympathy(TeaTime):
         finally:
             return rv
 
+    @property
+    def cite_help(self):
+        return textwrap.indent(textwrap.dedent(f"""
+        super().do_help(this, text)
+        """), prefix=" " * 4)
+
     def do_help(self, this, text, /, **kwargs):
         """
         help | ?
 
         """
         self.pause()
-
-        return textwrap.dedent(f"""
-            [DRAMA]_
-
-                You are woken early one Sunday morning.
-                Your flatmate is up and anxious.
-                Maybe you could make her a cup of tea.
-                {super().do_help(this, text)}
-                Start with a *look around*."
-                The character dialogue may give you some hints."
-                To see how things are coming along, you can *check* an object."
-                To see a list of past actions, use the *history* command.
-        """)
 
     def do_history(self, this, text, /, **kwargs):
         """
