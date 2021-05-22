@@ -93,18 +93,13 @@ class TeaAndSympathy(TeaTime):
         finally:
             return rv
 
-    @property
-    def cite_help(self):
-        return textwrap.indent(textwrap.dedent(f"""
-        super().do_help(this, text)
-        """), prefix=" " * 4)
-
     def do_help(self, this, text, /, **kwargs):
         """
         help | ?
 
         """
         self.pause()
+        return {"help_examples": textwrap.indent(super().do_help(this, text), prefix=" " * 4)}
 
     def do_history(self, this, text, /, **kwargs):
         """

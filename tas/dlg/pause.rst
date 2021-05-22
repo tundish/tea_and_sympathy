@@ -36,7 +36,7 @@ Help
     Your flatmate is up and anxious.
     Maybe you could make her a cup of tea.
 
-|HELP_TEXT|
+{help_examples}
 
 [DRAMA]_
 
@@ -44,8 +44,6 @@ Help
     The character dialogue may give you some hints.
     To see how things are coming along, you can *check* an object.
     To see a list of past actions, use the *history* command.
-
-.. |HELP_TEXT| property:: DRAMA.cite_help
 
 .. property:: DRAMA.prompt ?
 .. property:: NPC.state tas.tea.Motivation.acting

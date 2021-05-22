@@ -133,7 +133,7 @@ class DialogueTests(unittest.TestCase):
         mug = next(iter(self.drama.lookup["mug"]))
         mug.state = Location.counter
         fn, args, kwargs = self.drama.interpret(self.drama.match("look"))
-        results = list(self.drama(fn, *args, **kwargs))
+        results = self.drama(fn, *args, **kwargs)
         presenter = Presenter.build_presenter(self.drama.folder, results, ensemble=self.ensemble)
         self.assertEqual("made.rst", self.drama.folder.paths[presenter.index])
         self.assertTrue(presenter.frames[-1][Model.Line][-1].persona, vars(presenter))
