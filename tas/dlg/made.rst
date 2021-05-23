@@ -35,11 +35,14 @@ Input
 
 |INPUT_TEXT|
 
+[DRAMA]_
+
+{look_items}
+
 .. |INPUT_TEXT| property:: DRAMA.input_text
 
 .. property:: DRAMA.prompt ?
 
-{0}
 
 Brewed
 ------
