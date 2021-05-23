@@ -143,7 +143,7 @@ Waiting
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
 
-Legacy
-------
+Look
+----
 
-{0}
+{look_items}

@@ -23,6 +23,7 @@ import enum
 import random
 import re
 import statistics
+import textwrap
 
 from turberfield.catchphrase.drama import Drama
 from turberfield.dialogue.types import Stateful
@@ -142,6 +143,15 @@ class TeaTime(Drama):
         prioritised = sorted(options, key=self.prioritise, reverse=True)
         return prioritised[0]
 
+    def do_help(self, this, text):
+        """
+        help | ?
+
+        """
+        return {
+            "help_examples": textwrap.indent(super().do_help(this, text), prefix=" " * 4)
+        }
+
     def do_look(self, this, text, *args):
         """
         look | look around | look around kitchen
@@ -152,10 +162,12 @@ class TeaTime(Drama):
         x
 
         """
-        return "\n".join(list(
-            "You look around. You see:",
-            *("* the {0}".format(i.value[0].capitalize()) for i in list(Location))
-        ))
+        return {
+            "look_items": textwrap.indent(
+                "\n".join("* {0}".format(i.value[0].capitalize()) for i in list(Location)),
+                prefix=" " * 4
+            )
+        }
 
     def say_examine(self, obj):
         locn = obj.get_state(Location)
