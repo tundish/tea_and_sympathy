@@ -21,7 +21,7 @@ import argparse
 import sys
 import time
 
-from turberfield.catchphrase.drama import Drama
+from turberfield.catchphrase.mediator import Mediator
 from turberfield.catchphrase.presenter import Presenter
 from turberfield.catchphrase.render import Action
 from turberfield.catchphrase.render import Parameter
@@ -48,9 +48,9 @@ class Story(Renderer):
     """
 
     def __init__(self, cfg=None, **kwargs):
-        self.drama = TeaAndSympathy(**kwargs)
-        for i in self.drama.build():
-            self.drama.add(i)
+        self.mediator = TeaAndSympathy(**kwargs)
+        for i in self.mediator.build():
+            self.mediator.add(i)
         self.definitions = {
             "catchphrase-colour-washout": "hsl(50, 0%, 100%, 1.0)",
             "catchphrase-colour-shadows": "hsl(202.86, 100%, 4.12%)",
@@ -65,8 +65,8 @@ class Story(Renderer):
     @property
     def actions(self):
         yield Action(
-            "cmd", None, "/drama/cmd/", [], "post",
-            [Parameter("cmd", True, self.drama.validator, [self.drama.prompt], ">")],
+            "cmd", None, "/mediator/cmd/", [], "post",
+            [Parameter("cmd", True, self.mediator.validator, [self.mediator.prompt], ">")],
             "Enter"
         )
 
@@ -81,8 +81,8 @@ class Story(Renderer):
 
     def represent(self, results=None):
         presenter = Presenter.build_presenter(
-            self.drama.folder, results,
-            ensemble=self.drama.ensemble + [self.drama, self.settings]
+            self.mediator.folder, results,
+            ensemble=self.mediator.ensemble + [self.mediator, self.settings]
         )
         if presenter and not(presenter.dwell or presenter.pause):
             setattr(self.settings, "catchphrase-reveal-extends", "none")
@@ -106,7 +106,7 @@ def parser():
 def main(opts):
     story = Story(**vars(opts))
     results = None
-    while story.drama.active:
+    while story.mediator.active:
         presenter = story.represent(results)
         for frame in presenter.frames:
             animation = presenter.animate(frame, dwell=presenter.dwell, pause=presenter.pause)
@@ -119,12 +119,12 @@ def main(opts):
 
         else:
 
-            if story.drama.outcomes["finish"]:
+            if story.mediator.outcomes["finish"]:
                 break
 
-            cmd = input("{0} ".format(story.drama.prompt))
-            fn, args, kwargs = story.drama.interpret(story.drama.match(cmd))
-            results = story.drama(fn, *args, **kwargs)
+            cmd = input("{0} ".format(story.mediator.prompt))
+            fn, args, kwargs = story.mediator.interpret(story.mediator.match(cmd))
+            results = story.mediator(fn, *args, **kwargs)
 
 def run():
     p = parser()

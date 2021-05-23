@@ -100,7 +100,7 @@ class TeaAndSympathy(TeaTime):
         """
         self.pause()
         return textwrap.dedent("""
-        [DRAMA]_
+        [MEDIATOR]_
         So far, it's been like this.
         """) + "\n".join(
             ("*{0.args[0]}*".format(i) for i in self.history)
@@ -115,7 +115,7 @@ class TeaAndSympathy(TeaTime):
         self.prompt = "If you're stuck, try 'help' or 'history'."
         self.pause()
 
-        return "\n".join(("[DRAMA]_", text, self.refusal))
+        return "\n".join(("[MEDIATOR]_", text, self.refusal))
 
     def do_quit(self, this, text, /, **kwargs):
         """

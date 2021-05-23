@@ -25,7 +25,7 @@ import re
 import statistics
 import textwrap
 
-from turberfield.catchphrase.drama import Drama
+from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.types import Stateful
 
 from tas.types import Feature
@@ -70,7 +70,7 @@ class Location(enum.Enum):
         }.get(self, ["on"])
 
 
-class TeaTime(Drama):
+class TeaTime(Mediator):
 
     validator = re.compile("[\\w ]+")
 
@@ -112,7 +112,7 @@ class TeaTime(Drama):
 
     def prioritise(self, match):
         """
-        This method is a comparator for drama parser matches .
+        This method is a comparator for mediator parser matches .
         It creates a score from the objects in the keyword arguments.
         It operates two measures:
             * location priority of the objects
@@ -163,7 +163,7 @@ class TeaTime(Drama):
 
         """
         return {
-            "look_items": textwrap.indent(
+            this.__name__: textwrap.indent(
                 "\n".join("* {0}".format(i.value[0].capitalize()) for i in list(Location)),
                 prefix=" " * 4
             )

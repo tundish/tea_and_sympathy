@@ -15,7 +15,7 @@
    :types:  tas.types.Character
    :states: tas.tea.Motivation.paused
 
-.. entity:: DRAMA
+.. entity:: MEDIATOR
    :types:  tas.sympathy.TeaAndSympathy
 
 .. entity:: SETTINGS
@@ -28,9 +28,9 @@ Paused
 Help
 ----
 
-.. condition:: DRAMA.history[0].args[0] help
+.. condition:: MEDIATOR.history[0].args[0] help
 
-[DRAMA]_
+[MEDIATOR]_
 
     You are woken early one Sunday morning.
     Your flatmate is up and anxious.
@@ -38,13 +38,13 @@ Help
 
 {help_examples}
 
-[DRAMA]_
+[MEDIATOR]_
 
     Start with a *look around*.
     The character dialogue may give you some hints.
     To see how things are coming along, you can *check* an object.
     To see a list of past actions, use the *history* command.
 
-.. property:: DRAMA.prompt ?
+.. property:: MEDIATOR.prompt ?
 .. property:: NPC.state tas.tea.Motivation.acting
 .. property:: SETTINGS.catchphrase-colour-gravity hsl(209.33, 96.92%, 12.75%)

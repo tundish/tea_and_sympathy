@@ -39,20 +39,20 @@ async def get_frame(request):
             frame = story.presenter.frames.pop(0)
             animation = story.presenter.animate(frame, dwell=story.presenter.dwell, pause=story.presenter.pause)
     except (AttributeError, IndexError):
-        story.drama.input_text = ""
+        story.mediator.input_text = ""
         story.presenter = story.represent()
         frame = story.presenter.frames.pop(0)
         animation = story.presenter.animate(frame)
 
     refresh = Presenter.refresh_animations(animation, min_val=2) if story.presenter.pending else None
     refresh_target = story.refresh_target("/") if not (
-        story.drama.outcomes["finish"] or story.drama.outcomes["paused"]
+        story.mediator.outcomes["finish"] or story.mediator.outcomes["paused"]
     ) else None
     title = next(iter(story.presenter.metadata.get("project", ["Tea and Sympathy"])), "Tea and Sympathy")
     controls = [
         "\n".join(story.render_action_form(action, autofocus=not n))
         for n, action in enumerate(story.actions)
-        if not (story.presenter.pending or story.drama.outcomes["finish"])
+        if not (story.presenter.pending or story.mediator.outcomes["finish"])
     ]
     rv = story.render_body_html(title=title, next_=refresh_target, refresh=refresh).format(
         '<link rel="stylesheet" href="/css/theme/tas.css" />',
@@ -66,11 +66,11 @@ async def post_command(request):
     story = request.app["story"][0]
     data = await request.post()
     cmd = data["cmd"]
-    if not story.drama.validator.match(cmd):
+    if not story.mediator.validator.match(cmd):
         raise web.HTTPUnauthorized(reason="User sent invalid command.")
     else:
-        fn, args, kwargs = story.drama.interpret(story.drama.match(cmd))
-        lines = story.drama(fn, *args, **kwargs)
+        fn, args, kwargs = story.mediator.interpret(story.mediator.match(cmd))
+        lines = story.mediator(fn, *args, **kwargs)
         story.presenter = story.represent(lines)
     raise web.HTTPFound("/")
 
@@ -79,7 +79,7 @@ def build_app(args):
     app = web.Application()
     app.add_routes([
         web.get("/", get_frame),
-        web.post("/drama/cmd/", post_command),
+        web.post("/mediator/cmd/", post_command),
     ])
     app.router.add_static(
         "/css/base/",

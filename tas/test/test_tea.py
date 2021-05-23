@@ -42,228 +42,228 @@ class LocationTests(unittest.TestCase):
 class TeaTests(unittest.TestCase):
 
     def test_initial(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        self.assertTrue(drama.active)
-        self.assertTrue("help" in "".join([i.__doc__ for i in drama.active]))
-        self.assertTrue("look" in "".join([i.__doc__ for i in drama.active]))
-        kettle = next(i for i in drama.ensemble if "kettle" in i.names)
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        self.assertTrue(mediator.active)
+        self.assertTrue("help" in "".join([i.__doc__ for i in mediator.active]))
+        self.assertTrue("look" in "".join([i.__doc__ for i in mediator.active]))
+        kettle = next(i for i in mediator.ensemble if "kettle" in i.names)
         self.assertEqual(20, kettle.state)
-        tap = next(i for i in drama.ensemble if "tap" in i.names)
+        tap = next(i for i in mediator.ensemble if "tap" in i.names)
         self.assertEqual(20, tap.state)
 
     def test_examine_drawer(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        options = list(drama.match("examine drawer", ensemble=list(Location)))
-        fn, args, kwargs = drama.interpret(options)
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        options = list(mediator.match("examine drawer", ensemble=list(Location)))
+        fn, args, kwargs = mediator.interpret(options)
         self.assertTrue(fn)
-        dlg = drama(fn, *args, **kwargs)
+        dlg = mediator(fn, *args, **kwargs)
         self.assertIn("Spoons", dlg)
 
     def test_examine_hob(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        options = list(drama.match("examine hob", ensemble=list(Location)))
-        fn, args, kwargs = drama.interpret(options)
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        options = list(mediator.match("examine hob", ensemble=list(Location)))
+        fn, args, kwargs = mediator.interpret(options)
         self.assertTrue(fn)
-        dlg = drama(fn, *args, **kwargs)
+        dlg = mediator(fn, *args, **kwargs)
         self.assertIn("Kettle", dlg)
         self.assertEqual(3, len(dlg.splitlines()), dlg)
 
     def test_examine_kettle_empty(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        options = list(drama.match("examine kettle", ensemble=list(Location)))
-        fn, args, kwargs = drama.interpret(options)
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        options = list(mediator.match("examine kettle", ensemble=list(Location)))
+        fn, args, kwargs = mediator.interpret(options)
         self.assertTrue(fn)
-        dlg = drama(fn, *args, **kwargs)
+        dlg = mediator(fn, *args, **kwargs)
         self.assertIn("kettle", dlg)
         self.assertEqual(2, len(dlg.splitlines()), dlg)
 
     def test_examine_kettle_filled(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        fn, args, kwargs = drama.interpret(drama.match("fill kettle with water"))
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        fn, args, kwargs = mediator.interpret(mediator.match("fill kettle with water"))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
 
-        options = list(drama.match("examine kettle", ensemble=list(Location)))
-        fn, args, kwargs = drama.interpret(options)
+        options = list(mediator.match("examine kettle", ensemble=list(Location)))
+        fn, args, kwargs = mediator.interpret(options)
         self.assertTrue(fn)
-        dlg = drama(fn, *args, **kwargs)
+        dlg = mediator(fn, *args, **kwargs)
         self.assertIn("kettle", dlg)
         self.assertEqual(4, len(dlg.splitlines()), dlg)
 
     def test_cold_water_in_mug(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        fn, args, kwargs = drama.interpret(drama.match("find mug"))
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        fn, args, kwargs = mediator.interpret(mediator.match("find mug"))
         self.assertIn("obj", kwargs, kwargs)
         mug = kwargs["obj"]
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertIn(drama.do_pour_liquid, drama.active)
-        fn, args, kwargs = drama.interpret(drama.match("pour water in the mug"))
-        self.assertEqual(drama.do_pour_liquid, fn, drama.active)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
+        self.assertIn(mediator.do_pour_liquid, mediator.active)
+        fn, args, kwargs = mediator.interpret(mediator.match("pour water in the mug"))
+        self.assertEqual(mediator.do_pour_liquid, fn, mediator.active)
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
         water = kwargs["src"]
-        self.assertFalse(any("water" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
+        self.assertFalse(any("water" in getattr(i, "names", []) for i in mug.contents(mediator.ensemble)))
 
     def test_milk_in_mug(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        fn, args, kwargs = drama.interpret(drama.match("find spoon"))
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        fn, args, kwargs = mediator.interpret(mediator.match("find spoon"))
         self.assertTrue(fn)
         spoon = kwargs["obj"]
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
         self.assertEqual(Location.counter, spoon.get_state(Location))
 
-        milk = next(i for i in drama.ensemble if "milk" in i.names)
-        fn, args, kwargs = drama.interpret(drama.match("find milk"))
+        milk = next(i for i in mediator.ensemble if "milk" in i.names)
+        fn, args, kwargs = mediator.interpret(mediator.match("find milk"))
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
 
-        fn, args, kwargs = drama.interpret(drama.match("find mug"))
+        fn, args, kwargs = mediator.interpret(mediator.match("find mug"))
         mug = kwargs["obj"]
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
         self.assertEqual(Location.counter, mug.get_state(Location))
 
-        fn, args, kwargs = drama.interpret(drama.match("stir milk"))
+        fn, args, kwargs = mediator.interpret(mediator.match("stir milk"))
         self.assertFalse(fn)
 
-        fn, args, kwargs = drama.interpret(drama.match("pour milk in the mug"))
-        self.assertEqual(drama.do_pour_liquid, fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(any("milk" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
+        fn, args, kwargs = mediator.interpret(mediator.match("pour milk in the mug"))
+        self.assertEqual(mediator.do_pour_liquid, fn)
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
+        self.assertTrue(any("milk" in getattr(i, "names", []) for i in mug.contents(mediator.ensemble)))
 
-        fn, args, kwargs = drama.interpret(drama.match("stir milk"))
+        fn, args, kwargs = mediator.interpret(mediator.match("stir milk"))
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
 
     def test_sugar_in_mug(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        sugar = next(i for i in drama.ensemble if "sugar" in i.names)
-        fn, args, kwargs = drama.interpret(drama.match("find sugar"))
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        sugar = next(i for i in mediator.ensemble if "sugar" in i.names)
+        fn, args, kwargs = mediator.interpret(mediator.match("find sugar"))
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
-        fn, args, kwargs = drama.interpret(drama.match("find mug"))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
+        fn, args, kwargs = mediator.interpret(mediator.match("find mug"))
         mug = kwargs["obj"]
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertIn(drama.do_pour_mass, drama.active)
-        fn, args, kwargs = drama.interpret(drama.match("put sugar in the mug"))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
+        self.assertIn(mediator.do_pour_mass, mediator.active)
+        fn, args, kwargs = mediator.interpret(mediator.match("put sugar in the mug"))
         self.assertTrue(fn, "\n".join(
-            c for f in drama.active for c, (fn, args) in CommandParser.expand_commands(f, drama.ensemble)
+            c for f in mediator.active for c, (fn, args) in CommandParser.expand_commands(f, mediator.ensemble)
         ))
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(any("sugar" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
+        self.assertTrue(any("sugar" in getattr(i, "names", []) for i in mug.contents(mediator.ensemble)))
 
     def test_no_cold_water_in_mug(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        water = next(i for i in drama.ensemble if "water" in i.names)
-        fn, args, kwargs = drama.interpret(drama.match("find mug"))
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        water = next(i for i in mediator.ensemble if "water" in i.names)
+        fn, args, kwargs = mediator.interpret(mediator.match("find mug"))
         mug = kwargs["obj"]
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertIn(drama.do_pour_liquid, drama.active)
-        fn, args, kwargs = drama.interpret(drama.match("put tea in the mug"))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
+        self.assertIn(mediator.do_pour_liquid, mediator.active)
+        fn, args, kwargs = mediator.interpret(mediator.match("put tea in the mug"))
         self.assertTrue(fn, "\n".join(
-            c for f in drama.active for c, (fn, args) in CommandParser.expand_commands(f, drama.ensemble)
+            c for f in mediator.active for c, (fn, args) in CommandParser.expand_commands(f, mediator.ensemble)
         ))
         self.assertTrue(fn)
-        self.assertEqual(drama.do_drop_item, fn)
+        self.assertEqual(mediator.do_drop_item, fn)
         tea = kwargs["src"]
         mug = kwargs["dst"]
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(any("teabag" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
-        fn, args, kwargs = drama.interpret(drama.match("pour water in the mug"))
-        self.assertEqual(drama.do_pour_liquid, fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertFalse(any("water" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
+        self.assertTrue(any("teabag" in getattr(i, "names", []) for i in mug.contents(mediator.ensemble)))
+        fn, args, kwargs = mediator.interpret(mediator.match("pour water in the mug"))
+        self.assertEqual(mediator.do_pour_liquid, fn)
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
+        self.assertFalse(any("water" in getattr(i, "names", []) for i in mug.contents(mediator.ensemble)))
 
     def test_disallowed(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        fn, args, kwargs = drama.interpret(drama.match("find a mug"))
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        fn, args, kwargs = mediator.interpret(mediator.match("find a mug"))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
         mug = kwargs["obj"]
         self.assertEqual(Location.counter, mug.get_state(Location))
         for n, cmd in enumerate([
             "put hob in kettle",
         ]):
             with self.subTest(cmd=cmd, n=n):
-                fn, args, kwargs = drama.interpret(drama.match(cmd))
+                fn, args, kwargs = mediator.interpret(mediator.match(cmd))
                 self.assertFalse(fn, kwargs)
 
     def test_kettle_one_step(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        hob = next(iter(drama.lookup["hob"]))
-        kettle = next(iter(drama.lookup["kettle"]))
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        hob = next(iter(mediator.lookup["hob"]))
+        kettle = next(iter(mediator.lookup["kettle"]))
         self.assertEqual(20, kettle.state)
-        self.assertFalse(kettle.contents(drama.ensemble))
-        fn, args, kwargs = drama.interpret(drama.match("put the kettle on"))
+        self.assertFalse(kettle.contents(mediator.ensemble))
+        fn, args, kwargs = mediator.interpret(mediator.match("put the kettle on"))
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(kettle.contents(drama.ensemble))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
+        self.assertTrue(kettle.contents(mediator.ensemble))
         self.assertTrue(Motivation.acting, hob.get_state(Motivation))
 
     def test_kettle_two_step(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        hob = next(i for i in drama.ensemble if "hob" in i.names)
-        kettle = next(i for i in drama.ensemble if "kettle" in i.names)
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        hob = next(i for i in mediator.ensemble if "hob" in i.names)
+        kettle = next(i for i in mediator.ensemble if "kettle" in i.names)
         self.assertEqual(20, kettle.state)
-        self.assertFalse(kettle.contents(drama.ensemble))
-        fn, args, kwargs = drama.interpret(drama.match("fill the kettle"))
+        self.assertFalse(kettle.contents(mediator.ensemble))
+        fn, args, kwargs = mediator.interpret(mediator.match("fill the kettle"))
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
         self.assertEqual(kettle.state, 20)
-        self.assertTrue(kettle.contents(drama.ensemble))
-        fn, args, kwargs = drama.interpret(drama.match("boil the kettle"))
+        self.assertTrue(kettle.contents(mediator.ensemble))
+        fn, args, kwargs = mediator.interpret(mediator.match("boil the kettle"))
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(kettle.contents(drama.ensemble))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
+        self.assertTrue(kettle.contents(mediator.ensemble))
         self.assertTrue(Motivation.acting, hob.get_state(Motivation))
 
     def test_make_a_brew(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        hob = next(iter(drama.lookup["hob"]))
-        kettle = next(iter(drama.lookup["kettle"]))
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        hob = next(iter(mediator.lookup["hob"]))
+        kettle = next(iter(mediator.lookup["kettle"]))
         self.assertEqual(20, kettle.state)
-        self.assertFalse(kettle.contents(drama.ensemble))
-        fn, args, kwargs = drama.interpret(drama.match("put the kettle on"))
+        self.assertFalse(kettle.contents(mediator.ensemble))
+        fn, args, kwargs = mediator.interpret(mediator.match("put the kettle on"))
         self.assertTrue(fn)
-        dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertTrue(kettle.contents(drama.ensemble))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
+        self.assertTrue(kettle.contents(mediator.ensemble))
         self.assertTrue(Motivation.acting, hob.get_state(Motivation))
         for n in range(30, 110, 10):
             with self.subTest(n=n):
-                fn, args, kwargs = drama.interpret(drama.match("check the kettle"))
-                dlg = "\n".join(drama(fn, *args, **kwargs))
+                fn, args, kwargs = mediator.interpret(mediator.match("check the kettle"))
+                dlg = "\n".join(mediator(fn, *args, **kwargs))
                 self.assertEqual(n, kettle.state)
 
-        fn, args, kwargs = drama.interpret(drama.match("find a mug"))
-        dlg = "\n".join(drama(fn, *args, **kwargs))
+        fn, args, kwargs = mediator.interpret(mediator.match("find a mug"))
+        dlg = "\n".join(mediator(fn, *args, **kwargs))
         mug = kwargs["obj"]
         self.assertEqual(Location.counter, mug.get_state(Location))
         for n, cmd in enumerate([
@@ -271,30 +271,30 @@ class TeaTests(unittest.TestCase):
             "find spoon", "stir tea", "put the teabag in the bin"
         ]):
             with self.subTest(cmd=cmd, n=n):
-                self.assertIn(drama.do_find, drama.active)
-                options = list(drama.match(cmd))
-                fn, args, kwargs = drama.interpret(options)
+                self.assertIn(mediator.do_find, mediator.active)
+                options = list(mediator.match(cmd))
+                fn, args, kwargs = mediator.interpret(options)
                 self.assertTrue(fn, "\n".join(
-                    c for f in drama.active
-                    for c, (fn, args) in CommandParser.expand_commands(f, drama.ensemble)
+                    c for f in mediator.active
+                    for c, (fn, args) in CommandParser.expand_commands(f, mediator.ensemble)
                 ))
-                dlg = "\n".join(drama(fn, *args, **kwargs))
+                dlg = "\n".join(mediator(fn, *args, **kwargs))
 
-        bin_ = next(iter(drama.lookup["bin"]))
-        self.assertFalse(any("teabag" in getattr(i, "names", []) for i in mug.contents(drama.ensemble)))
-        self.assertEqual(100, mug.state, drama.lookup["mug"])
+        bin_ = next(iter(mediator.lookup["bin"]))
+        self.assertFalse(any("teabag" in getattr(i, "names", []) for i in mug.contents(mediator.ensemble)))
+        self.assertEqual(100, mug.state, mediator.lookup["mug"])
 
-        teabag = next((i for i in bin_.contents(drama.ensemble) if "teabag" in getattr(i, "names", [])), None)
+        teabag = next((i for i in bin_.contents(mediator.ensemble) if "teabag" in getattr(i, "names", [])), None)
         self.assertTrue(teabag)
         self.assertEqual(bin_.state, teabag.state)
 
     def test_full_story(self):
-        drama = TeaTime()
-        for i in drama.build():
-            drama.add(i)
-        kettle = next(iter(drama.lookup["kettle"]))
+        mediator = TeaTime()
+        for i in mediator.build():
+            mediator.add(i)
+        kettle = next(iter(mediator.lookup["kettle"]))
         self.assertEqual(20, kettle.state)
-        self.assertFalse(kettle.contents(drama.ensemble))
+        self.assertFalse(kettle.contents(mediator.ensemble))
         for cmd in [
             "get a mug", "put the kettle on",
             "find some tea", "put the teabag in the mug",
@@ -302,18 +302,18 @@ class TeaTests(unittest.TestCase):
             "get some sugar", "put the sugar in the mug",
         ]:
             with self.subTest(cmd=cmd):
-                self.assertIn(drama.do_find, drama.active)
-                options = list(drama.match(cmd))
-                fn, args, kwargs = drama.interpret(options)
+                self.assertIn(mediator.do_find, mediator.active)
+                options = list(mediator.match(cmd))
+                fn, args, kwargs = mediator.interpret(options)
                 self.assertTrue(fn)
-                dlg = "\n".join(drama(fn, *args, **kwargs))
-                mugs = [i for i in drama.lookup["mug"] if i.get_state(Location) == Location.counter]
+                dlg = "\n".join(mediator(fn, *args, **kwargs))
+                mugs = [i for i in mediator.lookup["mug"] if i.get_state(Location) == Location.counter]
                 self.assertEqual(1, len(mugs))
 
         self.assertEqual(80, kettle.state)
-        fn, args, kwargs = drama.interpret(drama.match("check the kettle"))
-        list(drama(fn, *args, **kwargs))
-        list(drama(fn, *args, **kwargs))
+        fn, args, kwargs = mediator.interpret(mediator.match("check the kettle"))
+        list(mediator(fn, *args, **kwargs))
+        list(mediator(fn, *args, **kwargs))
         self.assertEqual(100, kettle.state)
 
         for cmd in [
@@ -323,18 +323,18 @@ class TeaTests(unittest.TestCase):
             "add the milk", "stir the tea",
         ]:
             with self.subTest(cmd=cmd):
-                self.assertIn(drama.do_find, drama.active)
-                options = list(drama.match(cmd))
-                fn, args, kwargs = drama.interpret(options)
+                self.assertIn(mediator.do_find, mediator.active)
+                options = list(mediator.match(cmd))
+                fn, args, kwargs = mediator.interpret(options)
                 self.assertTrue(fn)
-                dlg = "\n".join(drama(fn, *args, **kwargs))
-                mugs = [i for i in drama.lookup["mug"] if i.get_state(Location) == Location.counter]
+                dlg = "\n".join(mediator(fn, *args, **kwargs))
+                mugs = [i for i in mediator.lookup["mug"] if i.get_state(Location) == Location.counter]
                 self.assertEqual(1, len(mugs))
 
-        self.assertFalse(any("teabag" in getattr(i, "names", []) for i in mugs[0].contents(drama.ensemble)))
-        self.assertEqual(100, mugs[0].state, drama.lookup["mug"])
+        self.assertFalse(any("teabag" in getattr(i, "names", []) for i in mugs[0].contents(mediator.ensemble)))
+        self.assertEqual(100, mugs[0].state, mediator.lookup["mug"])
 
-        bin_ = next(iter(drama.lookup["bin"]))
-        teabag = next((i for i in bin_.contents(drama.ensemble) if "teabag" in getattr(i, "names", [])), None)
+        bin_ = next(iter(mediator.lookup["bin"]))
+        teabag = next((i for i in bin_.contents(mediator.ensemble) if "teabag" in getattr(i, "names", [])), None)
         self.assertTrue(teabag)
         self.assertEqual(bin_.state, teabag.state)

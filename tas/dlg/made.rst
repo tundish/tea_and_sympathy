@@ -23,7 +23,7 @@
    :states: tas.tea.Location.hob
             100
 
-.. entity:: DRAMA
+.. entity:: MEDIATOR
    :types:  tas.sympathy.TeaAndSympathy
 
 
@@ -35,19 +35,19 @@ Input
 
 |INPUT_TEXT|
 
-[DRAMA]_
+[MEDIATOR]_
 
 {look_items}
 
-.. |INPUT_TEXT| property:: DRAMA.input_text
+.. |INPUT_TEXT| property:: MEDIATOR.input_text
 
-.. property:: DRAMA.prompt ?
+.. property:: MEDIATOR.prompt ?
 
 
 Brewed
 ------
 
-.. condition:: DRAMA.outcomes[brewed] True
+.. condition:: MEDIATOR.outcomes[brewed] True
 
 [PLAYER]_
 
@@ -56,7 +56,7 @@ Brewed
 Untidy
 ------
 
-.. condition:: DRAMA.outcomes[untidy] True
+.. condition:: MEDIATOR.outcomes[untidy] True
 
 [NPC]_
 
@@ -65,7 +65,7 @@ Untidy
 Stingy
 ------
 
-.. condition:: DRAMA.outcomes[stingy] True
+.. condition:: MEDIATOR.outcomes[stingy] True
 
 [NPC]_
 
@@ -74,7 +74,7 @@ Stingy
 Served
 ------
 
-.. condition:: DRAMA.outcomes[served] True
+.. condition:: MEDIATOR.outcomes[served] True
 
 [PLAYER]_
 
@@ -84,12 +84,12 @@ Served
 
     Thanks, |PLAYER_NAME|.
 
-.. property:: DRAMA.prompt Well done. You may 'quit' now.
+.. property:: MEDIATOR.prompt Well done. You may 'quit' now.
 
 Sugary
 ------
 
-.. condition:: DRAMA.outcomes[sugary] True
+.. condition:: MEDIATOR.outcomes[sugary] True
 
 [NPC]_
 

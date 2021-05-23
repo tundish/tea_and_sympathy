@@ -22,7 +22,7 @@
    :types:  tas.tea.Space
    :states: tas.tea.Location.hob
 
-.. entity:: DRAMA
+.. entity:: MEDIATOR
    :types:  tas.sympathy.TeaAndSympathy
 
 .. entity:: SETTINGS
@@ -37,10 +37,10 @@ Input
 
 |INPUT_TEXT|
 
-.. |INPUT_TEXT| property:: DRAMA.input_text
+.. |INPUT_TEXT| property:: MEDIATOR.input_text
 
 
-.. property:: DRAMA.prompt ?
+.. property:: MEDIATOR.prompt ?
 .. property:: SETTINGS.catchphrase-reveal-extends both
 
 1

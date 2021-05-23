@@ -23,7 +23,7 @@
    :states: tas.tea.Location.hob
             tas.tea.Motivation.paused
 
-.. entity:: DRAMA
+.. entity:: MEDIATOR
    :types:  tas.sympathy.TeaAndSympathy
 
 .. entity:: SETTINGS
@@ -38,12 +38,12 @@ Input
 
 |INPUT_TEXT|
 
-.. |INPUT_TEXT| property:: DRAMA.input_text
+.. |INPUT_TEXT| property:: MEDIATOR.input_text
 
 Caution
 -------
 
-.. condition:: DRAMA.turns 0
+.. condition:: MEDIATOR.turns 0
 
 |NPC_NAME| is on her phone.
 
@@ -51,24 +51,24 @@ Caution
 
     I am going to swear.
 
-.. property:: DRAMA.prompt Type 'help'. Or 'quit' if you don't want adult language.
+.. property:: MEDIATOR.prompt Type 'help'. Or 'quit' if you don't want adult language.
 
 Cold
 ----
 
-.. condition:: DRAMA.turns 1
+.. condition:: MEDIATOR.turns 1
 
 [NPC]_
 
     It's freezing.
 
-.. property:: DRAMA.prompt ?
+.. property:: MEDIATOR.prompt ?
 
 
 Spam
 ----
 
-.. condition:: DRAMA.turns 2
+.. condition:: MEDIATOR.turns 2
 
 [NPC]_
 
@@ -77,7 +77,7 @@ Spam
 Ignore them
 -----------
 
-.. condition:: DRAMA.turns 3
+.. condition:: MEDIATOR.turns 3
 
 [PLAYER]_
 
@@ -90,7 +90,7 @@ Ignore them
 Idea
 ----
 
-.. condition:: DRAMA.turns 4
+.. condition:: MEDIATOR.turns 4
 
 [PLAYER]_
 
@@ -100,7 +100,7 @@ Idea
 Stupidly
 --------
 
-.. condition:: DRAMA.turns 5
+.. condition:: MEDIATOR.turns 5
 
 [NPC]_
 
@@ -111,7 +111,7 @@ Stupidly
 Every day
 ---------
 
-.. condition:: DRAMA.turns 6
+.. condition:: MEDIATOR.turns 6
 
 [PLAYER]_
 
@@ -124,7 +124,7 @@ Every day
 Calm
 ----
 
-.. condition:: DRAMA.turns 7
+.. condition:: MEDIATOR.turns 7
 
 [PLAYER]_
 
@@ -134,7 +134,7 @@ Calm
 Waiting
 -------
 
-.. condition:: DRAMA.turns 8
+.. condition:: MEDIATOR.turns 8
 
 [NPC]_
 
@@ -146,4 +146,4 @@ Waiting
 Look
 ----
 
-{look_items}
+{do_look}
