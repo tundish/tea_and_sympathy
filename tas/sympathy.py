@@ -19,8 +19,10 @@
 
 from collections import defaultdict
 from collections import namedtuple
+import random
 import textwrap
 
+from turberfield.catchphrase.parser import CommandParser
 from turberfield.dialogue.model import SceneScript
 
 from tas.tea import Motivation
@@ -57,6 +59,7 @@ class TeaAndSympathy(TeaTime):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.outcomes = defaultdict(bool)
+        self.active.add(self.do_help)
         self.active.add(self.do_history)
         self.active.add(self.do_quit)
         self.refusal = "That's not an option right now."
@@ -92,6 +95,21 @@ class TeaAndSympathy(TeaTime):
             pass
         finally:
             return rv
+
+    def do_help(self, this, text):
+        """
+        help | ?
+
+        """
+        self.pause()
+        options = list(filter(
+            lambda x: len(x) > 1,
+            (i[0] for fn in self.active for i in CommandParser.expand_commands(fn, self.ensemble))
+        ))
+        return textwrap.indent(
+            "\n".join("* {0}".format(i) for i in random.sample(options, min(3, len(options)))),
+            prefix=" " * 4
+        )
 
     def do_history(self, this, text, /, **kwargs):
         """

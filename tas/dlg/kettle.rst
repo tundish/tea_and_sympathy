@@ -177,4 +177,4 @@ Input
 Look
 ----
 
-{look_items}
+{do_look}

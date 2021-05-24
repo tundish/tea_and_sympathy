@@ -20,7 +20,6 @@
 
 from collections import Counter
 import enum
-import random
 import re
 import statistics
 import textwrap
@@ -28,6 +27,7 @@ import textwrap
 from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.types import Stateful
 
+from tas.types import Drama
 from tas.types import Feature
 from tas.types import Item
 from tas.types import Liquid
@@ -70,7 +70,7 @@ class Location(enum.Enum):
         }.get(self, ["on"])
 
 
-class TeaTime(Mediator):
+class TeaTime(Drama, Mediator):
 
     validator = re.compile("[\\w ]+")
 
@@ -92,7 +92,6 @@ class TeaTime(Mediator):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.active.add(self.do_help)
         self.active.add(self.do_look)
         self.active.add(self.do_search)
         self.active.add(self.do_examine)
@@ -143,15 +142,6 @@ class TeaTime(Mediator):
         prioritised = sorted(options, key=self.prioritise, reverse=True)
         return prioritised[0]
 
-    def do_help(self, this, text):
-        """
-        help | ?
-
-        """
-        return {
-            "help_examples": textwrap.indent(super().do_help(this, text), prefix=" " * 4)
-        }
-
     def do_look(self, this, text, *args):
         """
         look | look around | look around kitchen
@@ -162,12 +152,10 @@ class TeaTime(Mediator):
         x
 
         """
-        return {
-            this.__name__: textwrap.indent(
-                "\n".join("* {0}".format(i.value[0].capitalize()) for i in list(Location)),
-                prefix=" " * 4
-            )
-        }
+        return textwrap.indent(
+            "\n".join("* {0}".format(i.value[0].capitalize()) for i in list(Location)),
+            prefix=" " * 4
+        )
 
     def say_examine(self, obj):
         locn = obj.get_state(Location)
@@ -222,7 +210,7 @@ class TeaTime(Mediator):
         locn = obj.get_state(Location)
 
         colour = getattr(obj, "colour", "")
-        pre = f"You get the {colour} {obj.name} {locn.away[0]} the {locn.value[0]}."
+        yield f"You get the {colour} {obj.name} {locn.away[0]} the {locn.value[0]}."
 
         if "kettle" not in obj.names:
             obj.set_state(Location.counter)
@@ -232,8 +220,7 @@ class TeaTime(Mediator):
             self.active.add(self.do_pour_mass)
 
         locn = obj.get_state(Location)
-        post = f"The {colour} {obj.name} is {locn.into[0]} the {locn.value[0]}."
-        return "\n".join((pre, post))
+        yield f"The {colour} {obj.name} is {locn.into[0]} the {locn.value[0]}."
 
     def do_pour_liquid(self, this, text, /, *, src: Liquid, dst: Space):
         """

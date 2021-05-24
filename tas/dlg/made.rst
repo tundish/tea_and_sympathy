@@ -37,7 +37,7 @@ Input
 
 [MEDIATOR]_
 
-{look_items}
+{do_look}
 
 .. |INPUT_TEXT| property:: MEDIATOR.input_text
 

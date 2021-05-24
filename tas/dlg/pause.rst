@@ -28,7 +28,7 @@ Paused
 Help
 ----
 
-.. condition:: MEDIATOR.history[0].args[0] help
+.. condition:: MEDIATOR.history[0].name do_help
 
 [MEDIATOR]_
 
@@ -36,7 +36,7 @@ Help
     Your flatmate is up and anxious.
     Maybe you could make her a cup of tea.
 
-{help_examples}
+{do_help}
 
 [MEDIATOR]_
 

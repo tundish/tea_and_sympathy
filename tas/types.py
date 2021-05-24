@@ -77,3 +77,25 @@ class Liquid(Named, Component):
 
 class Item(Named, Component): pass
 class Mass(Named, Component): pass
+
+class Drama:
+
+    @property
+    def ensemble(self):
+        return list({i for s in self.lookup.values() for i in s})
+
+    @property
+    def turns(self):
+        return len(self.history)
+
+    def build(self, ensemble=None):
+        yield from ensemble or []
+
+    def add(self, *args):
+        for item in args:
+            for n in getattr(item, "names", []):
+                self.lookup[n].add(item)
+
+    def interlude(self, folder, index, **kwargs) -> dict:
+        return {}
+
