@@ -122,8 +122,7 @@ def main(opts):
                 break
 
             cmd = input("{0} ".format(story.drama.prompt))
-            fn, args, kwargs = story.drama.interpret(story.drama.match(cmd, story.drama.ensemble))
-            results = story.drama(fn, *args, **kwargs)
+            results = story.drama.play(cmd)
 
 def run():
     p = parser()

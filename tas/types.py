@@ -97,6 +97,10 @@ class Drama:
             for n in getattr(item, "names", []):
                 self.lookup[n].add(item)
 
+    def play(self, cmd: str) -> dict:
+        fn, args, kwargs = self.interpret(self.match(cmd, self.ensemble))
+        return self(fn, *args, **kwargs)
+
     def interlude(self, folder, index, **kwargs) -> dict:
         return {}
 
