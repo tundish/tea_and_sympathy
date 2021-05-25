@@ -78,6 +78,7 @@ class Liquid(Named, Component):
 class Item(Named, Component): pass
 class Mass(Named, Component): pass
 
+
 class Drama:
 
     @property
@@ -88,8 +89,8 @@ class Drama:
     def turns(self):
         return len(self.history)
 
-    def build(self, ensemble=None):
-        yield from ensemble or []
+    def build(self):
+        return []
 
     def add(self, *args):
         for item in args:

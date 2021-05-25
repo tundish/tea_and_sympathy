@@ -96,7 +96,7 @@ class TeaAndSympathy(TeaTime):
         finally:
             return rv
 
-    def do_help(self, this, text):
+    def do_help(self, this, text, /, **kwargs):
         """
         help | ?
 

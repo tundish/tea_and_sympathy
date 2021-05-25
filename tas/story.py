@@ -106,7 +106,7 @@ def main(opts):
     story = Story(**vars(opts))
     results = None
     while story.drama.active:
-        presenter = story.represent(results)
+        presenter = story.represent(story.drama.facts)
         for frame in presenter.frames:
             animation = presenter.animate(frame, dwell=presenter.dwell, pause=presenter.pause)
             if not animation:
@@ -122,7 +122,7 @@ def main(opts):
                 break
 
             cmd = input("{0} ".format(story.drama.prompt))
-            fn, args, kwargs = story.drama.interpret(story.drama.match(cmd))
+            fn, args, kwargs = story.drama.interpret(story.drama.match(cmd, story.drama.ensemble))
             results = story.drama(fn, *args, **kwargs)
 
 def run():

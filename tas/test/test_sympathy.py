@@ -31,7 +31,7 @@ from turberfield.catchphrase.render import Settings
 from turberfield.dialogue.model import Model
 
 
-class MediatorTests(unittest.TestCase):
+class DramaTests(unittest.TestCase):
 
     def test_make_a_brew(self):
         drama = TeaAndSympathy()
@@ -39,6 +39,7 @@ class MediatorTests(unittest.TestCase):
             drama.add(i)
         self.assertFalse(drama.outcomes["brewed"])
         self.assertFalse(drama.outcomes["stingy"])
+        self.assertTrue(drama.lookup["mug"])
 
         kettle = next(iter(drama.lookup["kettle"]))
         fn, args, kwargs = drama.interpret(drama.match("put the kettle on"))
@@ -56,14 +57,14 @@ class MediatorTests(unittest.TestCase):
 
         self.assertEqual(2, len([i for i in drama.ensemble if "water" in getattr(i, "names", [])]))
 
-        fn, args, kwargs = drama.interpret(drama.match("find mug"))
+        fn, args, kwargs = drama.interpret(drama.match("find mug", drama.ensemble))
+        self.assertIn("obj", kwargs, (fn, args, kwargs, drama.active, [i for i in drama.ensemble if "mug" in i.names]))
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        self.assertIn("obj", (fn, args, kwargs))
         mug = kwargs["obj"]
         self.assertEqual(Location.counter, mug.get_state(Location))
         self.assertTrue(drama.outcomes["stingy"])
 
-        fn, args, kwargs = drama.interpret(drama.match("pour water into the mug"))
+        fn, args, kwargs = drama.interpret(drama.match("pour water into the mug", drama.ensemble))
         self.assertEqual(drama.do_pour_liquid, fn, drama.active)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         mug = kwargs["dst"]
@@ -72,12 +73,12 @@ class MediatorTests(unittest.TestCase):
             next(i for i in mug.contents(drama.ensemble) if "water" in getattr(i, "names", [])).state
         )
         self.assertFalse(drama.outcomes["brewed"])
-        fn, args, kwargs = drama.interpret(drama.match("drop a teabag in the mug"))
+        fn, args, kwargs = drama.interpret(drama.match("drop a teabag in the mug", drama.ensemble))
         dlg = "\n".join(drama(fn, *args, **kwargs))
         self.assertTrue(drama.outcomes["brewed"])
 
         self.assertTrue(drama.outcomes["stingy"])
-        fn, args, kwargs = drama.interpret(drama.match("pour some milk into the mug"))
+        fn, args, kwargs = drama.interpret(drama.match("pour some milk into the mug", drama.ensemble))
         dlg = "\n".join(drama(fn, *args, **kwargs))
         self.assertFalse(drama.outcomes["stingy"])
 
@@ -86,16 +87,16 @@ class MediatorTests(unittest.TestCase):
         for i in drama.build():
             drama.add(i)
         sugar = next(i for i in drama.ensemble if "sugar" in i.names)
-        fn, args, kwargs = drama.interpret(drama.match("find sugar"))
+        fn, args, kwargs = drama.interpret(drama.match("find sugar", drama.ensemble))
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
-        fn, args, kwargs = drama.interpret(drama.match("find mug"))
+        fn, args, kwargs = drama.interpret(drama.match("find mug", drama.ensemble))
         mug = kwargs["obj"]
         self.assertFalse(drama.outcomes["sugary"])
         self.assertTrue(fn)
         dlg = "\n".join(drama(fn, *args, **kwargs))
         self.assertIn(drama.do_pour_mass, drama.active)
-        fn, args, kwargs = drama.interpret(drama.match("put sugar in the mug"))
+        fn, args, kwargs = drama.interpret(drama.match("put sugar in the mug", drama.ensemble))
         self.assertTrue(fn, "\n".join(
             c for f in drama.active for c, (fn, args) in CommandParser.expand_commands(f, drama.ensemble)
         ))
