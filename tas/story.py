@@ -78,9 +78,9 @@ class Story(Renderer):
         else:
             return refresh_state
 
-    def represent(self, results=None):
+    def represent(self, data, facts=None):
         presenter = Presenter.build_presenter(
-            self.drama.folder, results,
+            self.drama.folder, data, facts,
             ensemble=self.drama.ensemble + [self.drama, self.settings]
         )
         if presenter and not(presenter.dwell or presenter.pause):
@@ -106,7 +106,7 @@ def main(opts):
     story = Story(**vars(opts))
     results = None
     while story.drama.active:
-        presenter = story.represent(story.drama.facts)
+        presenter = story.represent(results, story.drama.facts)
         for frame in presenter.frames:
             animation = presenter.animate(frame, dwell=presenter.dwell, pause=presenter.pause)
             if not animation:
