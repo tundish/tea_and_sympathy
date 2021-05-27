@@ -143,7 +143,7 @@ Waiting
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
 
-Look
-----
+Mediation
+---------
 
-{do_look}
+{0}
