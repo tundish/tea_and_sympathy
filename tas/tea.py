@@ -182,7 +182,7 @@ class TeaTime(Drama, Mediator):
             else:
                 yield "It's empty."
 
-    def do_examine(self, this, text, /, *, obj: [Item, Liquid, Mass, Space]):
+    def do_examine(self, this, text, /, *, obj: [Feature, Item, Liquid, Mass, Space]):
         """
         examine {obj.names[0]} | check {obj.names[0]} | inspect {obj.names[0]} | search {obj.names[0]}
         examine {obj.names[1]} | check {obj.names[1]} | inspect {obj.names[1]} | search {obj.names[1]}
