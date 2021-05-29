@@ -27,6 +27,7 @@ import textwrap
 from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.types import Stateful
 
+from tas.types import Character
 from tas.types import Drama
 from tas.types import Feature
 from tas.types import Item
@@ -142,6 +143,12 @@ class TeaTime(Drama, Mediator):
         prioritised = sorted(options, key=self.prioritise, reverse=True)
         return prioritised[0]
 
+    def pause(self, *args):
+        args = args or [Motivation.acting]
+        for i in self.ensemble:
+            if isinstance(i, Character) and i.get_state(Motivation) in args:
+                i.state = Motivation.paused
+
     def do_look(self, this, text, *args):
         """
         look | look around | look around kitchen
@@ -152,6 +159,7 @@ class TeaTime(Drama, Mediator):
         x
 
         """
+        self.pause()
         return textwrap.indent(
             "\n".join("* {0}".format(i.value[0].capitalize()) for i in list(Location)),
             prefix=" " * 4

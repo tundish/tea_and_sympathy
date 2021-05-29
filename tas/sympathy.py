@@ -50,12 +50,6 @@ class TeaAndSympathy(TeaTime):
             Character(names=["Louise"]).set_state(Motivation.player),
         ]
 
-    def pause(self, *args):
-        args = args or [Motivation.acting]
-        for i in self.ensemble:
-            if isinstance(i, Character) and i.get_state(Motivation) in args:
-                i.state = Motivation.paused
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.outcomes = defaultdict(bool)

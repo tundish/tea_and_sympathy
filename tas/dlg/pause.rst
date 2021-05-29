@@ -47,4 +47,17 @@ Help
 
 .. property:: MEDIATOR.prompt ?
 .. property:: NPC.state tas.tea.Motivation.acting
-.. property:: SETTINGS.catchphrase-colour-gravity hsl(209.33, 96.92%, 12.75%)
+
+Look
+----
+
+.. condition:: MEDIATOR.history[0].name do_look
+
+[MEDIATOR]_
+
+    Looking around, you see:
+
+{do_look}
+
+.. property:: MEDIATOR.prompt ?
+.. property:: NPC.state tas.tea.Motivation.acting

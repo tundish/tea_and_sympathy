@@ -33,15 +33,10 @@
 Early
 =====
 
-Input
------
-
-|INPUT_TEXT|
-
-.. |INPUT_TEXT| property:: MEDIATOR.input_text
-
 Caution
 -------
+
+{0}
 
 .. condition:: MEDIATOR.turns 0
 
@@ -56,6 +51,8 @@ Caution
 Cold
 ----
 
+{0}
+
 .. condition:: MEDIATOR.turns 1
 
 [NPC]_
@@ -68,6 +65,8 @@ Cold
 Spam
 ----
 
+{0}
+
 .. condition:: MEDIATOR.turns 2
 
 [NPC]_
@@ -76,6 +75,8 @@ Spam
 
 Ignore them
 -----------
+
+{0}
 
 .. condition:: MEDIATOR.turns 3
 
@@ -90,6 +91,8 @@ Ignore them
 Idea
 ----
 
+{0}
+
 .. condition:: MEDIATOR.turns 4
 
 [PLAYER]_
@@ -99,6 +102,8 @@ Idea
 
 Stupidly
 --------
+
+{0}
 
 .. condition:: MEDIATOR.turns 5
 
@@ -110,6 +115,8 @@ Stupidly
 
 Every day
 ---------
+
+{0}
 
 .. condition:: MEDIATOR.turns 6
 
@@ -124,6 +131,8 @@ Every day
 Calm
 ----
 
+{0}
+
 .. condition:: MEDIATOR.turns 7
 
 [PLAYER]_
@@ -134,6 +143,8 @@ Calm
 Waiting
 -------
 
+{0}
+
 .. condition:: MEDIATOR.turns 8
 
 [NPC]_
@@ -142,8 +153,3 @@ Waiting
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
-
-Mediation
----------
-
-{0}

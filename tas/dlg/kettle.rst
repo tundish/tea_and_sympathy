@@ -46,6 +46,8 @@ Input
 1
 -
 
+{0}
+
 .. condition:: KETTLE.state 20
 
 [PLAYER]_
@@ -63,6 +65,8 @@ Input
 2
 -
 
+{0}
+
 .. condition:: KETTLE.state 30
 
 [PLAYER]_
@@ -78,6 +82,8 @@ Input
 3
 -
 
+{0}
+
 .. condition:: KETTLE.state 40
 
 [NPC]_
@@ -88,6 +94,8 @@ Input
 
 4
 -
+
+{0}
 
 .. condition:: KETTLE.state 50
 
@@ -101,6 +109,8 @@ Input
 
 5
 -
+
+{0}
 
 .. condition:: KETTLE.state 60
 
@@ -116,6 +126,8 @@ Input
 
 6
 -
+
+{0}
 
 .. condition:: KETTLE.state 70
 
@@ -141,6 +153,8 @@ Input
 7
 -
 
+{0}
+
 .. condition:: KETTLE.state 80
 
 [NPC]_
@@ -151,6 +165,8 @@ Input
 
 8
 -
+
+{0}
 
 .. condition:: KETTLE.state 90
 
@@ -165,6 +181,8 @@ Input
 9
 -
 
+{0}
+
 .. condition:: KETTLE.state 100
 
 [NPC]_
@@ -173,8 +191,3 @@ Input
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
-
-Look
-----
-
-{do_look}
