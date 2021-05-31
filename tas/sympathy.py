@@ -64,7 +64,7 @@ class TeaAndSympathy(TeaTime):
         try:
             rv = super().__call__(fn, *args, **kwargs)
         except TypeError:
-            rv = self.do_refuse(self.do_refuse, self.input_text, **kwargs)
+            rv = self.do_refuse(self.do_refuse, self.input_text, *args[1:], **kwargs)
 
         try:
             mugs = [i for i in self.lookup["mug"] if i.get_state(Location) == Location.counter]

@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from collections import defaultdict
 import random
 
 from turberfield.dialogue.types import DataObject
@@ -88,6 +89,10 @@ class Drama:
     @property
     def turns(self):
         return len(self.history)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.lookup = defaultdict(set)
 
     def build(self):
         return []
