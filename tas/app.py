@@ -69,7 +69,7 @@ async def post_command(request):
     if not story.drama.validator.match(cmd):
         raise web.HTTPUnauthorized(reason="User sent invalid command.")
     else:
-        text = story.drama.play(cmd)
+        text = story.drama.play(cmd, context=story.presenter.casting)
         story.presenter = story.represent(text, story.drama.facts)
     raise web.HTTPFound("/")
 

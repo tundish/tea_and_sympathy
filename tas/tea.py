@@ -149,7 +149,7 @@ class TeaTime(Drama, Mediator):
             if isinstance(i, Character) and i.get_state(Motivation) in args:
                 i.state = Motivation.paused
 
-    def do_look(self, this, text, *args):
+    def do_look(self, this, text, context):
         """
         look | look around | look around kitchen
         search | search kitchen
@@ -182,7 +182,7 @@ class TeaTime(Drama, Mediator):
             else:
                 yield "It's empty."
 
-    def do_examine(self, this, text, /, *, obj: [Feature, Item, Liquid, Mass, Space]):
+    def do_examine(self, this, text, context, *, obj: [Feature, Item, Liquid, Mass, Space]):
         """
         examine {obj.names[0]} | check {obj.names[0]} | inspect {obj.names[0]} | search {obj.names[0]}
         examine {obj.names[1]} | check {obj.names[1]} | inspect {obj.names[1]} | search {obj.names[1]}
@@ -190,7 +190,7 @@ class TeaTime(Drama, Mediator):
         """
         return "\n".join(self.say_examine(obj))
 
-    def do_search(self, this, text, /, *, locn: Location):
+    def do_search(self, this, text, context, *, locn: Location):
         """
         examine {locn.value[0]} | check {locn.value[0]} | inspect {locn.value[0]} | search {locn.value[0]}
         examine {locn.value[1]} | check {locn.value[1]} | inspect {locn.value[1]} | search {locn.value[1]}
@@ -204,7 +204,7 @@ class TeaTime(Drama, Mediator):
             "\n".join("* {0}{1}".format(i.capitalize(), "s" if counts[i] > 1 else "") for i in unhidden)
         )
 
-    def do_find(self, this, text, /, *, obj: [Item, Liquid, Mass, Space]):
+    def do_find(self, this, text, context, *, obj: [Item, Liquid, Mass, Space]):
         """
         find {obj.names[0]} | get {obj.names[0]} | grab {obj.names[0]} | pick up {obj.names[0]}
         find {obj.names[1]} | get {obj.names[1]} | grab {obj.names[1]} | pick up {obj.names[1]}
@@ -230,7 +230,7 @@ class TeaTime(Drama, Mediator):
         locn = obj.get_state(Location)
         yield f"The {colour} {obj.name} is {locn.into[0]} the {locn.value[0]}."
 
-    def do_pour_liquid(self, this, text, /, *, src: Liquid, dst: Space):
+    def do_pour_liquid(self, this, text, context, *, src: Liquid, dst: Space):
         """
         fill {dst.names[0]} with {src.heat} {src.names[0]} | fill {dst.names[0]} with {src.names[0]}
         fill {dst.names[0]} from {src.heat} {src.names[1]} | fill {dst.names[0]} from {src.names[1]}
@@ -283,7 +283,7 @@ class TeaTime(Drama, Mediator):
         post = f"The {src.names[0]} in the {colour} {dst.name} is {heat} ."
         return "\n".join((pre, post))
 
-    def do_pour_mass(self, this, text, /, *, src: Mass, dst: Space):
+    def do_pour_mass(self, this, text, context, *, src: Mass, dst: Space):
         """
         pour {src.names[0]} in {dst.names[0]} | pour {src.names[0]} in {dst.names[0]}
         pour {src.names[0]} into {dst.names[1]} | pour {src.names[0]} into {dst.names[1]}
@@ -298,7 +298,7 @@ class TeaTime(Drama, Mediator):
             f"The {src.names[0]} is in the {colour} {dst.name}."
         )
 
-    def do_drop_item(self, this, text, /, *, src: Item, dst: Space):
+    def do_drop_item(self, this, text, context, *, src: Item, dst: Space):
         """
         drop {src.names[0]} in {dst.names[0]} | drop {src.names[0]} into {dst.names[0]}
         drop {src.names[1]} in {dst.names[0]} | drop {src.names[1]} into {dst.names[0]}
@@ -313,7 +313,7 @@ class TeaTime(Drama, Mediator):
             f"The {src.names[0]} is in the {colour} {dst.name}."
         )
 
-    def do_heat_space(self, this, text, /, *, obj: Space):
+    def do_heat_space(self, this, text, context, *, obj: Space):
         """
         boil {obj.names[0]}
         heat {obj.names[0]}
@@ -323,9 +323,9 @@ class TeaTime(Drama, Mediator):
         hob = next(iter(self.lookup["hob"]))
         hob.state = Motivation.acting
         kettle = next(iter(self.lookup["kettle"]))
-        return self.do_examine(self.do_examine, text, obj=kettle)
+        return self.do_examine(self.do_examine, text, context, obj=kettle)
 
-    def do_stir(self, this, text, /, *, obj: [Item, Liquid]):
+    def do_stir(self, this, text, context, *, obj: [Item, Liquid]):
         """
         stir {obj.names[0]}
         stir {obj.names[1]}
@@ -350,13 +350,13 @@ class TeaTime(Drama, Mediator):
         else:
             return self.refusal
 
-    def do_put_the_kettle_on(self, this, text, *args):
+    def do_put_the_kettle_on(self, this, text, context):
         """
         put the kettle on.
 
         """
         kettle = next(iter(self.lookup["kettle"]))
         tap = next(iter(self.lookup["tap"]))
-        list(self.do_pour_liquid(self.do_pour_liquid, text, src=tap, dst=kettle))
+        list(self.do_pour_liquid(self.do_pour_liquid, text, context, src=tap, dst=kettle))
         self.active.discard(this)
-        return self.do_heat_space(self.do_heat_space, text, obj=kettle)
+        return self.do_heat_space(self.do_heat_space, text, context, obj=kettle)
