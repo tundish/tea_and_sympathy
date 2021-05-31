@@ -90,7 +90,7 @@ class TeaAndSympathy(TeaTime):
         finally:
             return rv
 
-    def do_help(self, this, text, /, **kwargs):
+    def do_help(self, this, text, context, *args, **kwargs):
         """
         help | ?
 
@@ -105,7 +105,7 @@ class TeaAndSympathy(TeaTime):
             prefix=" " * 4
         )
 
-    def do_history(self, this, text, /, **kwargs):
+    def do_history(self, this, text, context, *args, **kwargs):
         """
         history
 
@@ -118,7 +118,7 @@ class TeaAndSympathy(TeaTime):
             ("*{0.args[0]}*".format(i) for i in self.history)
         )
 
-    def do_refuse(self, this, text, /, **kwargs):
+    def do_refuse(self, this, text, context, *args, **kwargs):
         """
         refuse
 
@@ -129,7 +129,7 @@ class TeaAndSympathy(TeaTime):
 
         return "\n".join(("[MEDIATOR]_", text, self.refusal))
 
-    def do_quit(self, this, text, /, **kwargs):
+    def do_quit(self, this, text, context, *args, **kwargs):
         """
         exit | finish | stop | quit
 

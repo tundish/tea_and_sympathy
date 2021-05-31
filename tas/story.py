@@ -104,9 +104,9 @@ def parser():
 
 def main(opts):
     story = Story(**vars(opts))
-    results = None
+    text = None
     while story.drama.active:
-        presenter = story.represent(results, story.drama.facts)
+        presenter = story.represent(text, story.drama.facts)
         for frame in presenter.frames:
             animation = presenter.animate(frame, dwell=presenter.dwell, pause=presenter.pause)
             if not animation:
@@ -122,7 +122,7 @@ def main(opts):
                 break
 
             cmd = input("{0} ".format(story.drama.prompt))
-            results = story.drama.play(cmd, context=presenter.casting)
+            text = story.drama.play(cmd, context=presenter.casting)
 
 def run():
     p = parser()
