@@ -96,6 +96,10 @@ class Story(Renderer):
 def parser():
     rv = argparse.ArgumentParser()
     rv.add_argument(
+        "--debug", action="store_true", default=False,
+        help="Write generated dialogue for debugging."
+    )
+    rv.add_argument(
         "--quick", action="store_true", default=False,
         help="Don't perform timed animations."
     )
@@ -107,6 +111,9 @@ def main(opts):
     text = None
     while story.drama.active:
         presenter = story.represent(text, story.drama.facts)
+        if opts.debug:
+            print(presenter.text, file=sys.stderr)
+            print(*presenter.frames, sep="\n", file=sys.stderr)
         for frame in presenter.frames:
             animation = presenter.animate(frame, dwell=presenter.dwell, pause=presenter.pause)
             if not animation:

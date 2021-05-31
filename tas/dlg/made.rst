@@ -35,10 +35,6 @@ Input
 
 |INPUT_TEXT|
 
-[MEDIATOR]_
-
-{do_look}
-
 .. |INPUT_TEXT| property:: MEDIATOR.input_text
 
 .. property:: MEDIATOR.prompt ?
@@ -49,6 +45,8 @@ Brewed
 
 .. condition:: MEDIATOR.outcomes[brewed] True
 
+{0}
+
 [PLAYER]_
 
     Here's your tea.
@@ -57,6 +55,8 @@ Untidy
 ------
 
 .. condition:: MEDIATOR.outcomes[untidy] True
+
+{0}
 
 [NPC]_
 
@@ -67,6 +67,8 @@ Stingy
 
 .. condition:: MEDIATOR.outcomes[stingy] True
 
+{0}
+
 [NPC]_
 
     We must have run out of milk.
@@ -75,6 +77,8 @@ Served
 ------
 
 .. condition:: MEDIATOR.outcomes[served] True
+
+{0}
 
 [PLAYER]_
 
@@ -90,6 +94,8 @@ Sugary
 ------
 
 .. condition:: MEDIATOR.outcomes[sugary] True
+
+{0}
 
 [NPC]_
 

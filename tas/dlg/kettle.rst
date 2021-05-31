@@ -46,9 +46,9 @@ Input
 1
 -
 
-{0}
-
 .. condition:: KETTLE.state 20
+
+{0}
 
 [PLAYER]_
 
@@ -65,9 +65,9 @@ Input
 2
 -
 
-{0}
-
 .. condition:: KETTLE.state 30
+
+{0}
 
 [PLAYER]_
 
@@ -82,9 +82,9 @@ Input
 3
 -
 
-{0}
-
 .. condition:: KETTLE.state 40
+
+{0}
 
 [NPC]_
 
@@ -95,9 +95,9 @@ Input
 4
 -
 
-{0}
-
 .. condition:: KETTLE.state 50
+
+{0}
 
 [NPC]_
 
@@ -110,9 +110,9 @@ Input
 5
 -
 
-{0}
-
 .. condition:: KETTLE.state 60
+
+{0}
 
 [NPC]_
 
@@ -127,9 +127,9 @@ Input
 6
 -
 
-{0}
-
 .. condition:: KETTLE.state 70
+
+{0}
 
 [PLAYER]_
 
@@ -153,9 +153,9 @@ Input
 7
 -
 
-{0}
-
 .. condition:: KETTLE.state 80
+
+{0}
 
 [NPC]_
 
@@ -166,9 +166,9 @@ Input
 8
 -
 
-{0}
-
 .. condition:: KETTLE.state 90
+
+{0}
 
 [PLAYER]_
 
@@ -181,9 +181,9 @@ Input
 9
 -
 
-{0}
-
 .. condition:: KETTLE.state 100
+
+{0}
 
 [NPC]_
 

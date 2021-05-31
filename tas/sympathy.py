@@ -20,7 +20,6 @@
 from collections import defaultdict
 from collections import namedtuple
 import random
-import textwrap
 
 from turberfield.catchphrase.parser import CommandParser
 from turberfield.dialogue.model import SceneScript
@@ -100,10 +99,7 @@ class TeaAndSympathy(TeaTime):
             lambda x: len(x) > 1,
             (i[0] for fn in self.active for i in CommandParser.expand_commands(fn, self.ensemble))
         ))
-        return textwrap.indent(
-            "\n".join("* {0}".format(i) for i in random.sample(options, min(3, len(options)))),
-            prefix=" " * 4
-        )
+        return "\n".join("* {0}".format(i) for i in random.sample(options, min(3, len(options))))
 
     def do_history(self, this, text, context, *args, **kwargs):
         """

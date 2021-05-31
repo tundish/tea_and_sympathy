@@ -36,9 +36,9 @@ Early
 Caution
 -------
 
-{0}
-
 .. condition:: MEDIATOR.turns 0
+
+{0}
 
 |NPC_NAME| is on her phone.
 
@@ -51,9 +51,9 @@ Caution
 Cold
 ----
 
-{0}
-
 .. condition:: MEDIATOR.turns 1
+
+{0}
 
 [NPC]_
 
@@ -65,9 +65,9 @@ Cold
 Spam
 ----
 
-{0}
-
 .. condition:: MEDIATOR.turns 2
+
+{0}
 
 [NPC]_
 
@@ -76,9 +76,9 @@ Spam
 Ignore them
 -----------
 
-{0}
-
 .. condition:: MEDIATOR.turns 3
+
+{0}
 
 [PLAYER]_
 
@@ -91,9 +91,9 @@ Ignore them
 Idea
 ----
 
-{0}
-
 .. condition:: MEDIATOR.turns 4
+
+{0}
 
 [PLAYER]_
 
@@ -103,9 +103,9 @@ Idea
 Stupidly
 --------
 
-{0}
-
 .. condition:: MEDIATOR.turns 5
+
+{0}
 
 [NPC]_
 
@@ -116,9 +116,9 @@ Stupidly
 Every day
 ---------
 
-{0}
-
 .. condition:: MEDIATOR.turns 6
+
+{0}
 
 [PLAYER]_
 
@@ -131,9 +131,9 @@ Every day
 Calm
 ----
 
-{0}
-
 .. condition:: MEDIATOR.turns 7
+
+{0}
 
 [PLAYER]_
 
@@ -143,9 +143,9 @@ Calm
 Waiting
 -------
 
-{0}
-
 .. condition:: MEDIATOR.turns 8
+
+{0}
 
 [NPC]_
 

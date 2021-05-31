@@ -71,7 +71,7 @@ class TeaTests(unittest.TestCase):
         self.assertTrue(fn)
         dlg = drama(fn, *args, **kwargs)
         self.assertIn("Kettle", dlg)
-        self.assertEqual(3, len(dlg.splitlines()), dlg)
+        self.assertEqual(3, len(list(filter(None, dlg.splitlines()))), dlg)
 
     def test_examine_kettle_empty(self):
         drama = TeaTime()

@@ -22,7 +22,6 @@ from collections import Counter
 import enum
 import re
 import statistics
-import textwrap
 
 from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.types import Stateful
@@ -160,10 +159,7 @@ class TeaTime(Drama, Mediator):
 
         """
         self.pause()
-        return textwrap.indent(
-            "\n".join("* {0}".format(i.value[0].capitalize()) for i in list(Location)),
-            prefix=" " * 4
-        )
+        return "\n".join("* {0}".format(i.value[0].capitalize()) for i in list(Location))
 
     def say_examine(self, obj):
         locn = obj.get_state(Location)
@@ -199,7 +195,7 @@ class TeaTime(Drama, Mediator):
         items = [i for i in self.ensemble if isinstance(i, Stateful) and i.get_state(Location) == locn]
         counts = Counter(i.names[0] for i in items)
         unhidden = {i.names[0] for i in items if getattr(i, "parent", i) == i}
-        return "Looking {0.into[0]} the {0.value[0]}, you see:\n{1}\n".format(
+        return "Looking {0.into[0]} the {0.value[0]}, you see:\n\n{1}\n".format(
             locn,
             "\n".join("* {0}{1}".format(i.capitalize(), "s" if counts[i] > 1 else "") for i in unhidden)
         )
