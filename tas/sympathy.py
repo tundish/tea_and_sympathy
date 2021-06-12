@@ -99,7 +99,7 @@ class TeaAndSympathy(TeaTime):
             lambda x: len(x) > 1,
             (i[0] for fn in self.active for i in CommandParser.expand_commands(fn, self.ensemble))
         ))
-        return "\n".join("* {0}".format(i) for i in random.sample(options, min(3, len(options))))
+        yield from ("* {0}".format(i) for i in random.sample(options, min(3, len(options))))
 
     def do_history(self, this, text, context, *args, **kwargs):
         """
@@ -107,23 +107,15 @@ class TeaAndSympathy(TeaTime):
 
         """
         self.pause()
-        return textwrap.dedent("""
-        [MEDIATOR]_
-        So far, it's been like this.
-        """) + "\n".join(
-            ("*{0.args[0]}*".format(i) for i in self.history)
-        )
+        yield from ("*{0.args[0]}*".format(i) for i in self.history)
 
     def do_refuse(self, this, text, context, *args, **kwargs):
         """
         refuse
 
         """
-        # FIXME: This doeasn't work.
-        self.prompt = "If you're stuck, try 'help' or 'history'."
         self.pause()
-
-        return "\n".join(("[MEDIATOR]_", text, self.refusal))
+        return f"{text}\n\n{self.refusal}"
 
     def do_quit(self, this, text, context, *args, **kwargs):
         """
