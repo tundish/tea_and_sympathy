@@ -29,4 +29,45 @@ have gone and done it.
 Did I make the tea yesterday? If I did, then you are getting too used to me
 being your servant. Or else, I'm the lazy one.
 
+Use Case
+========
 
+In order to make tea, at a minimum there must be access to the following items:
+* A kettle with hot water in it.
+* A clean mug with a teabag. One for each Consumer.
+
+Once these conditions are met, perform *brewing* by puring the hot water into
+each mug. At this point a spoon is required.
+
+The teabag must be removed prior to *serving*.
+
+According to the preference of each Consumer, these optional items may be added
+to the corresponding mug at any time after the teabag is removed:
+* Milk
+
+According to the preference of each Consumer, these optional items may be added
+to the corresponding mug at any time:
+* Sugar
+
+No water in the kettle?
+    Perform *filling*.
+
+Water in the kettle is not hot?
+    Perform *boiling*.
+
+Not enough clean mugs?
+    Perform *washup*.
+
+Principal Actor
+    The Producer who makes the tea.
+    The intention of the Producer is *serving* the tea.
+
+Secondary Actors
+    The Consumer for whom tea is made.
+    The expectation of the Consumer is *drinking* the tea.
+
+Elaborations
+
+    * The PA may or may not be a Consumer of the tea.
+    * The PA may relinquish control to another Consumer.
+    * Consumers may assist if asked, eg: Can you get the mugs out for me?
