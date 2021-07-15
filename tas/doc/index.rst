@@ -36,7 +36,7 @@ In order to make tea, at a minimum there must be access to the following items:
 * A kettle with hot water in it.
 * A clean mug with a teabag. One for each Consumer.
 
-Once these conditions are met, perform *brewing* by puring the hot water into
+Once these conditions are met, perform *brewing* by pouring the hot water into
 each mug. At this point a spoon is required.
 
 The teabag must be removed prior to *serving*.
@@ -56,11 +56,11 @@ Water in the kettle is not hot?
     Perform *boiling*.
 
 Not enough clean mugs?
-    Perform *washup*.
+    Perform *washing*.
 
 Principal Actor
     The Producer who makes the tea.
-    The intention of the Producer is *serving* the tea.
+    The expectation of the Producer is *serving* the tea.
 
 Secondary Actors
     The Consumer for whom tea is made.
@@ -68,6 +68,6 @@ Secondary Actors
 
 Elaborations
 
-    * The PA may or may not be a Consumer of the tea.
-    * The PA may relinquish control to another Consumer.
+    * The Producer may or may not be a Consumer of the tea.
+    * The Producer may relinquish control to another.
     * Consumers may assist if asked, eg: Can you get the mugs out for me?
