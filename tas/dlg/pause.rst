@@ -9,11 +9,11 @@
 
 .. entity:: PLAYER
    :types:  tas.types.Character
-   :states: tas.tea.Motivation.player
+   :states: tas.teatime.Motivation.player
 
 .. entity:: NPC
    :types:  tas.types.Character
-   :states: tas.tea.Motivation.paused
+   :states: tas.teatime.Motivation.paused
 
 .. entity:: MEDIATOR
    :types:  tas.sympathy.TeaAndSympathy
@@ -46,7 +46,7 @@ Help
     To see a list of past actions, use the *history* command.
 
 .. property:: MEDIATOR.prompt ?
-.. property:: NPC.state tas.tea.Motivation.acting
+.. property:: NPC.state tas.teatime.Motivation.acting
 
 Look
 ----
@@ -60,4 +60,4 @@ Look
 {do_look}
 
 .. property:: MEDIATOR.prompt ?
-.. property:: NPC.state tas.tea.Motivation.acting
+.. property:: NPC.state tas.teatime.Motivation.acting

@@ -9,11 +9,11 @@
 
 .. entity:: PLAYER
    :types:  tas.types.Character
-   :states: tas.tea.Motivation.paused
+   :states: tas.teatime.Motivation.paused
 
 .. entity:: NPC
    :types:  tas.types.Character
-   :states: tas.tea.Motivation.paused
+   :states: tas.teatime.Motivation.paused
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings

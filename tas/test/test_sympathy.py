@@ -21,8 +21,8 @@ import random
 import unittest
 
 from tas.story import Story
-from tas.tea import Motivation
-from tas.tea import Location
+from tas.teatime import Motivation
+from tas.teatime import Location
 from tas.sympathy import TeaAndSympathy
 
 from turberfield.catchphrase.parser import CommandParser

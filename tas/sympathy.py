@@ -24,9 +24,9 @@ import random
 from turberfield.catchphrase.parser import CommandParser
 from turberfield.dialogue.model import SceneScript
 
-from tas.tea import Motivation
-from tas.tea import Location
-from tas.tea import TeaTime
+from tas.teatime import Motivation
+from tas.teatime import Location
+from tas.teatime import TeaTime
 from tas.types import Character
 
 
