@@ -45,14 +45,22 @@ class Construct(ChainMap):
         super().__init__(*maps)
         self.uid = uid
 
+class Promise(Proclet):
 
-class Brew(Proclet):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.log = logging.getLogger(self.name)
+        self.intent = {}
+        self.result = {}
+
+
+class Brew(Promise):
 
     @property
     def net(self):
         return {
             self.pro_filling: [self.pro_boiling, self.pro_missing],
-            self.pro_missing: [self.pro_claiming, self.pro_missing],
+            self.pro_missing: [self.pro_claiming], # self.pro_missing],
             self.pro_boiling: [self.pro_brewing],
             self.pro_claiming: [self.pro_inspecting, self.pro_claiming],
             self.pro_inspecting: [self.pro_approving],
@@ -61,16 +69,25 @@ class Brew(Proclet):
             self.pro_serving: [],
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.log = logging.getLogger(self.name)
-
     def pro_filling(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         yield
 
     def pro_missing(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
+        self.intent.update(kwargs)
+        for k, v in kwargs.items():
+            if not self.result.get(k):
+                k = Kit.create(
+                    name=f"find_{k}",
+                    channels=self.channels,
+                    group=[self.uid],
+                )
+                yield from self.channels["public"].send(
+                    sender=self.uid, group=[k.uid],
+                    action=this.__name__, content={k: v}
+                )
+                yield k
         yield
 
     def pro_boiling(self, this, **kwargs):
@@ -99,7 +116,7 @@ class Brew(Proclet):
         yield
 
 
-class Kit(Proclet):
+class Kit(Promise):
 
     @property
     def net(self):
@@ -110,16 +127,19 @@ class Kit(Proclet):
         }
 
     def pro_missing(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
         yield
 
     def pro_finding(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
         yield
 
     def pro_claiming(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
         yield
 
 
-class Tidy(Proclet):
+class Tidy(Promise):
 
     @property
     def net(self):
@@ -148,7 +168,7 @@ class TypeTests(unittest.TestCase):
 if __name__ == "__main__":
     logging.basicConfig(
         style="{", format="{proclet.name:>16}|{funcName:>14}|{message}",
-        level=logging.DEBUG,
+        level=logging.INFO,
     )
     channels = {"public": Channel()}
     b = Brew.create(name="brew_tea", channels=channels)
@@ -159,7 +179,8 @@ if __name__ == "__main__":
                 logging.debug(m, extra={"proclet": b})
         except Termination:
             rv = 0
-        except Exception:
+        except Exception as e:
             rv = 1
+            logging.exception(e, extra={"proclet": b})
 
     sys.exit(rv)
