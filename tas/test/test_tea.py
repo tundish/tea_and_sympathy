@@ -222,28 +222,41 @@ class Brew(Proclet):
             self.pro_serving: [],
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.log = logging.getLogger(self.name)
+
     def pro_filling(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
         yield
 
     def pro_missing(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
         yield
 
     def pro_boiling(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
         yield
 
     def pro_claiming(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
         yield
 
     def pro_inspecting(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
         yield
 
     def pro_approving(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
         yield
 
     def pro_brewing(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
         yield
 
     def pro_serving(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
+        raise Termination()
         yield
 
 
