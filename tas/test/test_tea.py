@@ -78,16 +78,16 @@ class Brew(Promise):
         self.intent.update(kwargs)
         for k, v in kwargs.items():
             if not self.result.get(k):
-                k = Kit.create(
+                p = Kit.create(
                     name=f"find_{k}",
                     channels=self.channels,
                     group=[self.uid],
                 )
+                yield p
                 yield from self.channels["public"].send(
-                    sender=self.uid, group=[k.uid],
+                    sender=self.uid, group=[p.uid],
                     action=this.__name__, content={k: v}
                 )
-                yield k
         yield
 
     def pro_boiling(self, this, **kwargs):
@@ -127,7 +127,17 @@ class Kit(Promise):
         }
 
     def pro_missing(self, this, **kwargs):
-        self.log.info("", extra={"proclet": self})
+        try:
+            sync = next(
+                i for i in self.channels["public"].receive(self, this)
+                if i.action == this.__name__
+            )
+            self.log.debug(sync, extra={"proclet": self})
+        except StopIteration:
+            return
+        else:
+            self.log.info(sync, extra={"proclet": self})
+            yield
         yield
 
     def pro_finding(self, this, **kwargs):
