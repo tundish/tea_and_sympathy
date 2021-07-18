@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import logging
 import random
 import sys
 import unittest
@@ -208,7 +209,82 @@ class Construct(ChainMap):
 
 class Brew(Proclet):
 
-    ...
+    @property
+    def net(self):
+        return {
+            self.pro_filling: [self.pro_boiling, self.pro_missing],
+            self.pro_missing: [self.pro_claiming, self.pro_missing],
+            self.pro_boiling: [self.pro_brewing],
+            self.pro_claiming: [self.pro_inspecting, self.pro_claiming],
+            self.pro_inspecting: [self.pro_approving],
+            self.pro_approving: [self.pro_brewing],
+            self.pro_brewing: [self.pro_serving],
+            self.pro_serving: [],
+        }
+
+    def pro_filling(self, this, **kwargs):
+        yield
+
+    def pro_missing(self, this, **kwargs):
+        yield
+
+    def pro_boiling(self, this, **kwargs):
+        yield
+
+    def pro_claiming(self, this, **kwargs):
+        yield
+
+    def pro_inspecting(self, this, **kwargs):
+        yield
+
+    def pro_approving(self, this, **kwargs):
+        yield
+
+    def pro_brewing(self, this, **kwargs):
+        yield
+
+    def pro_serving(self, this, **kwargs):
+        yield
+
+
+class Kit(Proclet):
+
+    @property
+    def net(self):
+        return {
+            self.pro_missing: [self.pro_finding],
+            self.pro_finding: [self.pro_claiming],
+            self.pro_claiming: [],
+        }
+
+    def pro_missing(self, this, **kwargs):
+        yield
+
+    def pro_finding(self, this, **kwargs):
+        yield
+
+    def pro_claiming(self, this, **kwargs):
+        yield
+
+
+class Tidy(Proclet):
+
+    @property
+    def net(self):
+        return {
+            self.pro_inspecting: [self.pro_cleaning],
+            self.pro_cleaning: [self.pro_approving],
+            self.pro_approving: [],
+        }
+
+    def pro_inspecting(self, this, **kwargs):
+        yield
+
+    def pro_cleaning(self, this, **kwargs):
+        yield
+
+    def pro_approving(self, this, **kwargs):
+        yield
 
 
 class TypeTests(unittest.TestCase):
@@ -218,6 +294,10 @@ class TypeTests(unittest.TestCase):
         self.assertIsInstance(c.uid, uuid.UUID)
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        style="{", format="{proclet.name:>16}|{funcName:>14}|{message}",
+        level=logging.DEBUG,
+    )
     channels = {"public": Channel()}
     b = Brew.create(name="brew_tea", channels=channels)
     rv = None
