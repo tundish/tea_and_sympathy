@@ -74,6 +74,7 @@ class Brew(Promise):
 
     def pro_filling(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
+        self.kettle = 20
         yield
 
     def pro_missing(self, this, **kwargs):
@@ -96,9 +97,8 @@ class Brew(Promise):
 
     def pro_boiling(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        kettle = 20
-        while kettle != 100:
-            kettle += 10
+        while self.kettle <= 90:
+            self.kettle += 10
             return
         yield
 
@@ -173,11 +173,12 @@ class Kit(Promise):
 
     def pro_missing(self, this, **kwargs):
         try:
-            sync = next(
+            m = next(
                 i for i in self.channels["public"].receive(self, this)
                 if i.action == Init.request
             )
-            self.intent.update(sync.content)
+            print(self.pending)
+            self.intent.update(m.content)
         except StopIteration:
             return
         else:
@@ -231,6 +232,7 @@ class Tidy(Promise):
         for k, v in self.intent.items():
             if random.random() > self.luck:
                 self.log.info(f"Cleaning {k}", extra={"proclet": self})
+        yield
 
     def pro_approving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
@@ -258,8 +260,6 @@ if __name__ == "__main__":
         try:
             for m in b(tea=2, milk=2, spoons=1, sugar=1):
                 logging.debug(m, extra={"proclet": b})
-            #print(b.result)
-            #print(b.pending)
         except Termination:
             rv = 0
         except Exception as e:
@@ -267,7 +267,7 @@ if __name__ == "__main__":
             logging.exception(e, extra={"proclet": b})
         finally:
             n += 1
-            if n > 20:
+            if n > 30:
                 break
 
     sys.exit(rv)
