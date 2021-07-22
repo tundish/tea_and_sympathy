@@ -50,6 +50,16 @@ class Promise(Proclet):
         ]
         return ChainMap(*reversed(mappings))
 
+    @property
+    def pending(self):
+        return all(
+            next((i for i in reversed(v) if isinstance(i.action, Exit)), None)
+            and not c.empty(self.uid)
+            for c in self.channels.values()
+            for v in c.view(self.uid)
+        )
+
+
 class Brew(Promise):
 
     @property
@@ -262,6 +272,7 @@ if __name__ == "__main__":
             for m in b(tea=2, milk=2, spoons=1, sugar=1):
                 logging.debug(m, extra={"proclet": b})
             print(b.result_)
+            print(b.pending)
         except Termination:
             rv = 0
         except Exception as e:
