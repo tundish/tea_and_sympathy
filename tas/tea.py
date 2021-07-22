@@ -37,27 +37,24 @@ class Promise(Proclet):
         super().__init__(*args, **kwargs)
         self.log = logging.getLogger(self.name)
         self.intent = {}
-        self.result = defaultdict(list)  # FIXME Use channel and Performatives
 
     @property
-    def result_(self):
+    def result(self):
         mappings = [
-            m.content
+            next((m.content for m in reversed(v) if m.action == Exit.deliver), {})
             for c in self.channels.values()
             for v in c.view(self.uid)
-            for m in reversed(v)
-            if m.sender != self.uid and m.action == Exit.deliver
         ]
-        return ChainMap(*reversed(mappings))
+        return ChainMap(*reversed(list(filter(None, mappings))))
 
     @property
     def pending(self):
-        return all(
-            next((i for i in reversed(v) if isinstance(i.action, Exit)), None)
-            and not c.empty(self.uid)
+        return [
+            v
             for c in self.channels.values()
             for v in c.view(self.uid)
-        )
+            if not any(i for i in reversed(v) if isinstance(i.action, Exit))
+        ]
 
 
 class Brew(Promise):
@@ -93,19 +90,15 @@ class Brew(Promise):
                 yield p
                 yield from self.channels["public"].send(
                     sender=self.uid, group=[p.uid],
-                    action=this.__name__, content={k: v}
+                    action=Init.request, content={k: v}
                 )
-                self.result[k].append(p.uid)
         yield
 
     def pro_boiling(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        if "kettle" not in self.intent:
-            self.intent["kettle"] = 100
-            self.result["kettle"].append(0)
-
-        while self.result["kettle"][-1] != self.intent["kettle"]:
-            self.result["kettle"].append(self.result["kettle"][-1] + 10)
+        kettle = 20
+        while kettle != 100:
+            kettle += 10
             return
         yield
 
@@ -113,9 +106,8 @@ class Brew(Promise):
         try:
             sync = next(
                 i for i in self.channels["public"].receive(self, this)
-                if i.action == this.__name__
+                if i.action == Exit.deliver
             )
-            self.result.update(sync.content)
         except StopIteration:
             return
         else:
@@ -125,7 +117,7 @@ class Brew(Promise):
     def pro_inspecting(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         for k in ("mugs", "spoons"):
-            if isinstance(next(reversed(self.result.get(k)), None), uuid.UUID):
+            if any(i for i in self.pending if k in i[0].content):
                 continue
 
             if self.result.get(k):
@@ -139,24 +131,19 @@ class Brew(Promise):
                 luck = kwargs.get("luck", random.triangular(0, 1, 3/4))
                 yield from self.channels["public"].send(
                     sender=self.uid, group=[p.uid],
-                    action=this.__name__,
-                    content={k: self.result[k][-1], "luck": luck}
+                    action=Init.request,
+                    content={k: self.intent[k], "luck": luck}
                 )
-                self.result[k].append(p.uid)
         yield
 
     def pro_approving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        while any(
-            isinstance(next(reversed(i), None), uuid.UUID)
-            for i in self.result.values()
-        ):
+        while self.pending:
             try:
                 sync = next(
                     i for i in self.channels["public"].receive(self, this)
-                    if i.action == this.__name__
+                    if isinstance(i.action, Exit)
                 )
-                self.result.update(sync.content)
             except StopIteration:
                 return
         else:
@@ -169,7 +156,7 @@ class Brew(Promise):
 
     def pro_serving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        if not any(isinstance(i[-1], uuid.UUID) for i in self.result.values()):
+        if not self.pending:
             raise Termination()
             yield
 
@@ -188,7 +175,7 @@ class Kit(Promise):
         try:
             sync = next(
                 i for i in self.channels["public"].receive(self, this)
-                if i.action == this.__name__
+                if i.action == Init.request
             )
             self.intent.update(sync.content)
         except StopIteration:
@@ -201,14 +188,14 @@ class Kit(Promise):
     def pro_finding(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         for k, v in self.intent.items():
-            self.result[k].append(v)
+            self.log.info(f"Finding {k}", extra={"proclet": self})
         yield
 
     def pro_claiming(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         yield from self.channels["public"].send(
             sender=self.uid, group=self.group,
-            action=this.__name__, content=self.result
+            action=Exit.deliver, content=self.intent
         )
         yield
 
@@ -228,7 +215,7 @@ class Tidy(Promise):
         try:
             sync = next(
                 i for i in self.channels["public"].receive(self, this)
-                if i.action == this.__name__
+                if i.action == Init.request
             )
             self.luck = sync.content.pop("luck", 1)
             self.intent.update(sync.content)
@@ -244,13 +231,12 @@ class Tidy(Promise):
         for k, v in self.intent.items():
             if random.random() > self.luck:
                 self.log.info(f"Cleaning {k}", extra={"proclet": self})
-            self.result[k].append(v)
 
     def pro_approving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         yield from self.channels["public"].send(
             sender=self.uid, group=self.group,
-            action=this.__name__, content=self.result
+            action=Exit.deliver, content=self.intent
         )
         yield
 
@@ -267,16 +253,21 @@ if __name__ == "__main__":
     )
     b = promise_tea()
     rv = None
+    n = 0
     while rv is None:
         try:
             for m in b(tea=2, milk=2, spoons=1, sugar=1):
                 logging.debug(m, extra={"proclet": b})
-            print(b.result_)
-            print(b.pending)
+            #print(b.result)
+            #print(b.pending)
         except Termination:
             rv = 0
         except Exception as e:
             rv = 1
             logging.exception(e, extra={"proclet": b})
+        finally:
+            n += 1
+            if n > 20:
+                break
 
     sys.exit(rv)
