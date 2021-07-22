@@ -36,7 +36,7 @@ class Promise(Proclet):
         super().__init__(*args, **kwargs)
         self.log = logging.getLogger(self.name)
         self.intent = {}
-        self.result = defaultdict(list)
+        self.result = defaultdict(list)  # FIXME Use channel and Performatives
 
 
 class Brew(Promise):
