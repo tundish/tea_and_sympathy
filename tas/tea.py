@@ -18,6 +18,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
+import random
 import sys
 
 from proclets.channel import Channel
@@ -42,7 +43,7 @@ class Brew(Promise):
     def net(self):
         return {
             self.pro_filling: [self.pro_boiling, self.pro_missing],
-            self.pro_missing: [self.pro_claiming],  # self.pro_missing],
+            self.pro_missing: [self.pro_claiming],
             self.pro_boiling: [self.pro_brewing],
             self.pro_claiming: [self.pro_inspecting, self.pro_claiming],
             self.pro_inspecting: [self.pro_approving],
@@ -58,7 +59,8 @@ class Brew(Promise):
     def pro_missing(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         self.intent.update(kwargs)
-        for k, v in kwargs.items():
+        self.intent["mugs"] = self.intent["tea"]
+        for k, v in self.intent.items():
             if not self.result.get(k):
                 p = Kit.create(
                     name=f"find_{k}",
@@ -98,6 +100,22 @@ class Brew(Promise):
 
     def pro_inspecting(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
+        for k in ("mugs", "spoons"):
+            if self.result.get(k):
+                p = Tidy.create(
+                    name=f"clean_{k}",
+                    channels=self.channels,
+                    group=[self.uid],
+                )
+                yield p
+
+                luck = kwargs.get("luck", random.triangular(0, 1, 3/4))
+                yield from self.channels["public"].send(
+                    sender=self.uid, group=[p.uid],
+                    action=this.__name__,
+                    content={k: self.result[k], "luck": luck}
+                )
+                print(self.domain)
         yield
 
     def pro_approving(self, this, **kwargs):
@@ -164,12 +182,34 @@ class Tidy(Promise):
         }
 
     def pro_inspecting(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
+        try:
+            sync = next(
+                i for i in self.channels["public"].receive(self, this)
+                if i.action == this.__name__
+            )
+            self.luck = sync.content.pop("luck", 1)
+            self.intent.update(sync.content)
+        except StopIteration:
+            return
+        else:
+            self.log.info(self.intent, extra={"proclet": self})
+            yield
         yield
 
     def pro_cleaning(self, this, **kwargs):
-        yield
+        self.log.info("", extra={"proclet": self})
+        for k in self.intent:
+            if random.random() > self.luck:
+                self.log.info(f"Cleaning {k}", extra={"proclet": self})
+            yield
 
     def pro_approving(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
+        yield from self.channels["public"].send(
+            sender=self.uid, group=self.group,
+            action=this.__name__, content=self.result
+        )
         yield
 
 
@@ -187,7 +227,7 @@ if __name__ == "__main__":
     rv = None
     while rv is None:
         try:
-            for m in b(tea=2, milk=2, sugar=1):
+            for m in b(tea=2, milk=2, spoons=1, sugar=1):
                 logging.debug(m, extra={"proclet": b})
         except Termination:
             rv = 0
