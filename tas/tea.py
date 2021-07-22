@@ -74,10 +74,16 @@ class Brew(Promise):
 
     def pro_boiling(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
+        if "kettle" not in self.intent:
+            self.intent["kettle"] = 100
+            self.result["kettle"] = 0
+
+        while self.result["kettle"] != self.intent["kettle"]:
+            self.result["kettle"] += 10
+            return
         yield
 
     def pro_claiming(self, this, **kwargs):
-        print(self.i_nodes[self.pro_brewing], self.marking, self.enabled)
         try:
             sync = next(
                 i for i in self.channels["public"].receive(self, this)
@@ -167,16 +173,17 @@ class Tidy(Promise):
         yield
 
 
-def promise_tea():
+def promise_tea(**kwargs):
+    name = kwargs.pop("name", "brew_tea")
     channels = {"public": Channel()}
-    return Brew.create(name="brew_tea", channels=channels)
+    return Brew.create(name=name, channels=channels, **kwargs)
 
 if __name__ == "__main__":
     logging.basicConfig(
         style="{", format="{proclet.name:>16}|{funcName:>14}|{message}",
         level=logging.INFO,
     )
-    b = make_promise()
+    b = promise_tea()
     rv = None
     while rv is None:
         try:
