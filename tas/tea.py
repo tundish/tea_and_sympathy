@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from collections import defaultdict
 import logging
 import random
 import sys
@@ -35,7 +36,7 @@ class Promise(Proclet):
         super().__init__(*args, **kwargs)
         self.log = logging.getLogger(self.name)
         self.intent = {}
-        self.result = {}
+        self.result = defaultdict(list)
 
 
 class Brew(Promise):
@@ -73,17 +74,17 @@ class Brew(Promise):
                     sender=self.uid, group=[p.uid],
                     action=this.__name__, content={k: v}
                 )
-                self.result[k] = p.uid
+                self.result[k].append(p.uid)
         yield
 
     def pro_boiling(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         if "kettle" not in self.intent:
             self.intent["kettle"] = 100
-            self.result["kettle"] = 0
+            self.result["kettle"].append(0)
 
-        while self.result["kettle"] != self.intent["kettle"]:
-            self.result["kettle"] += 10
+        while self.result["kettle"][-1] != self.intent["kettle"]:
+            self.result["kettle"].append(self.result["kettle"][-1] + 10)
             return
         yield
 
@@ -103,7 +104,7 @@ class Brew(Promise):
     def pro_inspecting(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         for k in ("mugs", "spoons"):
-            if isinstance(self.result.get(k), uuid.UUID):
+            if isinstance(next(reversed(self.result.get(k)), None), uuid.UUID):
                 continue
 
             if self.result.get(k):
@@ -118,14 +119,17 @@ class Brew(Promise):
                 yield from self.channels["public"].send(
                     sender=self.uid, group=[p.uid],
                     action=this.__name__,
-                    content={k: self.result[k], "luck": luck}
+                    content={k: self.result[k][-1], "luck": luck}
                 )
-                self.result[k] = p.uid
+                self.result[k].append(p.uid)
         yield
 
     def pro_approving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        while any(isinstance(i, uuid.UUID) for i in self.result.values()):
+        while any(
+            isinstance(next(reversed(i), None), uuid.UUID)
+            for i in self.result.values()
+        ):
             try:
                 sync = next(
                     i for i in self.channels["public"].receive(self, this)
@@ -144,7 +148,7 @@ class Brew(Promise):
 
     def pro_serving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        if self.result and all(self.result.values()):
+        if not any(isinstance(i[-1], uuid.UUID) for i in self.result.values()):
             raise Termination()
             yield
 
@@ -175,7 +179,8 @@ class Kit(Promise):
 
     def pro_finding(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        self.result.update(self.intent)
+        for k, v in self.intent.items():
+            self.result[k].append(v)
         yield
 
     def pro_claiming(self, this, **kwargs):
@@ -218,7 +223,7 @@ class Tidy(Promise):
         for k, v in self.intent.items():
             if random.random() > self.luck:
                 self.log.info(f"Cleaning {k}", extra={"proclet": self})
-            self.result[k] = v
+            self.result[k].append(v)
 
     def pro_approving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
