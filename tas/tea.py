@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from collections import ChainMap
 from collections import defaultdict
 import logging
 import random
@@ -38,6 +39,16 @@ class Promise(Proclet):
         self.intent = {}
         self.result = defaultdict(list)  # FIXME Use channel and Performatives
 
+    @property
+    def result_(self):
+        mappings = [
+            m.content
+            for c in self.channels.values()
+            for v in c.view(self.uid)
+            for m in reversed(v)
+            if m.sender != self.uid and m.action == Exit.deliver
+        ]
+        return ChainMap(*reversed(mappings))
 
 class Brew(Promise):
 
@@ -250,6 +261,7 @@ if __name__ == "__main__":
         try:
             for m in b(tea=2, milk=2, spoons=1, sugar=1):
                 logging.debug(m, extra={"proclet": b})
+            print(b.result_)
         except Termination:
             rv = 0
         except Exception as e:
