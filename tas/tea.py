@@ -20,6 +20,7 @@
 import logging
 import random
 import sys
+import uuid
 
 from proclets.channel import Channel
 from proclets.proclet import Proclet
@@ -72,6 +73,7 @@ class Brew(Promise):
                     sender=self.uid, group=[p.uid],
                     action=this.__name__, content={k: v}
                 )
+                self.result[k] = p.uid
         yield
 
     def pro_boiling(self, this, **kwargs):
@@ -101,6 +103,9 @@ class Brew(Promise):
     def pro_inspecting(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         for k in ("mugs", "spoons"):
+            if isinstance(self.result.get(k), uuid.UUID):
+                continue
+
             if self.result.get(k):
                 p = Tidy.create(
                     name=f"clean_{k}",
@@ -115,12 +120,23 @@ class Brew(Promise):
                     action=this.__name__,
                     content={k: self.result[k], "luck": luck}
                 )
-                print(self.domain)
+                self.result[k] = p.uid
         yield
 
     def pro_approving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        yield
+        while any(isinstance(i, uuid.UUID) for i in self.result.values()):
+            try:
+                sync = next(
+                    i for i in self.channels["public"].receive(self, this)
+                    if i.action == this.__name__
+                )
+                self.result.update(sync.content)
+            except StopIteration:
+                return
+        else:
+            self.log.info(self.result, extra={"proclet": self})
+            yield
 
     def pro_brewing(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
@@ -199,10 +215,10 @@ class Tidy(Promise):
 
     def pro_cleaning(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        for k in self.intent:
+        for k, v in self.intent.items():
             if random.random() > self.luck:
                 self.log.info(f"Cleaning {k}", extra={"proclet": self})
-            yield
+            self.result[k] = v
 
     def pro_approving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
