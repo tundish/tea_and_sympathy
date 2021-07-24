@@ -17,8 +17,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+
+from collections import Counter
 import unittest
 import uuid
+
+from proclets.proclet import Proclet
+from proclets.types import Termination
 
 from tas.tea import promise_tea
 
@@ -26,8 +31,16 @@ from tas.tea import promise_tea
 class TypeTests(unittest.TestCase):
 
     def test_construct(self):
+        baseline = set(Proclet.population.keys())
         p = promise_tea()
-        self.assertTrue(p.intent)
+        self.assertFalse(p.intent)
         self.assertFalse(p.result)
-        r = list(p(tea=2, milk=2, sugar=1))
-        self.assertTrue(p.result)
+        while True:
+            try:
+                r = list(p(mugs=2, tea=2, milk=2, spoons=1, sugar=1))
+            except Termination:
+                self.assertTrue(p.result)
+                break
+
+        created = [v for k, v in Proclet.population.items() if k not in baseline]
+        self.assertTrue(created)
