@@ -18,6 +18,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from collections import ChainMap
+from collections import Counter
 from collections import defaultdict
 import logging
 import random
@@ -55,6 +56,10 @@ class Promise(Proclet):
             for v in c.view(self.uid)
             if not any(i for i in reversed(v) if isinstance(i.action, Exit))
         ]
+
+    @property
+    def effort(self):
+        return Counter(k for m in self.result.maps for k in m)
 
 
 class Brew(Promise):
@@ -115,7 +120,7 @@ class Brew(Promise):
     def pro_inspecting(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         for k in ("mugs", "spoons"):
-            if any(i for i in self.pending if k in i[0].content):
+            if self.effort[k] > 1:
                 continue
 
             if self.result.get(k):
@@ -124,7 +129,6 @@ class Brew(Promise):
                     channels=self.channels,
                     group=[self.uid],
                 )
-                yield p
 
                 luck = kwargs.get("luck", random.triangular(0, 1, 3/4))
                 yield from self.channels["public"].send(
@@ -132,6 +136,7 @@ class Brew(Promise):
                     action=Init.request,
                     content={k: kwargs[k], "luck": luck}
                 )
+                yield p
         yield
 
     def pro_approving(self, this, **kwargs):

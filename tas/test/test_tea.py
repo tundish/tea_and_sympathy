@@ -25,12 +25,15 @@ import uuid
 from proclets.proclet import Proclet
 from proclets.types import Termination
 
+from tas.tea import Brew
+from tas.tea import Kit
+from tas.tea import Tidy
 from tas.tea import promise_tea
 
 
 class TypeTests(unittest.TestCase):
 
-    def test_construct(self):
+    def test_tallies(self):
         baseline = set(Proclet.population.keys())
         p = promise_tea()
         self.assertFalse(p.intent)
@@ -42,5 +45,17 @@ class TypeTests(unittest.TestCase):
                 self.assertTrue(p.result)
                 break
 
+        self.assertEqual(1, p.tally["pro_missing"])
+        self.assertGreater(p.tally["pro_inspecting"], 1)
         created = [v for k, v in Proclet.population.items() if k not in baseline]
-        self.assertTrue(created)
+        totals = Counter(type(i) for i in created)
+        for cls, n in totals.items():
+            with self.subTest(cls=cls):
+                self.assertEqual(Counter({Brew: 1, Kit: 5, Tidy: 2})[cls], totals[cls])
+
+        for cls in (Kit, Tidy):
+            for p in created:
+                if isinstance(p, cls):
+                    with self.subTest(p=p):
+                        self.assertTrue(all(i == 1 for i in p.tally.values()))
+
