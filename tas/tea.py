@@ -32,6 +32,14 @@ from proclets.types import Exit
 from proclets.types import Termination
 
 
+class Attribution(dict):
+
+    def __init__(self, *args, uid=None, ts=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.uid = uid
+        self.ts = ts
+
+
 class Promise(Proclet):
 
     def __init__(self, *args, **kwargs):
@@ -42,7 +50,10 @@ class Promise(Proclet):
     @property
     def result(self):
         mappings = [
-            next((m.content for m in reversed(v) if m.action == Exit.deliver), {})
+            next(
+                (Attribution(m.content, ts=m.ts, uid=m.sender) for m in reversed(v) if m.action == Exit.deliver),
+                Attribution()
+            )
             for c in self.channels.values()
             for v in c.view(self.uid)
         ]
