@@ -72,6 +72,15 @@ class Promise(Proclet):
     def effort(self):
         return Counter(k for m in self.result.maps for k in m)
 
+    def lacks(self, key, cls: Proclet):
+        return not (
+            any(key in m.content
+            for l in self.pending
+            for m in l
+            if any(isinstance(self.population.get(u), cls) for u in m.group)) or
+            any(key in a for a in self.result.maps if isinstance(self.population.get(a.uid), cls))
+        )
+
 
 class Brew(Promise):
 
@@ -131,23 +140,23 @@ class Brew(Promise):
     def pro_inspecting(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         for k in ("mugs", "spoons"):
-            if self.effort[k] > 1:
+            if not self.lacks(k, Tidy):
                 continue
 
-            if self.result.get(k):
-                p = Tidy.create(
-                    name=f"clean_{k}",
-                    channels=self.channels,
-                    group=[self.uid],
-                )
+            p = Tidy.create(
+                name=f"clean_{k}",
+                channels=self.channels,
+                group=[self.uid],
+            )
+            yield p
 
-                luck = kwargs.get("luck", random.triangular(0, 1, 3/4))
-                yield from self.channels["public"].send(
-                    sender=self.uid, group=[p.uid],
-                    action=Init.request,
-                    content={k: kwargs[k], "luck": luck}
-                )
-                yield p
+            luck = kwargs.get("luck", random.triangular(0, 1, 3/4))
+            yield from self.channels["public"].send(
+                sender=self.uid, group=[p.uid],
+                action=Init.request,
+                content={k: kwargs[k], "luck": luck}
+            )
+
         yield
 
     def pro_approving(self, this, **kwargs):
