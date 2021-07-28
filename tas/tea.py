@@ -72,13 +72,13 @@ class Promise(Proclet):
     def effort(self):
         return Counter(k for m in self.result.maps for k in m)
 
-    def lacks(self, key, cls: Proclet):
+    def lacks(self, key, *classes: Proclet):
         return not (
             any(key in m.content
             for l in self.pending
             for m in l
-            if any(isinstance(self.population.get(u), cls) for u in m.group)) or
-            any(key in a for a in self.result.maps if isinstance(self.population.get(a.uid), cls))
+            if any(isinstance(self.population.get(u), classes) for u in m.group)) or
+            any(key in a for a in self.result.maps if isinstance(self.population.get(a.uid), classes))
         )
 
 
