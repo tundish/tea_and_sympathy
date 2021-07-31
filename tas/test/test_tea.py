@@ -23,13 +23,23 @@ import unittest
 import uuid
 
 from proclets.proclet import Proclet
+from proclets.types import Init
+from proclets.types import Exit
 from proclets.types import Termination
 
 from tas.tea import Brew
 from tas.tea import Kit
+from tas.tea import Maturity
 from tas.tea import Tidy
 from tas.tea import promise_tea
 
+
+class MaturityTests(unittest.TestCase):
+
+    def test_init(self):
+        state = Maturity.inception
+        self.assertEqual(state, state.trigger())
+        self.assertEqual(Maturity.elaboration, state.trigger(Init.request))
 
 class TypeTests(unittest.TestCase):
 

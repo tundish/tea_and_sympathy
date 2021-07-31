@@ -43,7 +43,7 @@ class Attribution(dict):
 
 class Maturity(enum.Enum):
     """
-    Tery Winograd, Fernando Flores, Craig Larman
+    Terry Winograd, Fernando Flores, Craig Larman
 
     """
     inception = 1
@@ -55,6 +55,10 @@ class Maturity(enum.Enum):
     moribund = 7
     withdrawn = 8
     cancelled = 9
+
+    def trigger(self, event=None):
+        if self.value == 1:
+            return {Init.request: Maturity.elaboration}.get(event, self)
 
 
 class Promise(Proclet):
