@@ -20,6 +20,7 @@
 from collections import ChainMap
 from collections import Counter
 from collections import defaultdict
+import enum
 import logging
 import random
 import sys
@@ -38,6 +39,22 @@ class Attribution(dict):
         super().__init__(*args, **kwargs)
         self.uid = uid
         self.ts = ts
+
+
+class Maturity(enum.Enum):
+    """
+    Tery Winograd, Fernando Flores, Craig Larman
+
+    """
+    inception = 1
+    elaboration = 2
+    construction = 3
+    transition = 4
+    completion = 5
+    discussion = 6
+    moribund = 7
+    withdrawn = 8
+    cancelled = 9
 
 
 class Promise(Proclet):
