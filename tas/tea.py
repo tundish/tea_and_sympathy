@@ -59,6 +59,14 @@ class Maturity(enum.Enum):
     def trigger(self, event=None):
         if self.value == 1:
             return {Init.request: Maturity.elaboration}.get(event, self)
+        elif self.value == 2:
+            return {
+                Init.promise: Maturity.construction,
+                Init.counter: Maturity.discussion,
+                Init.abandon: Maturity.withdrawn,
+            }.get(event, self)
+        else:
+            return self
 
 
 class Promise(Proclet):

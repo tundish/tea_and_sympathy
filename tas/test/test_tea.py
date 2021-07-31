@@ -36,10 +36,29 @@ from tas.tea import promise_tea
 
 class MaturityTests(unittest.TestCase):
 
-    def test_init(self):
+    def test_inception(self):
         state = Maturity.inception
         self.assertEqual(state, state.trigger())
-        self.assertEqual(Maturity.elaboration, state.trigger(Init.request))
+        for i in Init:
+            with self.subTest(state=state, i=i):
+                if i == Init.request:
+                    self.assertEqual(Maturity.elaboration, state.trigger(Init.request))
+                else:
+                    self.assertEqual(state, state.trigger(i))
+
+    def test_elaboration(self):
+        state = Maturity.elaboration
+        for i in Init:
+            with self.subTest(state=state, i=i):
+                if i == Init.promise:
+                    self.assertEqual(Maturity.construction, state.trigger(i))
+                elif i == Init.abandon:
+                    self.assertEqual(Maturity.withdrawn, state.trigger(i))
+                elif i == Init.counter:
+                    self.assertEqual(Maturity.discussion, state.trigger(i))
+                else:
+                    self.assertEqual(state, state.trigger(i))
+
 
 class TypeTests(unittest.TestCase):
 
