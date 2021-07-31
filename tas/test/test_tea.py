@@ -29,34 +29,81 @@ from proclets.types import Termination
 
 from tas.tea import Brew
 from tas.tea import Kit
-from tas.tea import Maturity
+from tas.tea import Fruition
 from tas.tea import Tidy
 from tas.tea import promise_tea
 
 
-class MaturityTests(unittest.TestCase):
+class FruitionTests(unittest.TestCase):
 
     def test_inception(self):
-        state = Maturity.inception
+        state = Fruition.inception
         self.assertEqual(state, state.trigger())
         for i in Init:
             with self.subTest(state=state, i=i):
                 if i == Init.request:
-                    self.assertEqual(Maturity.elaboration, state.trigger(Init.request))
+                    self.assertEqual(Fruition.elaboration, state.trigger(Init.request))
                 else:
                     self.assertEqual(state, state.trigger(i))
 
     def test_elaboration(self):
-        state = Maturity.elaboration
+        state = Fruition.elaboration
         for i in Init:
             with self.subTest(state=state, i=i):
                 if i == Init.promise:
-                    self.assertEqual(Maturity.construction, state.trigger(i))
-                elif i == Init.abandon:
-                    self.assertEqual(Maturity.withdrawn, state.trigger(i))
+                    self.assertEqual(Fruition.construction, state.trigger(i))
+                elif i in (Init.abandon, Init.decline):
+                    self.assertEqual(Fruition.withdrawn, state.trigger(i))
                 elif i == Init.counter:
-                    self.assertEqual(Maturity.discussion, state.trigger(i))
+                    self.assertEqual(Fruition.discussion, state.trigger(i))
                 else:
+                    self.assertEqual(state, state.trigger(i))
+
+    def test_discussion(self):
+        state = Fruition.discussion
+        for i in Init:
+            with self.subTest(state=state, i=i):
+                if i == Init.counter:
+                    self.assertEqual(Fruition.elaboration, state.trigger(i))
+                elif i in (Init.abandon, Init.decline):
+                    self.assertEqual(Fruition.withdrawn, state.trigger(i))
+                elif i in (Init.confirm, Init.promise):
+                    self.assertEqual(Fruition.construction, state.trigger(i))
+                else:
+                    self.assertEqual(state, state.trigger(i))
+
+    def test_construction(self):
+        state = Fruition.construction
+        for i in Exit:
+            with self.subTest(state=state, i=i):
+                if i == Exit.deliver:
+                    self.assertEqual(Fruition.transition, state.trigger(i))
+                elif i == Exit.decline:
+                    self.assertEqual(Fruition.moribund, state.trigger(i))
+                elif i == Exit.abandon:
+                    self.assertEqual(Fruition.cancelled, state.trigger(i))
+                else:
+                    self.assertEqual(state, state.trigger(i))
+
+    def test_transition(self):
+        state = Fruition.transition
+        for i in Exit:
+            with self.subTest(state=state, i=i):
+                if i == Exit.decline:
+                    self.assertEqual(Fruition.construction, state.trigger(i))
+                elif i == Exit.abandon:
+                    self.assertEqual(Fruition.cancelled, state.trigger(i))
+                elif i == Exit.confirm:
+                    self.assertEqual(Fruition.completion, state.trigger(i))
+                else:
+                    self.assertEqual(state, state.trigger(i))
+
+    def test_terminal(self):
+        for state in (
+            Fruition.withdrawn, Fruition.moribund, Fruition.cancelled, Fruition.completion
+        ):
+            for i in list(Init) + list(Exit):
+                with self.subTest(state=state, i=i):
                     self.assertEqual(state, state.trigger(i))
 
 

@@ -41,7 +41,7 @@ class Attribution(dict):
         self.ts = ts
 
 
-class Maturity(enum.Enum):
+class Fruition(enum.Enum):
     """
     Terry Winograd, Fernando Flores, Craig Larman
 
@@ -58,12 +58,35 @@ class Maturity(enum.Enum):
 
     def trigger(self, event=None):
         if self.value == 1:
-            return {Init.request: Maturity.elaboration}.get(event, self)
+            return {
+                Init.request: Fruition.elaboration
+            }.get(event, self)
         elif self.value == 2:
             return {
-                Init.promise: Maturity.construction,
-                Init.counter: Maturity.discussion,
-                Init.abandon: Maturity.withdrawn,
+                Init.promise: Fruition.construction,
+                Init.counter: Fruition.discussion,
+                Init.abandon: Fruition.withdrawn,
+                Init.decline: Fruition.withdrawn,
+            }.get(event, self)
+        elif self.value == 3:
+            return {
+                Exit.abandon: Fruition.cancelled,
+                Exit.deliver: Fruition.transition,
+                Exit.decline: Fruition.moribund,
+            }.get(event, self)
+        elif self.value == 4:
+            return {
+                Exit.abandon: Fruition.cancelled,
+                Exit.decline: Fruition.construction,
+                Exit.confirm: Fruition.completion,
+            }.get(event, self)
+        elif self.value == 6:
+            return {
+                Init.promise: Fruition.construction,
+                Init.confirm: Fruition.construction,
+                Init.counter: Fruition.elaboration,
+                Init.abandon: Fruition.withdrawn,
+                Init.decline: Fruition.withdrawn,
             }.get(event, self)
         else:
             return self
