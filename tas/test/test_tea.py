@@ -107,7 +107,7 @@ class FruitionTests(unittest.TestCase):
                     self.assertEqual(state, state.trigger(i))
 
 
-class TypeTests(unittest.TestCase):
+class FlowTests(unittest.TestCase):
 
     def test_tallies(self):
         baseline = set(Proclet.population.keys())
@@ -135,3 +135,20 @@ class TypeTests(unittest.TestCase):
                     with self.subTest(p=p):
                         self.assertTrue(all(i == 1 for i in p.tally.values()))
 
+
+    def test_acts(self):
+        import sys
+        baseline = set(Proclet.population.keys())
+        p = promise_tea()
+        n = 0
+        while n < 100:
+            try:
+                for m in p(mugs=2, tea=2, milk=2, spoons=1, sugar=1):
+                    if n == 0:
+                        p.actions.update({Init.promise: Init.abandon})
+                        p.contents.update({Init.promise: {"tea": 0}})
+                    print(m, file=sys.stderr)
+                    n += 1
+            except Termination:
+                print(n, file=sys.stderr)
+                break

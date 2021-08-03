@@ -97,6 +97,8 @@ class Promise(Proclet):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.log = logging.getLogger(self.name)
+        self.actions = {}
+        self.contents = {}
         self.intent = None
 
     @property
@@ -131,6 +133,15 @@ class Promise(Proclet):
             for m in l
             if any(isinstance(self.population.get(u), classes) for u in m.group)) or
             any(key in a for a in self.result.maps if isinstance(self.population.get(a.uid), classes))
+        )
+
+    def action(self, this, channel="public", **kwargs):
+        return list(
+            self.channels[channel].respond(
+                self, this,
+                actions=self.actions,
+                contents=self.contents,
+            )
         )
 
 
