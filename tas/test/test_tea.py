@@ -147,7 +147,7 @@ class FlowTests(unittest.TestCase):
                     if n == 0:
                         p.actions.update({Init.promise: Init.abandon})
                         p.contents.update({Init.promise: {"tea": 0}})
-                    print(m, file=sys.stderr)
+                    print(*list(p.fruition("mugs")), file=sys.stderr, sep="\n")
                     n += 1
             except Termination:
                 print(n, file=sys.stderr)

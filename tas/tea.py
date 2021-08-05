@@ -20,6 +20,7 @@
 from collections import ChainMap
 from collections import Counter
 from collections import defaultdict
+from collections import namedtuple
 import enum
 import logging
 import random
@@ -94,11 +95,14 @@ class Fruition(enum.Enum):
 
 class Promise(Proclet):
 
+    Discourse = namedtuple("Discourse", ["uid", "channel", "reference", "fruition"])
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.log = logging.getLogger(self.name)
         self.actions = {}
         self.contents = {}
+        self.discourse = defaultdict(dict)
         self.intent = None
 
     @property
@@ -112,6 +116,20 @@ class Promise(Proclet):
             for v in c.view(self.uid)
         ]
         return ChainMap(*reversed(list(filter(None, mappings))))
+
+    def fruition(self, k):
+        speech = {}
+        for d in list(self.discourse.get(k, {}).values()):
+            if d.uid not in speech:
+                speech.update(
+                    {v[0].connect: v for v in self.channels[d.channel].view(self.uid)}
+                )
+
+            state = Fruition.inception
+            for m in speech[d.uid]:
+                state = state.trigger(m.action)
+            rv = self.discourse[k][d.uid] = self.discourse[k][d.uid]._replace(fruition=state)
+            yield rv
 
     @property
     def pending(self):
@@ -175,10 +193,13 @@ class Brew(Promise):
                     group=[self.uid],
                 )
                 yield p
-                yield from self.channels["public"].send(
+
+                for m in self.channels["public"].send(
                     sender=self.uid, group=[p.uid],
                     action=Init.request, content={k: v}
-                )
+                ):
+                    self.discourse[k][m.connect] = self.Discourse(m.connect, "public", k, None)
+                    yield m
         yield
 
     def pro_boiling(self, this, **kwargs):
