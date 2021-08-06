@@ -19,6 +19,7 @@
 
 
 from collections import Counter
+import sys
 import unittest
 import uuid
 
@@ -79,7 +80,7 @@ class FruitionTests(unittest.TestCase):
                 if i == Exit.deliver:
                     self.assertEqual(Fruition.transition, state.trigger(i))
                 elif i == Exit.decline:
-                    self.assertEqual(Fruition.moribund, state.trigger(i))
+                    self.assertEqual(Fruition.defaulted, state.trigger(i))
                 elif i == Exit.abandon:
                     self.assertEqual(Fruition.cancelled, state.trigger(i))
                 else:
@@ -100,7 +101,7 @@ class FruitionTests(unittest.TestCase):
 
     def test_terminal(self):
         for state in (
-            Fruition.withdrawn, Fruition.moribund, Fruition.cancelled, Fruition.completion
+            Fruition.withdrawn, Fruition.defaulted, Fruition.cancelled, Fruition.completion
         ):
             for i in list(Init) + list(Exit):
                 with self.subTest(state=state, i=i):
@@ -136,8 +137,13 @@ class FlowTests(unittest.TestCase):
                         self.assertTrue(all(i == 1 for i in p.tally.values()))
 
 
-    def test_acts(self):
-        import sys
+    def test_confirm_counter(self):
+        """
+        Can you get the mugs for me?
+        I'll get them in a minute.
+        OK fine.
+
+        """
         baseline = set(Proclet.population.keys())
         p = promise_tea()
         n = 0
@@ -145,10 +151,17 @@ class FlowTests(unittest.TestCase):
             try:
                 for m in p(mugs=2, tea=2, milk=2, spoons=1, sugar=1):
                     if n == 0:
-                        p.actions.update({Init.promise: Init.abandon})
-                        p.contents.update({Init.promise: {"tea": 0}})
-                    print(*list(p.fruition("mugs")), file=sys.stderr, sep="\n")
+                        p.actions.update({Init.counter: Init.confirm})
+                        # p.contents.update({Init.promise: {"tea": 0}})
+                    elif n == 12:
+                        kit = next(iter(
+                            i for i in p.domain
+                            if isinstance(i, Kit)
+                            and "mugs" in getattr(i.intent, "content", {})
+                        ))
+                        kit.actions.update({Init.counter: Init.counter})
+                        print(n, kit, file=sys.stderr)
                     n += 1
             except Termination:
-                print(n, file=sys.stderr)
+                print(p.domain, file=sys.stderr)
                 break

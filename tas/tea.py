@@ -53,7 +53,7 @@ class Fruition(enum.Enum):
     transition = 4
     completion = 5
     discussion = 6
-    moribund = 7
+    defaulted = 7
     withdrawn = 8
     cancelled = 9
 
@@ -73,7 +73,7 @@ class Fruition(enum.Enum):
             return {
                 Exit.abandon: Fruition.cancelled,
                 Exit.deliver: Fruition.transition,
-                Exit.decline: Fruition.moribund,
+                Exit.decline: Fruition.defaulted,
             }.get(event, self)
         elif self.value == 4:
             return {
@@ -122,7 +122,7 @@ class Promise(Proclet):
         for d in list(self.discourse.get(k, {}).values()):
             if d.uid not in speech:
                 speech.update(
-                    {v[0].connect: v for v in self.channels[d.channel].view(self.uid)}
+                    {v[0].connect: v for v in self.channels[d.channel].view(self.uid)}  # FIXME view -> dict
                 )
 
             state = Fruition.inception
@@ -270,6 +270,12 @@ class Brew(Promise):
 
 class Kit(Promise):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.actions = {
+            Init.request: Init.promise,
+        }
+
     @property
     def net(self):
         return {
@@ -281,7 +287,7 @@ class Kit(Promise):
     def pro_missing(self, this, **kwargs):
         try:
             self.intent = next(
-                i for i in self.channels["public"].receive(self, this)
+                i for i in self.channels["public"].respond(self, this)
                 if i.action == Init.request
             )
         except StopIteration:
