@@ -285,12 +285,12 @@ class Kit(Promise):
         }
 
     def pro_missing(self, this, **kwargs):
+        #print(self.actions)
         try:
-            self.intent = next(
-                i for i in self.channels["public"].respond(self, this)
-                if i.action == Init.request
-            )
-        except StopIteration:
+            msgs = list(self.channels["public"].respond(self, this, actions=self.actions))
+            self.intent = msgs[0]
+            #print(self.intent)
+        except INdexError:
             return
         else:
             self.log.info(self.intent, extra={"proclet": self})

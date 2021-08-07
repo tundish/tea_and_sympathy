@@ -146,22 +146,23 @@ class FlowTests(unittest.TestCase):
         """
         baseline = set(Proclet.population.keys())
         p = promise_tea()
+        p.actions.update({Init.counter: Init.confirm})
+        kit = None
         n = 0
         while n < 100:
             try:
                 for m in p(mugs=2, tea=2, milk=2, spoons=1, sugar=1):
-                    if n == 0:
-                        p.actions.update({Init.counter: Init.confirm})
-                        # p.contents.update({Init.promise: {"tea": 0}})
-                    elif n == 12:
-                        kit = next(iter(
-                            i for i in p.domain
-                            if isinstance(i, Kit)
-                            and "mugs" in getattr(i.intent, "content", {})
-                        ))
-                        kit.actions.update({Init.counter: Init.counter})
-                        print(n, kit, file=sys.stderr)
+                    if isinstance(m, Kit) and "mugs" in m.name:
+                        kit = m
+                        kit.actions.update({Init.request: Init.counter})
+                        print(kit.intent)
+                    if n == 70:
+                        #print(kit.intent.connect, file=sys.stderr)
+                        #print(list(p.fruition("mugs")), kit, file=sys.stderr)
+                        print(kit.intent)
+                        print(p.channels["public"].view(kit.uid), file=sys.stderr)
+
+                        pass
                     n += 1
             except Termination:
-                print(p.domain, file=sys.stderr)
                 break
