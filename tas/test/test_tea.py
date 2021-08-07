@@ -110,8 +110,10 @@ class FruitionTests(unittest.TestCase):
 
 class FlowTests(unittest.TestCase):
 
+    def setUp(self):
+        self.baseline = set(Proclet.population.keys())
+
     def test_tallies(self):
-        baseline = set(Proclet.population.keys())
         p = promise_tea()
         self.assertFalse(p.intent)
         self.assertFalse(p.result)
@@ -124,7 +126,7 @@ class FlowTests(unittest.TestCase):
 
         self.assertEqual(1, p.tally["pro_missing"])
         self.assertGreater(p.tally["pro_inspecting"], 1)
-        created = [v for k, v in Proclet.population.items() if k not in baseline]
+        created = [v for k, v in Proclet.population.items() if k not in self.baseline]
         totals = Counter(type(i) for i in created)
         for cls, n in totals.items():
             with self.subTest(cls=cls):
@@ -144,25 +146,23 @@ class FlowTests(unittest.TestCase):
         OK fine.
 
         """
-        baseline = set(Proclet.population.keys())
         p = promise_tea()
         p.actions.update({Init.counter: Init.confirm})
         kit = None
         n = 0
-        while n < 100:
+        while n < 70:
             try:
                 for m in p(mugs=2, tea=2, milk=2, spoons=1, sugar=1):
                     if isinstance(m, Kit) and "mugs" in m.name:
                         kit = m
                         kit.actions.update({Init.request: Init.counter})
-                        print(kit.intent)
-                    if n == 70:
+                    if n == 30:
                         #print(kit.intent.connect, file=sys.stderr)
                         #print(list(p.fruition("mugs")), kit, file=sys.stderr)
-                        print(kit.intent)
                         print(p.channels["public"].view(kit.uid), file=sys.stderr)
 
                         pass
                     n += 1
             except Termination:
+                print(n)
                 break

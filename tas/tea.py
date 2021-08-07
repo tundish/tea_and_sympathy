@@ -22,6 +22,7 @@ from collections import Counter
 from collections import defaultdict
 from collections import namedtuple
 import enum
+import functools
 import logging
 import random
 import sys
@@ -102,7 +103,8 @@ class Promise(Proclet):
         self.log = logging.getLogger(self.name)
         self.actions = {}
         self.contents = {}
-        self.discourse = defaultdict(dict)
+        self.discourse = defaultdict(dict) # FIXME
+        self.fruition = defaultdict(functools.partial(Fruition, 1))
         self.intent = None
 
     @property
@@ -117,7 +119,7 @@ class Promise(Proclet):
         ]
         return ChainMap(*reversed(list(filter(None, mappings))))
 
-    def fruition(self, k):
+    def _fruition(self, k):
         speech = {}
         for d in list(self.discourse.get(k, {}).values()):
             if d.uid not in speech:
@@ -185,8 +187,15 @@ class Brew(Promise):
 
     def pro_missing(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
+        print(*self.fruition.items(), sep="\n")
+        if not any(
+            self.fruition[k] in (Fruition.inception, Fruition.elaboration, Fruition.discussion)
+            for k in kwargs
+        ):
+            yield
+
         for k, v in kwargs.items():
-            if not self.result.get(k):
+            if self.fruition[k] == Fruition.inception:
                 p = Kit.create(
                     name=f"find_{k}",
                     channels=self.channels,
@@ -194,13 +203,20 @@ class Brew(Promise):
                 )
                 yield p
 
-                for m in self.channels["public"].send(
+                m = next(self.channels["public"].send(
                     sender=self.uid, group=[p.uid],
                     action=Init.request, content={k: v}
-                ):
-                    self.discourse[k][m.connect] = self.Discourse(m.connect, "public", k, None)
-                    yield m
-        yield
+                ))
+                self.fruition[k] = self.fruition[k].trigger(m.action)
+                yield m
+
+            if self.fruition[k] in (Fruition.elaboration, Fruition.discussion):
+                for m in self.channels["public"].respond(self, this, actions=self.actions):
+                    try:
+                        self.fruition[k] = self.fruition[k].trigger(m.action)
+                    except TypeError:
+                        print(k, m)
+                        raise
 
     def pro_boiling(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
@@ -285,16 +301,13 @@ class Kit(Promise):
         }
 
     def pro_missing(self, this, **kwargs):
-        #print(self.actions)
         try:
             msgs = list(self.channels["public"].respond(self, this, actions=self.actions))
             self.intent = msgs[0]
-            #print(self.intent)
-        except INdexError:
+        except IndexError:
             return
         else:
             self.log.info(self.intent, extra={"proclet": self})
-            yield
         yield
 
     def pro_finding(self, this, **kwargs):
