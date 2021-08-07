@@ -149,20 +149,26 @@ class FlowTests(unittest.TestCase):
         p = promise_tea()
         p.actions.update({Init.counter: Init.confirm})
         kit = None
-        n = 0
-        while n < 70:
+        turns = 0
+        while turns < 70:
             try:
-                for m in p(mugs=2, tea=2, milk=2, spoons=1, sugar=1):
+                for n, m in enumerate(p(mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
                     if isinstance(m, Kit) and "mugs" in m.name:
                         kit = m
                         kit.actions.update({Init.request: Init.counter})
-                    if n == 30:
-                        #print(kit.intent.connect, file=sys.stderr)
-                        #print(list(p.fruition("mugs")), kit, file=sys.stderr)
-                        print(p.channels["public"].view(kit.uid), file=sys.stderr)
 
-                        pass
-                    n += 1
+                    if turns + n == 20:
+                        with self.subTest(turns=turns, n=n):
+                            self.assertEqual(Fruition.construction, p.fruition["mugs"])
+
+                    elif turns + n == 27:
+                        for c in ("mugs", "tea", "milk", "spoons", "sugar"):
+                            with self.subTest(turns=turns, n=n, c=c):
+                                self.assertEqual(Fruition.construction, p.fruition[c])
+
+                    if m and m.action == Exit.deliver:
+                        print(turns + n, m.content)
+                turns += max(1, n)
             except Termination:
                 print(n)
                 break
