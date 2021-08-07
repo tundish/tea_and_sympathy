@@ -167,6 +167,12 @@ class Promise(Proclet):
 
 class Brew(Promise):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.actions = {
+            Exit.deliver: Exit.confirm,
+        }
+
     @property
     def net(self):
         return {
@@ -187,7 +193,6 @@ class Brew(Promise):
 
     def pro_missing(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        print(*self.fruition.items(), sep="\n")
         if not any(
             self.fruition[k] in (Fruition.inception, Fruition.elaboration, Fruition.discussion)
             for k in kwargs
@@ -212,11 +217,7 @@ class Brew(Promise):
 
             if self.fruition[k] in (Fruition.elaboration, Fruition.discussion):
                 for m in self.channels["public"].respond(self, this, actions=self.actions):
-                    try:
-                        self.fruition[k] = self.fruition[k].trigger(m.action)
-                    except TypeError:
-                        print(k, m)
-                        raise
+                    self.fruition[k] = self.fruition[k].trigger(m.action)
 
     def pro_boiling(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
