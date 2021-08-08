@@ -35,8 +35,147 @@ from proclets.types import Init
 from proclets.types import Exit
 from proclets.types import Termination
 
-from tas.promise import Fruition
-from tas.promise import Promise
+
+class Attribution(dict):
+
+    def __init__(self, *args, uid=None, ts=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.uid = uid
+        self.ts = ts
+
+
+class Fruition(enum.Enum):
+    """
+    Terry Winograd, Fernando Flores, Craig Larman
+
+    """
+    inception = 1
+    elaboration = 2
+    construction = 3
+    transition = 4
+    completion = 5
+    discussion = 6
+    defaulted = 7
+    withdrawn = 8
+    cancelled = 9
+
+    def trigger(self, event=None):
+        if self.value == 1:
+            return {
+                Init.request: Fruition.elaboration
+            }.get(event, self)
+        elif self.value == 2:
+            return {
+                Init.promise: Fruition.construction,
+                Init.counter: Fruition.discussion,
+                Init.abandon: Fruition.withdrawn,
+                Init.decline: Fruition.withdrawn,
+            }.get(event, self)
+        elif self.value == 3:
+            return {
+                Exit.abandon: Fruition.cancelled,
+                Exit.deliver: Fruition.transition,
+                Exit.decline: Fruition.defaulted,
+            }.get(event, self)
+        elif self.value == 4:
+            return {
+                Exit.abandon: Fruition.cancelled,
+                Exit.decline: Fruition.construction,
+                Exit.confirm: Fruition.completion,
+            }.get(event, self)
+        elif self.value == 6:
+            return {
+                Init.promise: Fruition.construction,
+                Init.confirm: Fruition.construction,
+                Init.counter: Fruition.elaboration,
+                Init.abandon: Fruition.withdrawn,
+                Init.decline: Fruition.withdrawn,
+            }.get(event, self)
+        else:
+            return self
+
+
+class Promise(Proclet):
+
+    Discourse = namedtuple("Discourse", ["uid", "channel", "reference", "fruition"])
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.log = logging.getLogger(self.name)
+        self.actions = {}
+        self.contents = {}
+        self.fruition = defaultdict(functools.partial(Fruition, 1))
+        self.requests = defaultdict(deque)
+
+    @property
+    def result(self):
+        mappings = [
+            next(
+                (Attribution(m.content, ts=m.ts, uid=m.sender) for m in reversed(v) if m.action == Exit.deliver),
+                Attribution()
+            )
+            for c in self.channels.values()
+            for v in c.view(self.uid).values()
+        ]
+        return ChainMap(*reversed(list(filter(None, mappings))))
+
+    @property
+    def pending(self):
+        return [
+            v
+            for c in self.channels.values()
+            for v in c.view(self.uid)
+            if not any(i for i in reversed(v) if isinstance(i.action, Exit))
+        ]
+
+    @property
+    def effort(self):
+        return Counter(k for m in self.result.maps for k in m)
+
+    def lacks(self, key, *classes: Proclet):
+        return not (
+            any(key in m.content
+            for l in self.pending
+            for m in l
+            if any(isinstance(self.population.get(u), classes) for u in m.group)) or
+            any(key in a for a in self.result.maps if isinstance(self.population.get(a.uid), classes))
+        )
+
+    def action(self, this, channel="public", **kwargs):
+        return list(
+            self.channels[channel].respond(
+                self, this,
+                actions=self.actions,
+                contents=self.contents,
+            )
+        )
+
+    def pro_init(self, this, **kwargs):
+        for c in self.channels.values():
+            for n, m in enumerate(
+                c.respond(self, this, actions=self.actions, contents=self.contents)
+            ):
+                self.contents[m.action] = m.content
+                job = tuple(self.contents[Init.request].items())
+                self.fruition[job] = self.fruition[job].trigger(m.action)
+
+                if not n:
+                    self.requests[job].append(m)
+
+        if all(i == Fruition.construction for i in self.fruition.values()):
+            self.log.debug(self.requests, extra={"proclet": self})
+            yield
+
+
+    def pro_exit(self, this, **kwargs):
+        for j, v in self.requests.items():
+            self.fruition[j] = self.fruition[j].trigger(Exit.deliver)
+            for m in v:
+                yield m.channel.reply(
+                    self, m, action=Exit.deliver, content=dict(j)
+                )
+        self.log.debug(self.fruition, extra={"proclet": self})
+        yield
 
 
 class Brew(Promise):
