@@ -20,6 +20,7 @@
 from collections import ChainMap
 from collections import Counter
 from collections import defaultdict
+from collections import deque
 from collections import namedtuple
 import enum
 import functools
@@ -105,7 +106,7 @@ class Promise(Proclet):
         self.contents = {}
         self.discourse = defaultdict(dict) # FIXME
         self.fruition = defaultdict(functools.partial(Fruition, 1))
-        self.intent = None
+        self.requests = defaultdict(deque)
 
     @property
     def result(self):
@@ -302,26 +303,32 @@ class Kit(Promise):
         }
 
     def pro_missing(self, this, **kwargs):
-        try:
-            msgs = list(self.channels["public"].respond(self, this, actions=self.actions))
-            self.intent = msgs[0]
-        except IndexError:
-            return
-        else:
-            self.log.info(self.intent, extra={"proclet": self})
-        yield
+        for n, m in enumerate(
+            self.channels["public"].respond(self, this, actions=self.actions, contents=self.contents)
+        ):
+            self.contents[m.action] = m.content
+            job = tuple(self.contents[Init.request].items())
+            self.requests[job].append(m)
+            self.fruition[job] = self.fruition[job].trigger(m.action)
+
+        if all(i == Fruition.construction for i in self.fruition.values()):
+            self.log.info(self.requests, extra={"proclet": self})
+            yield
 
     def pro_finding(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        for k, v in self.intent.content.items():
-            self.log.info(f"Finding {k}", extra={"proclet": self})
+        for job in self.fruition:
+            for k in dict(job):
+                self.log.info(f"Finding {k}", extra={"proclet": self})
         yield
 
     def pro_claiming(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        yield self.channels["public"].reply(
-            self, self.intent, action=Exit.deliver, content=self.intent.content
-        )
+        for j, v in self.requests.items():
+            for m in v:
+                yield self.channels["public"].reply(
+                    self, m, action=Exit.deliver, content=dict(j)
+                )
         yield
 
 
