@@ -150,6 +150,33 @@ class Promise(Proclet):
             )
         )
 
+    def pro_init(self, this, **kwargs):
+        for c in self.channels.values():
+            for n, m in enumerate(
+                c.respond(self, this, actions=self.actions, contents=self.contents)
+            ):
+                self.contents[m.action] = m.content
+                job = tuple(self.contents[Init.request].items())
+                self.fruition[job] = self.fruition[job].trigger(m.action)
+
+                if not n:
+                    self.requests[job].append(m)
+
+        if all(i == Fruition.construction for i in self.fruition.values()):
+            self.log.debug(self.requests, extra={"proclet": self})
+            yield
+
+
+    def pro_exit(self, this, **kwargs):
+        for j, v in self.requests.items():
+            self.fruition[j] = self.fruition[j].trigger(Exit.deliver)
+            for m in v:
+                yield m.channel.reply(
+                    self, m, action=Exit.deliver, content=dict(j)
+                )
+        self.log.debug(self.fruition, extra={"proclet": self})
+        yield
+
 
 class Brew(Promise):
 
@@ -282,15 +309,40 @@ class Kit(Promise):
     @property
     def net(self):
         return {
-            self.pro_missing: [self.pro_finding],
-            self.pro_finding: [self.pro_claiming],
-            self.pro_claiming: [],
+            self.pro_init: [self.pro_finding],
+            self.pro_finding: [self.pro_exit],
+            self.pro_exit: [],
         }
 
-    def pro_missing(self, this, **kwargs):
+    def pro_finding(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
+        for job in self.fruition:
+            for k in dict(job):
+                self.log.info(f"Finding {k}", extra={"proclet": self})
+        yield
+
+
+class Tidy(Promise):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.actions = {
+            Init.request: Init.promise,
+        }
+
+    @property
+    def net(self):
+        return {
+            self.pro_init: [self.pro_cleaning],
+            self.pro_cleaning: [self.pro_exit],
+            self.pro_exit: [],
+        }
+
+    def pro_init(self, this, **kwargs):
         for n, m in enumerate(
             self.channels["public"].respond(self, this, actions=self.actions, contents=self.contents)
         ):
+            self.luck = m.content.pop("luck", 1)
             self.contents[m.action] = m.content
             job = tuple(self.contents[Init.request].items())
             self.fruition[job] = self.fruition[job].trigger(m.action)
@@ -302,61 +354,11 @@ class Kit(Promise):
             self.log.info(self.requests, extra={"proclet": self})
             yield
 
-    def pro_finding(self, this, **kwargs):
-        self.log.info("", extra={"proclet": self})
-        for job in self.fruition:
-            for k in dict(job):
-                self.log.info(f"Finding {k}", extra={"proclet": self})
-        yield
-
-    def pro_claiming(self, this, **kwargs):
-        for j, v in self.requests.items():
-            self.fruition[j] = self.fruition[j].trigger(Exit.deliver)
-            for m in v:
-                yield self.channels["public"].reply(
-                    self, m, action=Exit.deliver, content=dict(j)
-                )
-        self.log.debug(self.fruition, extra={"proclet": self})
-        yield
-
-
-class Tidy(Promise):
-
-    @property
-    def net(self):
-        return {
-            self.pro_inspecting: [self.pro_cleaning],
-            self.pro_cleaning: [self.pro_approving],
-            self.pro_approving: [],
-        }
-
-    def pro_inspecting(self, this, **kwargs):
-        self.log.info("", extra={"proclet": self})
-        try:
-            self.intent = next(
-                i for i in self.channels["public"].receive(self, this)
-                if i.action == Init.request
-            )
-            self.luck = self.intent.content.pop("luck", 1)
-        except StopIteration:
-            return
-        else:
-            self.log.info(self.intent, extra={"proclet": self})
-            yield
-        yield
-
     def pro_cleaning(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        for k, v in self.intent.content.items():
+        for k in self.fruition:
             if random.random() > self.luck:
                 self.log.info(f"Cleaning {k}", extra={"proclet": self})
-        yield
-
-    def pro_approving(self, this, **kwargs):
-        self.log.info("", extra={"proclet": self})
-        yield self.channels["public"].reply(
-            self, self.intent, action=Exit.deliver, content=self.intent.content
-        )
         yield
 
 
