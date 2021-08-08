@@ -115,7 +115,7 @@ class FlowTests(unittest.TestCase):
 
     def test_tallies(self):
         p = promise_tea()
-        self.assertFalse(p.intent)
+        self.assertFalse(p.requests)
         self.assertFalse(p.result)
         while True:
             try:
@@ -162,13 +162,14 @@ class FlowTests(unittest.TestCase):
                             self.assertEqual(Fruition.construction, p.fruition["mugs"])
 
                     elif turns + n == 27:
+                        # self.assertEqual(Fruition.transition, kit.fruition["mugs"])
+                        # self.assertEqual(Fruition.completion, p.fruition["mugs"])
                         for c in ("mugs", "tea", "milk", "spoons", "sugar"):
                             with self.subTest(turns=turns, n=n, c=c):
-                                self.assertEqual(Fruition.construction, p.fruition[c])
+                                self.assertIn(c, p.result)
 
                     if m and m.action == Exit.deliver:
                         print(turns + n, m.content)
                 turns += max(1, n)
             except Termination:
-                print(n)
                 break

@@ -104,7 +104,6 @@ class Promise(Proclet):
         self.log = logging.getLogger(self.name)
         self.actions = {}
         self.contents = {}
-        self.discourse = defaultdict(dict) # FIXME
         self.fruition = defaultdict(functools.partial(Fruition, 1))
         self.requests = defaultdict(deque)
 
@@ -116,23 +115,9 @@ class Promise(Proclet):
                 Attribution()
             )
             for c in self.channels.values()
-            for v in c.view(self.uid)
+            for v in c.view(self.uid).values()
         ]
         return ChainMap(*reversed(list(filter(None, mappings))))
-
-    def _fruition(self, k):
-        speech = {}
-        for d in list(self.discourse.get(k, {}).values()):
-            if d.uid not in speech:
-                speech.update(
-                    {v[0].connect: v for v in self.channels[d.channel].view(self.uid)}  # FIXME view -> dict
-                )
-
-            state = Fruition.inception
-            for m in speech[d.uid]:
-                state = state.trigger(m.action)
-            rv = self.discourse[k][d.uid] = self.discourse[k][d.uid]._replace(fruition=state)
-            yield rv
 
     @property
     def pending(self):
@@ -308,8 +293,10 @@ class Kit(Promise):
         ):
             self.contents[m.action] = m.content
             job = tuple(self.contents[Init.request].items())
-            self.requests[job].append(m)
             self.fruition[job] = self.fruition[job].trigger(m.action)
+
+            if not n:
+                self.requests[job].append(m)
 
         if all(i == Fruition.construction for i in self.fruition.values()):
             self.log.info(self.requests, extra={"proclet": self})
@@ -323,12 +310,13 @@ class Kit(Promise):
         yield
 
     def pro_claiming(self, this, **kwargs):
-        self.log.info("", extra={"proclet": self})
         for j, v in self.requests.items():
+            self.fruition[j] = self.fruition[j].trigger(Exit.deliver)
             for m in v:
                 yield self.channels["public"].reply(
                     self, m, action=Exit.deliver, content=dict(j)
                 )
+        self.log.debug(self.fruition, extra={"proclet": self})
         yield
 
 
