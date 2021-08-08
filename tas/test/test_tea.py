@@ -19,9 +19,7 @@
 
 
 from collections import Counter
-import sys
 import unittest
-import uuid
 
 from proclets.proclet import Proclet
 from proclets.types import Init
@@ -46,7 +44,7 @@ class FlowTests(unittest.TestCase):
         self.assertFalse(p.result)
         while True:
             try:
-                r = list(p(mugs=2, tea=2, milk=2, spoons=1, sugar=1))
+                list(p(mugs=2, tea=2, milk=2, spoons=1, sugar=1))
             except Termination:
                 self.assertTrue(p.result)
                 break
@@ -64,7 +62,6 @@ class FlowTests(unittest.TestCase):
                 if isinstance(p, cls):
                     with self.subTest(p=p):
                         self.assertTrue(all(i == 1 for i in p.tally.values()))
-
 
     def test_confirm_counter(self):
         """

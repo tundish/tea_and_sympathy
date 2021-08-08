@@ -18,21 +18,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-from collections import Counter
-import sys
 import unittest
-import uuid
 
-from proclets.proclet import Proclet
 from proclets.types import Init
 from proclets.types import Exit
-from proclets.types import Termination
 
-from tas.tea import Brew
-from tas.tea import Kit
-from tas.tea import Fruition
-from tas.tea import Tidy
-from tas.tea import promise_tea
+from tas.promise import Fruition
 
 
 class FruitionTests(unittest.TestCase):

@@ -97,8 +97,6 @@ class Fruition(enum.Enum):
 
 class Promise(Proclet):
 
-    Discourse = namedtuple("Discourse", ["uid", "channel", "reference", "fruition"])
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.log = logging.getLogger(self.name)
@@ -366,6 +364,7 @@ def promise_tea(**kwargs):
     name = kwargs.pop("name", "brew_tea")
     channels = {"public": Channel()}
     return Brew.create(name=name, channels=channels, **kwargs)
+
 
 if __name__ == "__main__":
     logging.basicConfig(

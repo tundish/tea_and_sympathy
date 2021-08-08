@@ -228,6 +228,7 @@ def promise_tea(**kwargs):
     channels = {"public": Channel()}
     return Brew.create(name=name, channels=channels, **kwargs)
 
+
 if __name__ == "__main__":
     logging.basicConfig(
         style="{", format="{proclet.name:>16}|{funcName:>14}|{message}",
