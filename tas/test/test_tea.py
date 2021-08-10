@@ -65,7 +65,7 @@ class FlowTests(unittest.TestCase):
 
     def test_confirm_counter(self):
         """
-        Can you get the mugs for me?
+        Can you get the mugs out for me?
         I'll get them in a minute.
         OK fine.
 
@@ -92,8 +92,12 @@ class FlowTests(unittest.TestCase):
                             with self.subTest(turns=turns, n=n, c=c):
                                 self.assertIn(c, p.result)
 
-                    if m and m.action == Exit.deliver:
+                    if getattr(m, "action", None) == Exit.deliver:
                         print(turns + n, m.content)
                 turns += max(1, n)
             except Termination:
+                print("Turns: ", turns)
                 break
+        else:
+            print(p.fruition, p.result, p.effort)
+            print(p.domain)

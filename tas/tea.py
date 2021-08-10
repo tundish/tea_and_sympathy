@@ -114,12 +114,14 @@ class Brew(Promise):
 
     def pro_inspecting(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        for k in ("mugs", "spoons"):
-            if not self.lacks(k, Tidy):
+        jobs = [(k, v) for k, v in kwargs.items() if k in ("mugs", "spoons")]
+        for j in jobs:
+            #self.fruition[j] =
+            if self.dispatched(j, Tidy):
                 continue
 
             p = Tidy.create(
-                name=f"clean_{k}",
+                name=f"clean_{j}",
                 channels=self.channels,
                 group=[self.uid],
             )
@@ -129,7 +131,7 @@ class Brew(Promise):
             yield from self.channels["public"].send(
                 sender=self.uid, group=[p.uid],
                 action=Init.request,
-                content={k: kwargs[k], "luck": luck}
+                content=dict(j, luck=luck)
             )
 
         yield
