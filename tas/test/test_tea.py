@@ -83,7 +83,8 @@ class FlowTests(unittest.TestCase):
 
                     if turns + n == 20:
                         with self.subTest(turns=turns, n=n):
-                            self.assertEqual(Fruition.construction, p.fruition["mugs"])
+                            self.assertEqual(Fruition.construction, p.fruition[("mugs", 2)])
+                            print(p.fruition)
 
                     elif turns + n == 27:
                         # self.assertEqual(Fruition.transition, kit.fruition["mugs"])

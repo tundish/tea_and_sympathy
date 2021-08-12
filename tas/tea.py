@@ -67,16 +67,14 @@ class Brew(Promise):
 
     def pro_missing(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        if not any(
-            self.fruition[k] in (Fruition.inception, Fruition.elaboration, Fruition.discussion)
-            for k in kwargs
-        ):
+        jobs = [tuple({k: v}.items()) for k, v in kwargs.items()]
+        if all(self.dispatched(j, Kit) for j in jobs):
             yield
 
-        for k, v in kwargs.items():
-            if self.fruition[k] == Fruition.inception:
+        for j in jobs:
+            if self.fruition[j] == Fruition.inception:
                 p = Kit.create(
-                    name=f"find_{k}",
+                    name=f"find_{j[0]}",
                     channels=self.channels,
                     group=[self.uid],
                 )
@@ -84,14 +82,13 @@ class Brew(Promise):
 
                 m = next(self.channels["public"].send(
                     sender=self.uid, group=[p.uid],
-                    action=Init.request, content={k: v}
-                ))
-                self.fruition[k] = self.fruition[k].trigger(m.action)
-                yield m
+                    action=Init.request, content=dict(j)))
+                self.fruition[j] = self.fruition[j].trigger(m.action)
 
-            if self.fruition[k] in (Fruition.elaboration, Fruition.discussion):
+            if self.fruition[j] in (Fruition.elaboration, Fruition.discussion):
                 for m in self.channels["public"].respond(self, this, actions=self.actions):
-                    self.fruition[k] = self.fruition[k].trigger(m.action)
+                    #print(m.action, self.fruition)
+                    self.fruition[j] = self.fruition[j].trigger(m.action)
 
     def pro_boiling(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
@@ -114,7 +111,7 @@ class Brew(Promise):
 
     def pro_inspecting(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        jobs = [(k, v) for k, v in kwargs.items() if k in ("mugs", "spoons")]
+        jobs = [tuple({k: v}.items()) for k, v in kwargs.items() if k in ("mugs", "spoons")]
         for j in jobs:
             #self.fruition[j] =
             if self.dispatched(j, Tidy):
