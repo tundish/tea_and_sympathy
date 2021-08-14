@@ -86,11 +86,14 @@ class Brew(Promise):
                 self.fruition[j] = self.fruition[j].trigger(m.action)
                 yield m
 
-            if self.fruition[j] in (Fruition.elaboration, Fruition.discussion):
-                for m in self.channels["public"].respond(self, this, actions=self.actions):
-                    self.fruition[j] = self.fruition[j].trigger(m.action)
-
-            self.log.info(self.fruition, extra={"proclet": self})
+        for m in self.channels["public"].respond(self, this, actions=self.actions):
+            try:
+                j = tuple(m.content.items())
+                self.fruition[j] = self.fruition[j].trigger(m.action)
+            except AttributeError:
+                self.log.debug(m, extra={"proclet": self})
+            finally:
+                yield m
 
     def pro_boiling(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
@@ -100,22 +103,24 @@ class Brew(Promise):
         yield
 
     def pro_claiming(self, this, **kwargs):
-        try:
-            sync = next(
-                i for i in self.channels["public"].receive(self, this)
-                if i.action == Exit.deliver
-            )
-        except StopIteration:
-            return
-        else:
-            self.log.info(self.fruition, extra={"proclet": self})
-            yield
+        for m in self.channels["public"].respond(
+            self, this, actions=self.actions, contents=self.contents
+        ):
+            self.contents[m.action] = m.content
+            try:
+                j = tuple(m.content.items())
+                self.fruition[j] = self.fruition[j].trigger(m.action)
+            except AttributeError:
+                return
+            else:
+                self.log.info(self.fruition, extra={"proclet": self})
+                yield
 
     def pro_inspecting(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         jobs = [tuple({k: v}.items()) for k, v in kwargs.items() if k in ("mugs", "spoons")]
         for j in jobs:
-            #self.fruition[j] =
+            self.fruition[j] = Fruition.inception
             if self.dispatched(j, Tidy):
                 continue
 

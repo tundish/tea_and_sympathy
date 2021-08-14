@@ -142,6 +142,7 @@ class Promise(Proclet):
 
                 if not n:
                     self.requests[job].append(m)
+                yield m
 
         if all(i == Fruition.construction for i in self.fruition.values()):
             self.log.debug(self.requests, extra={"proclet": self})
