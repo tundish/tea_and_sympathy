@@ -101,7 +101,7 @@ class Promise(Proclet):
         super().__init__(*args, **kwargs)
         self.log = logging.getLogger(self.name)
         self.actions = {}
-        self.contents = {}
+        self.contents = defaultdict(dict)
         self.fruition = defaultdict(functools.partial(Fruition, 1))
         self.requests = defaultdict(deque)
 

@@ -145,7 +145,7 @@ class Brew(Promise):
             self.fruition[j] = self.fruition[j].trigger(m.action)
             yield m
 
-        for m in self.channels["public"].respond(self, this, actions=self.actions, contents=self.contents):
+        for m in self.channels["public"].respond(self, this, actions=self.actions):
             try:
                 j = tuple(m.content.items())
                 self.fruition[j] = self.fruition[j].trigger(m.action)
