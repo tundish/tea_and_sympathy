@@ -103,8 +103,9 @@ class Brew(Promise):
         yield
 
     def pro_claiming(self, this, **kwargs):
+        senders = {i.uid for i in self.domain if isinstance(i, Kit)}
         for m in self.channels["public"].respond(
-            self, this, actions=self.actions, contents=self.contents
+            self, this, actions=self.actions, contents=self.contents, senders=senders
         ):
             self.contents[m.action] = m.content
             try:
@@ -113,7 +114,7 @@ class Brew(Promise):
             except AttributeError:
                 return
             else:
-                self.log.info(self.fruition, extra={"proclet": self})
+                self.log.debug(self.fruition, extra={"proclet": self})
                 yield
 
     def pro_inspecting(self, this, **kwargs):
@@ -136,8 +137,7 @@ class Brew(Promise):
             )
             yield p
 
-            luck = kwargs.get("luck", random.triangular(0, 1, 3/4))
-            luck = 1
+            # luck = kwargs.get("luck", random.triangular(0, 1, 3/4))
             m = next(self.channels["public"].send(
                 sender=self.uid, group=[p.uid],
                 action=Init.request, content=dict(j)
@@ -145,30 +145,25 @@ class Brew(Promise):
             self.fruition[j] = self.fruition[j].trigger(m.action)
             yield m
 
-        for m in self.channels["public"].respond(self, this, actions=self.actions):
+    def pro_approving(self, this, **kwargs):
+        self.log.info("", extra={"proclet": self})
+        senders = {i.uid for i in self.domain if isinstance(i, Tidy)}
+        # TODO: iterate over jobs
+        for m in self.channels["public"].respond(
+            self, this, actions=self.actions, contents=self.contents, senders=senders
+        ):
+            self.contents[m.action] = m.content
+            yield m
+
             try:
                 j = tuple(m.content.items())
                 self.fruition[j] = self.fruition[j].trigger(m.action)
             except AttributeError:
-                self.log.debug(m, extra={"proclet": self})
-            finally:
-                yield m
+                return
+            else:
+                self.log.debug(self.fruition, extra={"proclet": self})
+                yield
 
-    def pro_approving(self, this, **kwargs):
-        self.log.info("", extra={"proclet": self})
-        while any(i for i in self.fruition.values() if i != Fruition.completion):
-            self.log.info(self.fruition, extra={"proclet": self})
-            for m in self.channels["public"].respond(
-                self, this, actions=self.actions, contents=self.contents
-            ):
-                self.contents[m.action] = m.content
-                try:
-                    j = tuple(m.content.items())
-                    self.fruition[j] = self.fruition[j].trigger(m.action)
-                except AttributeError:
-                    return
-        else:
-            yield
 
     def pro_brewing(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
@@ -234,14 +229,16 @@ class Tidy(Promise):
                 self.requests[job].append(m)
 
         if all(i == Fruition.construction for i in self.fruition.values()):
-            self.log.info(self.requests, extra={"proclet": self})
+            self.log.debug(self.requests, extra={"proclet": self})
             yield
 
     def pro_cleaning(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        for k in self.fruition:
-            if random.random() > self.luck:
-                self.log.info(f"Cleaning {k}", extra={"proclet": self})
+        for j in self.fruition:
+            if random.random() < self.luck:
+                self.log.info(f"Cleaning {j[0][0]}", extra={"proclet": self})
+            else:
+                self.log.info(f"Fumbled {j[0][0]}", extra={"proclet": self})
         yield
 
 
@@ -262,7 +259,7 @@ if __name__ == "__main__":
     while rv is None:
         try:
             for m in b(mugs=2, tea=2, milk=2, spoons=1, sugar=1):
-                logging.info(m, extra={"proclet": b})
+                logging.debug(m, extra={"proclet": b})
         except Termination:
             rv = 0
         except Exception as e:
