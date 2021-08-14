@@ -68,13 +68,13 @@ class Brew(Promise):
     def pro_missing(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         jobs = [tuple({k: v}.items()) for k, v in kwargs.items()]
-        if all(self.dispatched(j, Kit) for j in jobs):
+        if all(self.fruition[j] == Fruition.construction for j in jobs):
             yield
 
         for j in jobs:
             if self.fruition[j] == Fruition.inception:
                 p = Kit.create(
-                    name=f"find_{j[0]}",
+                    name=f"find_{j[0][0]}",
                     channels=self.channels,
                     group=[self.uid],
                 )
@@ -84,11 +84,13 @@ class Brew(Promise):
                     sender=self.uid, group=[p.uid],
                     action=Init.request, content=dict(j)))
                 self.fruition[j] = self.fruition[j].trigger(m.action)
+                yield m
 
             if self.fruition[j] in (Fruition.elaboration, Fruition.discussion):
                 for m in self.channels["public"].respond(self, this, actions=self.actions):
-                    #print(m.action, self.fruition)
                     self.fruition[j] = self.fruition[j].trigger(m.action)
+
+            self.log.info(self.fruition, extra={"proclet": self})
 
     def pro_boiling(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
@@ -106,7 +108,7 @@ class Brew(Promise):
         except StopIteration:
             return
         else:
-            self.log.info(self.result, extra={"proclet": self})
+            self.log.info(self.fruition, extra={"proclet": self})
             yield
 
     def pro_inspecting(self, this, **kwargs):
@@ -118,7 +120,7 @@ class Brew(Promise):
                 continue
 
             p = Tidy.create(
-                name=f"clean_{j}",
+                name=f"clean_{j[0][0]}",
                 channels=self.channels,
                 group=[self.uid],
             )
@@ -143,8 +145,10 @@ class Brew(Promise):
                 )
             except StopIteration:
                 return
+            else:
+                self.log.debug(self.fruition, extra={"proclet": self})
         else:
-            self.log.info(self.result, extra={"proclet": self})
+            self.log.debug(self.result, extra={"proclet": self})
             yield
 
     def pro_brewing(self, this, **kwargs):
@@ -239,7 +243,7 @@ if __name__ == "__main__":
     while rv is None:
         try:
             for m in b(mugs=2, tea=2, milk=2, spoons=1, sugar=1):
-                logging.debug(m, extra={"proclet": b})
+                logging.info(m, extra={"proclet": b})
         except Termination:
             rv = 0
         except Exception as e:
@@ -247,7 +251,7 @@ if __name__ == "__main__":
             logging.exception(e, extra={"proclet": b})
         finally:
             n += 1
-            if n > 30:
+            if n > 20:
                 break
 
     sys.exit(rv)
