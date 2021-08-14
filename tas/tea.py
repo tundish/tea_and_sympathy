@@ -119,11 +119,16 @@ class Brew(Promise):
     def pro_inspecting(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         jobs = [tuple({k: v}.items()) for k, v in kwargs.items() if k in ("mugs", "spoons")]
+        if all(
+            self.dispatched(j, Tidy) and self.fruition[j] == Fruition.construction for j in jobs
+        ):
+            yield
+
         for j in jobs:
-            self.fruition[j] = Fruition.inception
             if self.dispatched(j, Tidy):
                 continue
 
+            self.fruition[j] = Fruition.inception
             p = Tidy.create(
                 name=f"clean_{j[0][0]}",
                 channels=self.channels,
@@ -132,28 +137,37 @@ class Brew(Promise):
             yield p
 
             luck = kwargs.get("luck", random.triangular(0, 1, 3/4))
-            yield from self.channels["public"].send(
+            luck = 1
+            m = next(self.channels["public"].send(
                 sender=self.uid, group=[p.uid],
-                action=Init.request,
-                content=dict(j, luck=luck)
-            )
+                action=Init.request, content=dict(j)
+            ))
+            self.fruition[j] = self.fruition[j].trigger(m.action)
+            yield m
 
-        yield
+        for m in self.channels["public"].respond(self, this, actions=self.actions, contents=self.contents):
+            try:
+                j = tuple(m.content.items())
+                self.fruition[j] = self.fruition[j].trigger(m.action)
+            except AttributeError:
+                self.log.debug(m, extra={"proclet": self})
+            finally:
+                yield m
 
     def pro_approving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        while self.pending:
-            try:
-                sync = next(
-                    i for i in self.channels["public"].receive(self, this)
-                    if isinstance(i.action, Exit)
-                )
-            except StopIteration:
-                return
-            else:
-                self.log.debug(self.fruition, extra={"proclet": self})
+        while any(i for i in self.fruition.values() if i != Fruition.completion):
+            self.log.info(self.fruition, extra={"proclet": self})
+            for m in self.channels["public"].respond(
+                self, this, actions=self.actions, contents=self.contents
+            ):
+                self.contents[m.action] = m.content
+                try:
+                    j = tuple(m.content.items())
+                    self.fruition[j] = self.fruition[j].trigger(m.action)
+                except AttributeError:
+                    return
         else:
-            self.log.debug(self.result, extra={"proclet": self})
             yield
 
     def pro_brewing(self, this, **kwargs):
@@ -256,7 +270,7 @@ if __name__ == "__main__":
             logging.exception(e, extra={"proclet": b})
         finally:
             n += 1
-            if n > 20:
+            if n > 30:
                 break
 
     sys.exit(rv)
