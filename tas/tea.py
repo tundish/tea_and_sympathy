@@ -148,22 +148,22 @@ class Brew(Promise):
     def pro_approving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         senders = {i.uid for i in self.domain if isinstance(i, Tidy)}
-        # TODO: iterate over jobs
-        for m in self.channels["public"].respond(
-            self, this, actions=self.actions, contents=self.contents, senders=senders
-        ):
-            self.contents[m.action] = m.content
-            yield m
+        jobs = {j for p in self.domain if isinstance(p, Tidy) for j in p.requests}
+        while jobs:
+            for m in self.channels["public"].respond(
+                self, this, actions=self.actions, contents=self.contents, senders=senders
+            ):
+                self.contents[m.action] = m.content
+                yield m
 
-            try:
-                j = tuple(m.content.items())
-                self.fruition[j] = self.fruition[j].trigger(m.action)
-            except AttributeError:
-                return
-            else:
-                self.log.debug(self.fruition, extra={"proclet": self})
-                yield
-
+                try:
+                    j = tuple(m.content.items())
+                    self.fruition[j] = self.fruition[j].trigger(m.action)
+                    jobs.discard(j)
+                except AttributeError:
+                    return
+        else:
+            yield
 
     def pro_brewing(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
