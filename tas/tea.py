@@ -96,7 +96,7 @@ class Brew(Promise):
                 yield m
 
     def pro_boiling(self, this, **kwargs):
-        self.log.info("", extra={"proclet": self})
+        self.log.info(self.kettle, extra={"proclet": self})
         while self.kettle <= 90:
             self.kettle += 10
             return
@@ -242,10 +242,25 @@ class Tidy(Promise):
         yield
 
 
-def promise_tea(**kwargs):
+def promise(**kwargs):
     name = kwargs.pop("name", "brew_tea")
     channels = {"public": Channel()}
     return Brew.create(name=name, channels=channels, **kwargs)
+
+
+def execute(p: Promise, **kwargs):
+    while True:
+        try:
+            msgs = list(p(**kwargs))
+            for m in msgs:
+                logging.debug(m, extra={"proclet": p})
+                if m is not None:
+                    yield m
+        except Termination:
+            return
+        except Exception as e:
+            logging.exception(e, extra={"proclet": p})
+            yield None
 
 
 if __name__ == "__main__":
@@ -253,21 +268,10 @@ if __name__ == "__main__":
         style="{", format="{proclet.name:>16}|{funcName:>14}|{message}",
         level=logging.INFO,
     )
-    b = promise_tea()
-    rv = None
-    n = 0
-    while rv is None:
-        try:
-            for m in b(mugs=2, tea=2, milk=2, spoons=1, sugar=1):
-                logging.debug(m, extra={"proclet": b})
-        except Termination:
-            rv = 0
-        except Exception as e:
-            rv = 1
-            logging.exception(e, extra={"proclet": b})
-        finally:
-            n += 1
-            if n > 30:
-                break
+    p = promise()
+    for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
+        print(n, p.fruition)
+        if m is None:
+            sys.exit(1)
 
-    sys.exit(rv)
+    sys.exit(0)

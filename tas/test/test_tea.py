@@ -30,7 +30,8 @@ from tas.tea import Brew
 from tas.tea import Kit
 from tas.tea import Fruition
 from tas.tea import Tidy
-from tas.tea import promise_tea
+from tas.tea import execute
+from tas.tea import promise
 
 
 class FlowTests(unittest.TestCase):
@@ -39,18 +40,14 @@ class FlowTests(unittest.TestCase):
         self.baseline = set(Proclet.population.keys())
 
     def test_tallies(self):
-        p = promise_tea()
+        p = promise()
         self.assertFalse(p.requests)
         self.assertFalse(p.result)
-        while True:
-            try:
-                list(p(mugs=2, tea=2, milk=2, spoons=1, sugar=1))
-            except Termination:
-                self.assertTrue(p.result)
-                break
+        list(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1))
 
-        self.assertEqual(1, p.tally["pro_missing"])
-        self.assertGreater(p.tally["pro_inspecting"], 1)
+        self.assertEqual(3, p.tally["pro_missing"])
+        self.assertEqual(9, p.tally["pro_boiling"])
+        self.assertEqual(6, p.tally["pro_inspecting"])
         created = [v for k, v in Proclet.population.items() if k not in self.baseline]
         totals = Counter(type(i) for i in created)
         for cls, n in totals.items():
@@ -63,6 +60,32 @@ class FlowTests(unittest.TestCase):
                     with self.subTest(p=p):
                         self.assertTrue(all(i == 1 for i in p.tally.values()))
 
+    def test_promise_request(self):
+        kit = None
+        p = promise()
+        for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
+
+            if isinstance(m, Kit) and "mugs" in m.name:
+                kit = m
+
+            if n == 24:
+                with self.subTest(n=n):
+                    self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])
+                    self.assertEqual(Fruition.construction, kit.fruition[(("mugs", 2),)])
+
+            elif n == 27:
+                for c in ("mugs", "tea", "milk", "spoons", "sugar"):
+                    with self.subTest(n=n, c=c):
+                        self.assertIn(c, p.result)
+
+            elif n == 35:
+                with self.subTest(n=n):
+                    self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
+                    self.assertEqual(Fruition.transition, kit.fruition[(("mugs", 2),)])
+
+            # Guard against injecting new jobs by accident
+            self.assertTrue(all(len(i) == 2 for k, v in p.fruition.items() for i in k), p.fruition)
+
     def test_confirm_counter(self):
         """
         Can you get the mugs out for me?
@@ -70,35 +93,29 @@ class FlowTests(unittest.TestCase):
         OK fine.
 
         """
-        p = promise_tea()
-        p.actions.update({Init.counter: Init.confirm})
         kit = None
-        turns = 0
-        while turns < 70:
-            try:
-                for n, m in enumerate(p(mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
-                    if isinstance(m, Kit) and "mugs" in m.name:
-                        kit = m
-                        kit.actions.update({Init.request: Init.counter})
+        p = promise()
+        p.actions.update({Init.counter: Init.confirm})
+        for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
 
-                    if turns + n == 20:
-                        with self.subTest(turns=turns, n=n):
-                            self.assertEqual(Fruition.construction, p.fruition[("mugs", 2)])
-                            print(p.fruition)
+            if isinstance(m, Kit) and "mugs" in m.name:
+                kit = m
+                kit.actions.update({Init.request: Init.counter})
 
-                    elif turns + n == 27:
-                        # self.assertEqual(Fruition.transition, kit.fruition["mugs"])
-                        # self.assertEqual(Fruition.completion, p.fruition["mugs"])
-                        for c in ("mugs", "tea", "milk", "spoons", "sugar"):
-                            with self.subTest(turns=turns, n=n, c=c):
-                                self.assertIn(c, p.result)
+            print(n, p.fruition)
 
-                    if getattr(m, "action", None) == Exit.deliver:
-                        print(turns + n, m.content)
-                turns += max(1, n)
-            except Termination:
-                print("Turns: ", turns)
-                break
-        else:
-            print(p.fruition, p.result, p.effort)
-            print(p.domain)
+            if n == 24:
+                with self.subTest(n=n):
+                    self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])
+
+            elif n == 27:
+                for c in ("mugs", "tea", "milk", "spoons", "sugar"):
+                    with self.subTest(n=n, c=c):
+                        self.assertIn(c, p.result)
+
+            elif n == 35:
+                with self.subTest(n=n):
+                    self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
+
+            # Guard against injecting new jobs by accident
+            self.assertTrue(all(len(i) == 2 for k, v in p.fruition.items() for i in k), p.fruition)
