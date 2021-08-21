@@ -102,8 +102,6 @@ class FlowTests(unittest.TestCase):
                 kit = m
                 kit.actions.update({Init.request: Init.counter})
 
-            print(n, p.fruition)
-
             if n == 24:
                 with self.subTest(n=n):
                     self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])

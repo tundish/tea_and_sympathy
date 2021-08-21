@@ -251,8 +251,7 @@ def promise(**kwargs):
 def execute(p: Promise, **kwargs):
     while True:
         try:
-            msgs = list(p(**kwargs))
-            for m in msgs:
+            for m in p(**kwargs):
                 logging.debug(m, extra={"proclet": p})
                 if m is not None:
                     yield m

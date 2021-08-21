@@ -136,6 +136,8 @@ class Promise(Proclet):
             for n, m in enumerate(
                 c.respond(self, this, actions=self.actions, contents=self.contents)
             ):
+                print(self, self.fruition)
+
                 self.contents[m.action] = m.content
                 job = tuple(self.contents[Init.request].items())
                 self.fruition[job] = self.fruition[job].trigger(m.action)
