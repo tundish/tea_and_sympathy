@@ -98,7 +98,7 @@ class FlowTests(unittest.TestCase):
         p.actions.update({Init.counter: Init.confirm})
         for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
             print(n, m, p.result)
-            if n > 40:
+            if n > 41:
                 break
 
             if isinstance(m, Kit) and "mugs" in m.name:
