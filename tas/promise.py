@@ -136,9 +136,7 @@ class Promise(Proclet):
             for n, m in enumerate(
                 c.respond(self, this, actions=self.actions, contents=self.contents)
             ):
-                print(self, self.fruition)
-
-                self.contents[m.action] = m.content
+                self.contents[m.action] = m.content or self.contents[m.action]
                 job = tuple(self.contents[Init.request].items())
                 self.fruition[job] = self.fruition[job].trigger(m.action)
 
@@ -149,7 +147,6 @@ class Promise(Proclet):
         if all(i == Fruition.construction for i in self.fruition.values()):
             self.log.debug(self.requests, extra={"proclet": self})
             yield
-
 
     def pro_exit(self, this, **kwargs):
         for j, v in self.requests.items():

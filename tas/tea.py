@@ -89,9 +89,10 @@ class Brew(Promise):
         for m in self.channels["public"].respond(self, this, actions=self.actions):
             try:
                 j = tuple(m.content.items())
-                self.fruition[j] = self.fruition[j].trigger(m.action)
             except AttributeError:
                 self.log.debug(m, extra={"proclet": self})
+            else:
+                self.fruition[j] = self.fruition[j].trigger(m.action)
             finally:
                 yield m
 
