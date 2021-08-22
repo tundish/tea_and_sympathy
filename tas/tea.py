@@ -88,6 +88,7 @@ class Brew(Promise):
 
         for m in self.channels["public"].respond(self, this, actions=self.actions, contents=self.contents):
             print(self.population[list(m.group)[0]], m.action, m.content)
+            self.contents[m.action] = m.content or self.contents[Init.request]
             try:
                 j = tuple(m.content.items())
             except AttributeError:
