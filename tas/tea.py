@@ -111,10 +111,10 @@ class Brew(Promise):
             self.contents[m.action] = m.content
             try:
                 j = tuple(m.content.items())
-                self.fruition[j] = self.fruition[j].trigger(m.action)
             except AttributeError:
                 return
             else:
+                self.fruition[j] = self.fruition[j].trigger(m.action)
                 self.log.debug(self.fruition, extra={"proclet": self})
                 yield
 

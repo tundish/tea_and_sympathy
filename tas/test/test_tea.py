@@ -69,19 +69,16 @@ class FlowTests(unittest.TestCase):
                 kit = m
 
             if n == 24:
-                with self.subTest(n=n):
-                    self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])
-                    self.assertEqual(Fruition.construction, kit.fruition[(("mugs", 2),)])
+                self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])
+                self.assertEqual(Fruition.construction, kit.fruition[(("mugs", 2),)])
 
             elif n == 30:
                 for c in ("mugs", "tea", "milk", "spoons", "sugar"):
-                    with self.subTest(n=n, c=c):
-                        self.assertIn(c, p.result)
+                    self.assertIn(c, p.result)
 
             elif n == 35:
-                with self.subTest(n=n):
-                    self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
-                    self.assertEqual(Fruition.transition, kit.fruition[(("mugs", 2),)])
+                self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
+                self.assertEqual(Fruition.transition, kit.fruition[(("mugs", 2),)])
 
             # Guard against injecting new jobs by accident
             self.assertTrue(all(len(i) == 2 for k, v in p.fruition.items() for i in k), p.fruition)
@@ -97,7 +94,7 @@ class FlowTests(unittest.TestCase):
         p = promise()
         p.actions.update({Init.counter: Init.confirm})
         for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
-            print(n, m, p.result)
+            #print(n, m, p.fruition)
             if n > 41:
                 break
 
@@ -105,22 +102,21 @@ class FlowTests(unittest.TestCase):
                 kit = m
                 kit.actions.update({Init.request: Init.counter})
 
-            if n == 26:
-                with self.subTest(n=n):
-                    self.assertEqual(Fruition.discussion, p.fruition[(("mugs", 2),)])
+            if n == 20:
+                self.assertEqual(Fruition.discussion, p.fruition[(("mugs", 2),)])
+
+            elif n == 24:
+                self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])
 
             elif n == 31:
-                with self.subTest(n=n):
-                    self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])
+                self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])
 
             elif n == 35:
-                with self.subTest(n=n):
-                    self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
+                self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
 
             elif n == 36:
                 for c in ("mugs", "tea", "milk", "spoons", "sugar"):
-                    with self.subTest(n=n, c=c):
-                        self.assertIn(c, p.result)
+                    self.assertIn(c, p.result)
 
             # Guard against injecting new jobs by accident
             self.assertTrue(all(len(i) == 2 for k, v in p.fruition.items() for i in k), p.fruition)
