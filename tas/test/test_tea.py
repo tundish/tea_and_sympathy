@@ -102,19 +102,22 @@ class FlowTests(unittest.TestCase):
                 kit = m
                 kit.actions.update({Init.request: Init.counter})
 
+            if p.fruition[(("mugs", 2),)] == Fruition.construction:
+                print(n)
+
             if n == 20:
                 self.assertEqual(Fruition.discussion, p.fruition[(("mugs", 2),)])
 
-            elif n == 24:
+            elif n == 240:
                 self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])
 
-            elif n == 31:
+            elif n == 310:
                 self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])
 
-            elif n == 35:
+            elif n == 350:
                 self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
 
-            elif n == 36:
+            elif n == 360:
                 for c in ("mugs", "tea", "milk", "spoons", "sugar"):
                     self.assertIn(c, p.result)
 

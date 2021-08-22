@@ -136,11 +136,11 @@ class Promise(Proclet):
             for n, m in enumerate(
                 c.respond(self, this, actions=self.actions, contents=self.contents)
             ):
-                self.contents[m.action] = m.content or self.contents[m.action]
-                job = tuple(self.contents[Init.request].items())
+                self.contents[m.action] = m.content or self.contents[Init.request]
+                job = tuple(self.contents[m.action].items())
                 self.fruition[job] = self.fruition[job].trigger(m.action)
 
-                if not n:
+                if m.action == Init.request:
                     self.requests[job].append(m)
                 yield m
 

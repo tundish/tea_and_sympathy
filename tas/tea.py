@@ -86,13 +86,17 @@ class Brew(Promise):
                 self.fruition[j] = self.fruition[j].trigger(m.action)
                 yield m
 
-        for m in self.channels["public"].respond(self, this, actions=self.actions):
+        for m in self.channels["public"].respond(self, this, actions=self.actions, contents=self.contents):
+            print(self.population[list(m.group)[0]], m.action, m.content)
             try:
                 j = tuple(m.content.items())
             except AttributeError:
                 self.log.debug(m, extra={"proclet": self})
+                print(m)
             else:
+                print(self.fruition[j], m.action)
                 self.fruition[j] = self.fruition[j].trigger(m.action)
+                print(self.fruition[j], self.actions)
             finally:
                 yield m
 
@@ -270,6 +274,8 @@ if __name__ == "__main__":
     )
     p = promise()
     for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
+        if n > 50:
+            break
         print(n, p.fruition)
         if m is None:
             sys.exit(1)
