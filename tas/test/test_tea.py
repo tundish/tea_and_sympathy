@@ -76,7 +76,7 @@ class FlowTests(unittest.TestCase):
                 for c in ("mugs", "tea", "milk", "spoons", "sugar"):
                     self.assertIn(c, p.result)
 
-            elif n == 35:
+            elif n == 42:
                 self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
                 self.assertEqual(Fruition.transition, kit.fruition[(("mugs", 2),)])
 
@@ -94,16 +94,12 @@ class FlowTests(unittest.TestCase):
         p = promise()
         p.actions.update({Init.counter: Init.confirm})
         for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
-            #print(n, m, p.fruition)
             if n > 61:
                 break
 
             if isinstance(m, Kit) and "mugs" in m.name:
                 kit = m
                 kit.actions.update({Init.request: Init.counter})
-
-            if p.fruition[(("mugs", 2),)] == Fruition.transition:
-                print("Yo", n)
 
             if n == 20:
                 self.assertEqual(Fruition.discussion, p.fruition[(("mugs", 2),)])
@@ -114,7 +110,7 @@ class FlowTests(unittest.TestCase):
             elif n == 31:
                 self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])
 
-            elif n == 35:
+            elif n == 43:
                 self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
 
             elif n == 36:

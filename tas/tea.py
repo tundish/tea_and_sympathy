@@ -87,17 +87,13 @@ class Brew(Promise):
                 yield m
 
         for m in self.channels["public"].respond(self, this, actions=self.actions, contents=self.contents):
-            print(self.population[list(m.group)[0]], m.action, m.content)
             self.contents[m.action] = m.content or self.contents[Init.request]
             try:
                 j = tuple(m.content.items())
             except AttributeError:
                 self.log.debug(m, extra={"proclet": self})
-                print(m)
             else:
-                print(self.fruition[j], m.action)
                 self.fruition[j] = self.fruition[j].trigger(m.action)
-                print(self.fruition[j], self.actions)
             finally:
                 yield m
 
