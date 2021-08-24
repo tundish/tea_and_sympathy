@@ -76,7 +76,7 @@ class FlowTests(unittest.TestCase):
                 for c in ("mugs", "tea", "milk", "spoons", "sugar"):
                     self.assertIn(c, p.result)
 
-            elif n == 42:
+            elif n == 46:
                 self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
                 self.assertEqual(Fruition.transition, kit.fruition[(("mugs", 2),)])
 
@@ -85,16 +85,16 @@ class FlowTests(unittest.TestCase):
 
     def test_confirm_counter(self):
         """
-        Can you get the mugs out for me?
-        I'll get them in a minute.
-        OK fine.
+        Brew -> Kit:    Can you get the mugs out for me?
+        Kit -> Brew:    I'll get them in a minute.
+        Brew -> Kit:    OK fine.
 
         """
         kit = None
         p = promise()
         p.actions.update({Init.counter: Init.confirm})
         for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
-            if n > 61:
+            if n > 60:
                 break
 
             if isinstance(m, Kit) and "mugs" in m.name:
@@ -110,12 +110,35 @@ class FlowTests(unittest.TestCase):
             elif n == 31:
                 self.assertEqual(Fruition.construction, p.fruition[(("mugs", 2),)])
 
-            elif n == 43:
-                self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
-
             elif n == 36:
                 for c in ("mugs", "tea", "milk", "spoons", "sugar"):
                     self.assertIn(c, p.result)
 
+            elif n == 47:
+                self.assertEqual(Fruition.transition, p.fruition[(("mugs", 2),)])
+
             # Guard against injecting new jobs by accident
             self.assertTrue(all(len(i) == 2 for k, v in p.fruition.items() for i in k), p.fruition)
+
+    def test_decline_transition(self):
+        """
+        Brew -> Tidy:   Can you wash the mugs out for me?
+        Tidy -> Brew:   There you go.
+        Brew -> Tidy:   And dry them, obviously.
+
+        """
+        tidy = None
+        p = promise()
+        p.actions.update({Init.counter: Init.confirm})
+        for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
+            if n > 65:
+                break
+
+            print(n, p.fruition[(("mugs", 2),)])
+            if isinstance(m, Tidy) and "mugs" in m.name:
+                tidy = m
+
+            if n == 40:
+                #tidy.actions.update({Init.request: Init.counter})
+                print(tidy.requests)
+

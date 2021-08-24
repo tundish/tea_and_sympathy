@@ -218,29 +218,10 @@ class Tidy(Promise):
             self.pro_exit: [],
         }
 
-    def pro_init(self, this, **kwargs):
-        for n, m in enumerate(
-            self.channels["public"].respond(self, this, actions=self.actions, contents=self.contents)
-        ):
-            self.luck = m.content.pop("luck", 1)
-            self.contents[m.action] = m.content
-            job = tuple(self.contents[Init.request].items())
-            self.fruition[job] = self.fruition[job].trigger(m.action)
-
-            if not n:
-                self.requests[job].append(m)
-
-        if all(i == Fruition.construction for i in self.fruition.values()):
-            self.log.debug(self.requests, extra={"proclet": self})
-            yield
-
     def pro_cleaning(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
         for j in self.fruition:
-            if random.random() < self.luck:
-                self.log.info(f"Cleaning {j[0][0]}", extra={"proclet": self})
-            else:
-                self.log.info(f"Fumbled {j[0][0]}", extra={"proclet": self})
+            self.log.info(f"Cleaning {j[0][0]}", extra={"proclet": self})
         yield
 
 
@@ -260,6 +241,7 @@ def execute(p: Promise, **kwargs):
         except Termination:
             return
         except Exception as e:
+            print(e)
             logging.exception(e, extra={"proclet": p})
             yield None
 
@@ -271,9 +253,8 @@ if __name__ == "__main__":
     )
     p = promise()
     for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
-        if n > 50:
+        if n > 65:
             break
-        print(n, p.fruition)
         if m is None:
             sys.exit(1)
 
