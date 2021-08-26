@@ -150,10 +150,13 @@ class Promise(Proclet):
 
     def pro_exit(self, this, **kwargs):
         for j, v in self.requests.items():
-            self.fruition[j] = self.fruition[j].trigger(Exit.deliver)
             for m in v:
-                yield m.channel.reply(
+                r = m.channel.reply(
                     self, m, action=Exit.deliver, content=dict(j)
                 )
+                print(j)
+                self.fruition[j] = self.fruition[j].trigger(r.action)
+                yield r
+
         self.log.debug(self.fruition, extra={"proclet": self})
         yield

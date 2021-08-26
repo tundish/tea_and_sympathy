@@ -124,7 +124,7 @@ class FlowTests(unittest.TestCase):
         """
         Brew -> Tidy:   Can you wash the mugs out for me?
         Tidy -> Brew:   There you go.
-        Brew -> Tidy:   And dry them, obviously.
+        Brew -> Tidy:   All of them, please.
 
         """
         tidy = None
@@ -132,6 +132,8 @@ class FlowTests(unittest.TestCase):
         p.actions.update({Init.counter: Init.confirm})
         for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
             if n > 65:
+                print(p.result, p.result["mugs"])
+                print(p.population[p.result.maps[0].uid])
                 break
 
             print(n, p.fruition[(("mugs", 2),)])
@@ -139,6 +141,8 @@ class FlowTests(unittest.TestCase):
                 tidy = m
 
             if n == 40:
-                #tidy.actions.update({Init.request: Init.counter})
+                tidy.requests[(("mugs", 1),)] = tidy.requests.pop((("mugs", 2),))  # TODO: Make a public method
                 print(tidy.requests)
 
+            # Guard against injecting new jobs by accident
+            self.assertTrue(all(len(i) == 2 for k, v in p.fruition.items() for i in k), p.fruition)
