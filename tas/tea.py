@@ -152,6 +152,7 @@ class Brew(Promise):
         self.log.info("", extra={"proclet": self})
         while any(i != Fruition.completion for i in self.fruition.values()):
             for m in self.channels["public"].receive(self, this):
+                yield m
                 j = tuple(m.content.items())
                 if j in self.fruition:
                     self.fruition[j] = self.fruition[j].trigger(m.action)

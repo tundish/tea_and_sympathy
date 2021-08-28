@@ -95,6 +95,7 @@ class FlowTests(unittest.TestCase):
         p.actions.update({Init.counter: Init.confirm})
         for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
             if n > 60:
+                self.assertEqual(2, len([i for i in p.domain if isinstance(i, Tidy)]))
                 break
 
             if isinstance(m, Kit) and "mugs" in m.name:
@@ -120,7 +121,7 @@ class FlowTests(unittest.TestCase):
             # Guard against injecting new jobs by accident
             self.assertTrue(all(len(i) == 2 for k, v in p.fruition.items() for i in k), p.fruition)
 
-    def test_decline_withdraw(self):
+    def test_decline_transition(self):
         """
         Brew -> Tidy:   Can you wash the mugs out for me?
         Tidy -> Brew:   There you go.
@@ -132,12 +133,13 @@ class FlowTests(unittest.TestCase):
         p.actions.update({Init.counter: Init.confirm})
         for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
             if n > 65:
+                self.assertEqual(3, len([i for i in p.domain if isinstance(i, Tidy)]))
                 break
-
-            print(n, p.fruition)
 
             if isinstance(m, Tidy) and "mugs" in m.name:
                 tidy = m
+            elif hasattr(m, "action") and m.action == Exit.decline:
+                print("Yo", n, m)
 
             if n == 40:
                 tidy.requests[(("mugs", 1),)] = tidy.requests.pop((("mugs", 2),))  # TODO: Make a public method
