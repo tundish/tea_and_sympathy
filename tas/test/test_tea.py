@@ -120,7 +120,7 @@ class FlowTests(unittest.TestCase):
             # Guard against injecting new jobs by accident
             self.assertTrue(all(len(i) == 2 for k, v in p.fruition.items() for i in k), p.fruition)
 
-    def test_decline_transition(self):
+    def test_decline_withdraw(self):
         """
         Brew -> Tidy:   Can you wash the mugs out for me?
         Tidy -> Brew:   There you go.
@@ -143,6 +143,9 @@ class FlowTests(unittest.TestCase):
             if n == 40:
                 tidy.requests[(("mugs", 1),)] = tidy.requests.pop((("mugs", 2),))  # TODO: Make a public method
                 print(tidy.requests)
+
+            elif n == 50:
+                print(m, p.population[m.sender].name)
 
             # Guard against injecting new jobs by accident
             self.assertTrue(all(len(i) == 2 for k, v in p.fruition.items() for i in k), p.fruition)

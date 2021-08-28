@@ -33,6 +33,7 @@ from proclets.channel import Channel
 from proclets.proclet import Proclet
 from proclets.types import Init
 from proclets.types import Exit
+from proclets.types import Performative
 from proclets.types import Termination
 
 from tas.promise import Fruition
@@ -149,21 +150,15 @@ class Brew(Promise):
 
     def pro_approving(self, this, **kwargs):
         self.log.info("", extra={"proclet": self})
-        senders = {i.uid for i in self.domain if isinstance(i, Tidy)}
-        jobs = {j for p in self.domain if isinstance(p, Tidy) for j in p.requests}
-        while jobs:
-            for m in self.channels["public"].respond(
-                self, this, actions=self.actions, contents=self.contents, senders=senders
-            ):
-                self.contents[m.action] = m.content
-                yield m
-
-                try:
-                    j = tuple(m.content.items())
-                    self.fruition[j] = self.fruition[j].trigger(m.action)
-                    jobs.discard(j)
-                except AttributeError:
-                    return
+        while any(i != Fruition.completion for i in self.fruition.values()):
+            for m in self.channels["public"].receive(self, this):
+                j = tuple(m.content.items())
+                if j in self.fruition:
+                    r = self.channels["public"].reply(self, m, action=Exit.confirm)
+                    self.fruition[j] = self.fruition[j].trigger(r.action)
+                else:
+                    r = self.channels["public"].reply(self, m, action=Exit.decline)
+                yield r
         else:
             yield
 
