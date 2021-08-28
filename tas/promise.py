@@ -154,7 +154,6 @@ class Promise(Proclet):
                 r = m.channel.reply(
                     self, m, action=Exit.deliver, content=dict(j)
                 )
-                print(j)
                 self.fruition[j] = self.fruition[j].trigger(r.action)
                 yield r
 

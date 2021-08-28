@@ -132,20 +132,15 @@ class FlowTests(unittest.TestCase):
         p.actions.update({Init.counter: Init.confirm})
         for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
             if n > 65:
-                print(p.result, p.result["mugs"])
-                print(p.population[p.result.maps[0].uid])
                 break
 
-            print(n, p.fruition[(("mugs", 2),)])
+            print(n, p.fruition)
+
             if isinstance(m, Tidy) and "mugs" in m.name:
                 tidy = m
 
             if n == 40:
                 tidy.requests[(("mugs", 1),)] = tidy.requests.pop((("mugs", 2),))  # TODO: Make a public method
-                print(tidy.requests)
-
-            elif n == 50:
-                print(m, p.population[m.sender].name)
 
             # Guard against injecting new jobs by accident
             self.assertTrue(all(len(i) == 2 for k, v in p.fruition.items() for i in k), p.fruition)

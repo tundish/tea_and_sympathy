@@ -154,11 +154,12 @@ class Brew(Promise):
             for m in self.channels["public"].receive(self, this):
                 j = tuple(m.content.items())
                 if j in self.fruition:
-                    r = self.channels["public"].reply(self, m, action=Exit.confirm)
-                    self.fruition[j] = self.fruition[j].trigger(r.action)
+                    self.fruition[j] = self.fruition[j].trigger(m.action)
+                    r = self.channels["public"].reply(self, m, action=Exit.confirm, content=dict(j))
                 else:
                     r = self.channels["public"].reply(self, m, action=Exit.decline)
                 yield r
+                self.fruition[j] = self.fruition[j].trigger(r.action)
         else:
             yield
 
@@ -236,7 +237,6 @@ def execute(p: Promise, **kwargs):
         except Termination:
             return
         except Exception as e:
-            print(e)
             logging.exception(e, extra={"proclet": p})
             yield None
 
