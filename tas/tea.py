@@ -140,7 +140,6 @@ class Brew(Promise):
             )
             yield p
 
-            # luck = kwargs.get("luck", random.triangular(0, 1, 3/4))
             m = next(self.channels["public"].send(
                 sender=self.uid, group=[p.uid],
                 action=Init.request, content=dict(j)
