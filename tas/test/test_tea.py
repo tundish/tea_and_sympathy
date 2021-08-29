@@ -94,7 +94,7 @@ class FlowTests(unittest.TestCase):
         p = promise()
         p.actions.update({Init.counter: Init.confirm})
         for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
-            if n > 60:
+            if n > 75:
                 self.assertEqual(2, len([i for i in p.domain if isinstance(i, Tidy)]))
                 break
 
@@ -132,7 +132,7 @@ class FlowTests(unittest.TestCase):
         p = promise()
         p.actions.update({Init.counter: Init.confirm})
         for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
-            if n > 65:
+            if n > 75:
                 self.assertEqual(3, len([i for i in p.domain if isinstance(i, Tidy)]))
                 break
 

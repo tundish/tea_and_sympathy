@@ -248,7 +248,7 @@ if __name__ == "__main__":
     )
     p = promise()
     for n, m in enumerate(execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)):
-        if n > 65:
+        if n > 75:
             break
         if m is None:
             sys.exit(1)
