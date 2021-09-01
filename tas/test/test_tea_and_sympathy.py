@@ -23,7 +23,7 @@ import unittest
 from tas.story import Story
 from tas.teatime import Motivation
 from tas.teatime import Location
-from tas.sympathy import TeaAndSympathy
+from tas.tea_and_sympathy import TeaAndSympathy
 
 from turberfield.catchphrase.parser import CommandParser
 from turberfield.catchphrase.presenter import Presenter

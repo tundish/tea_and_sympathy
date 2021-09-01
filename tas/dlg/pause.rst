@@ -16,7 +16,7 @@
    :states: tas.teatime.Motivation.paused
 
 .. entity:: MEDIATOR
-   :types:  tas.sympathy.TeaAndSympathy
+   :types:  tas.tea_and_sympathy.TeaAndSympathy
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings

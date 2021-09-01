@@ -24,7 +24,7 @@
             100
 
 .. entity:: MEDIATOR
-   :types:  tas.sympathy.TeaAndSympathy
+   :types:  tas.tea_and_sympathy.TeaAndSympathy
 
 
 Thanks

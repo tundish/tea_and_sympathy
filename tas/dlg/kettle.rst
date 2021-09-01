@@ -23,7 +23,7 @@
    :states: tas.teatime.Location.hob
 
 .. entity:: MEDIATOR
-   :types:  tas.sympathy.TeaAndSympathy
+   :types:  tas.tea_and_sympathy.TeaAndSympathy
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings

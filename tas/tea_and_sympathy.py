@@ -29,10 +29,8 @@ from tas.teatime import Location
 from tas.teatime import TeaTime
 from tas.types import Character
 
-from turberfield.catchphrase.mediator import Mediator
 
-
-class Sympathy(Mediator):
+class TeaAndSympathy(TeaTime):
 
     @property
     def folder(self):
