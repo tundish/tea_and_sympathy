@@ -32,7 +32,32 @@ from tas.types import Character
 from turberfield.catchphrase.mediator import Mediator
 
 
-class Sympathy(Mediator):
+class MyMediator(Mediator):
+
+    @property
+    def turns(self):
+        return len(self.history)
+
+    def play(self, cmd: str, context:dict) -> dict:
+        fn, args, kwargs = self.interpret(self.match(cmd, context=context, ensemble=self.ensemble))
+        return self(fn, *args, **kwargs)
+
+
+class MyDrama:
+
+    @property
+    def ensemble(self):
+        raise NotImplementedError
+
+    def build(self):
+        return []
+
+
+class Sympathy(MyDrama, MyMediator):
+
+    @property
+    def ensemble(self):
+        return list({i for s in self.lookup.values() for i in s})
 
     @property
     def folder(self):
@@ -45,8 +70,7 @@ class Sympathy(Mediator):
         )
 
     def build(self):
-        yield from super().build()
-        yield from [
+        return [
             Character(names=["Sophie"]).set_state(Motivation.acting),
             Character(names=["Louise"]).set_state(Motivation.player),
         ]
@@ -60,6 +84,10 @@ class Sympathy(Mediator):
         self.refusal = "That's not an option right now."
         self.input_text = ""
         self.prompt = "?"
+        self.lookup = defaultdict(set)
+        for item in args:
+            for n in item.names:
+                self.lookup[n].add(item)
 
     def __call__(self, fn, *args, **kwargs):
         try:

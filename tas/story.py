@@ -31,6 +31,7 @@ from turberfield.catchphrase.render import Settings
 # logging.basicConfig(level=logging.DEBUG)
 
 import tas
+from tas.sympathy import Sympathy
 from tas.tea_and_sympathy import TeaAndSympathy
 
 version = tas.__version__
@@ -47,9 +48,11 @@ class Story(Renderer):
     """
 
     def __init__(self, cfg=None, **kwargs):
-        self.drama = TeaAndSympathy(**kwargs)
-        for i in self.drama.build():
-            self.drama.add(i)
+        #self.drama = TeaAndSympathy(**kwargs)
+        self.drama = {
+            "sympathy": Sympathy(**kwargs)
+        }
+        self.context = self.drama["sympathy"]
         self.definitions = {
             "catchphrase-colour-washout": "hsl(50, 0%, 100%, 1.0)",
             "catchphrase-colour-shadows": "hsl(202.86, 100%, 4.12%)",
@@ -65,9 +68,17 @@ class Story(Renderer):
     def actions(self):
         yield Action(
             "cmd", None, "/drama/cmd/", [], "post",
-            [Parameter("cmd", True, self.drama.validator, [self.drama.prompt], ">")],
+            [Parameter("cmd", True, self.context.validator, [self.context.prompt], ">")],
             "Enter"
         )
+
+    @property
+    def active(self):
+        return [i for i in self.drama.values() if i.active]
+
+    @property
+    def facts(self):
+        return {record.name: record.result for record in reversed(self.context.history)}
 
     def refresh_target(self, url):
         refresh_state = getattr(self.settings, "catchphrase-states-refresh", "inherit").lower()
@@ -80,8 +91,8 @@ class Story(Renderer):
 
     def represent(self, data, facts=None):
         presenter = Presenter.build_presenter(
-            self.drama.folder, data, facts,
-            ensemble=self.drama.ensemble + [self.drama, self.settings]
+            self.context.folder, data, facts,
+            ensemble=self.context.ensemble + [self.context, self.settings]
         )
         if presenter and not(presenter.dwell or presenter.pause):
             setattr(self.settings, "catchphrase-reveal-extends", "none")
@@ -109,8 +120,8 @@ def parser():
 def main(opts):
     story = Story(**vars(opts))
     text = None
-    while story.drama.active:
-        presenter = story.represent(text, story.drama.facts)
+    while story.active:
+        presenter = story.represent(text, story.facts)
         if opts.debug:
             print(presenter.text, file=sys.stderr)
             print(*presenter.frames, sep="\n", file=sys.stderr)
@@ -125,11 +136,11 @@ def main(opts):
 
         else:
 
-            if story.drama.outcomes["finish"]:
+            if story.drama[story.context].outcomes["finish"]:
                 break
 
-            cmd = input("{0} ".format(story.drama.prompt))
-            text = story.drama.play(cmd, context=presenter.casting)
+            cmd = input("{0} ".format(story.drama[story.context].prompt))
+            text = story.drama[story.context].play(cmd, context=presenter.casting)
 
 def run():
     p = parser()
