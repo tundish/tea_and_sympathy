@@ -136,11 +136,11 @@ def main(opts):
 
         else:
 
-            if story.drama[story.context].outcomes["finish"]:
+            if story.context.outcomes["finish"]:
                 break
 
-            cmd = input("{0} ".format(story.drama[story.context].prompt))
-            text = story.drama[story.context].play(cmd, context=presenter.casting)
+            cmd = input("{0} ".format(story.context.prompt))
+            text = story.context.play(cmd, casting=presenter.casting)
 
 def run():
     p = parser()

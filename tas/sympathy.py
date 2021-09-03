@@ -24,6 +24,8 @@ import random
 from turberfield.catchphrase.parser import CommandParser
 from turberfield.dialogue.model import SceneScript
 
+from tas.tea import execute
+from tas.tea import promise
 from tas.teatime import Motivation
 from tas.teatime import Location
 from tas.teatime import TeaTime
@@ -38,8 +40,8 @@ class MyMediator(Mediator):
     def turns(self):
         return len(self.history)
 
-    def play(self, cmd: str, context:dict) -> dict:
-        fn, args, kwargs = self.interpret(self.match(cmd, context=context, ensemble=self.ensemble))
+    def play(self, cmd: str, casting:dict) -> dict:
+        fn, args, kwargs = self.interpret(self.match(cmd, context=casting, ensemble=self.ensemble))
         return self(fn, *args, **kwargs)
 
 
@@ -65,7 +67,7 @@ class Sympathy(MyDrama, MyMediator):
             pkg="tas.dlg",
             description="Tea and Sympathy",
             metadata={},
-            paths=["early.rst", "kettle.rst", "made.rst", "pause.rst", "quit.rst"],
+            paths=["promise.rst", "early.rst", "kettle.rst", "made.rst", "pause.rst", "quit.rst"],
             interludes=None
         )
 
@@ -85,41 +87,13 @@ class Sympathy(MyDrama, MyMediator):
         self.input_text = ""
         self.prompt = "?"
         self.lookup = defaultdict(set)
-        for item in args:
+        for item in self.build():
             for n in item.names:
                 self.lookup[n].add(item)
+        p = promise()
+        flow = execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
 
-    def __call__(self, fn, *args, **kwargs):
-        try:
-            rv = super().__call__(fn, *args, **kwargs)
-        except TypeError:
-            rv = self.do_refuse(self.do_refuse, self.input_text, *args[1:], **kwargs)
-
-        try:
-            mugs = [i for i in self.lookup["mug"] if i.get_state(Location) == Location.counter]
-            contents = [i.contents(self.ensemble) for i in mugs]
-            self.outcomes["brewed"] = self.outcomes["brewed"] or any(i for i in self.lookup["tea"] if i.state == 100)
-            self.outcomes["untidy"] = any(i for c in contents for i in c if "tea" in getattr(i, "names", []))
-            self.outcomes["stingy"] = not any(i for c in contents for i in c if "milk" in getattr(i, "names", []))
-            self.outcomes["sugary"] = any(i for c in contents for i in c if "sugar" in getattr(i, "names", []))
-            self.outcomes["served"] = (
-                self.outcomes["brewed"] and not self.outcomes["untidy"] and not self.outcomes["stingy"]
-            )
-            self.outcomes["finish"] = all(
-                i.get_state(Motivation) == Motivation.paused
-                for i in self.ensemble if isinstance(i, Character)
-            )
-            self.outcomes["paused"] = (
-                any(i.get_state(Motivation) == Motivation.paused
-                for i in self.ensemble if isinstance(i, Character))
-                and not self.outcomes["finish"]
-            )
-        except StopIteration:
-            pass
-        finally:
-            return rv
-
-    def do_help(self, this, text, context, *args, **kwargs):
+    def do_help(self, this, text, casting, *args, **kwargs):
         """
         help | ?
 
@@ -131,7 +105,7 @@ class Sympathy(MyDrama, MyMediator):
         ))
         yield from ("* {0}".format(i) for i in random.sample(options, min(3, len(options))))
 
-    def do_history(self, this, text, context, *args, **kwargs):
+    def do_history(self, this, text, casting, *args, **kwargs):
         """
         history
 
@@ -139,7 +113,7 @@ class Sympathy(MyDrama, MyMediator):
         self.pause()
         yield from ("*{0.args[0]}*".format(i) for i in self.history)
 
-    def do_refuse(self, this, text, context, *args, **kwargs):
+    def do_refuse(self, this, text, casting, *args, **kwargs):
         """
         refuse
 
@@ -147,7 +121,7 @@ class Sympathy(MyDrama, MyMediator):
         self.pause()
         return f"{text}\n\n{self.refusal}"
 
-    def do_quit(self, this, text, context, *args, **kwargs):
+    def do_quit(self, this, text, casting, *args, **kwargs):
         """
         exit | finish | stop | quit
 
