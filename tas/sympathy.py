@@ -32,30 +32,29 @@ from tas.teatime import TeaTime
 from tas.types import Character
 
 from turberfield.catchphrase.mediator import Mediator
+from turberfield.dialogue.types import Stateful
 
 
-class MyMediator(Mediator):
+
+class MyDrama(Mediator, Stateful):
+
+    @property
+    def ensemble(self):
+        raise NotImplementedError
 
     @property
     def turns(self):
         return len(self.history)
+
+    def build(self):
+        return []
 
     def play(self, cmd: str, casting:dict) -> dict:
         fn, args, kwargs = self.interpret(self.match(cmd, context=casting, ensemble=self.ensemble))
         return self(fn, *args, **kwargs)
 
 
-class MyDrama:
-
-    @property
-    def ensemble(self):
-        raise NotImplementedError
-
-    def build(self):
-        return []
-
-
-class Sympathy(MyDrama, MyMediator):
+class Sympathy(MyDrama):
 
     @property
     def ensemble(self):
