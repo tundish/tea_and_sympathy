@@ -33,6 +33,7 @@ from turberfield.catchphrase.render import Settings
 import tas
 from tas.sympathy import Sympathy
 from tas.tea_and_sympathy import TeaAndSympathy
+from tas.teatime import Operation
 
 version = tas.__version__
 
@@ -121,7 +122,7 @@ def main(opts):
     story = Story(**vars(opts))
     text = None
     while story.active:
-        presenter = story.represent(text, story.facts)
+        presenter = story.represent(text, story.context.facts)
         if opts.debug:
             print(presenter.text, file=sys.stderr)
             print(*presenter.frames, sep="\n", file=sys.stderr)
@@ -136,10 +137,11 @@ def main(opts):
 
         else:
 
-            if story.context.outcomes["finish"]:
+            if story.context.get_state(Operation) == Operation.finish:
                 break
 
             cmd = input("{0} ".format(story.context.prompt))
+            story.context.input_text = cmd
             text = story.context.play(cmd, casting=presenter.casting)
 
 def run():

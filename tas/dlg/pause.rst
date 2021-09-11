@@ -47,7 +47,7 @@ Help
     To see a list of past actions, use the *history* command.
 
 .. property:: DRAMA.prompt ?
-.. property:: NPC.state tas.teatime.Motivation.acting
+.. property:: DRAMA.state tas.teatime.Operation.normal
 
 Look
 ----
@@ -61,4 +61,4 @@ Look
 {do_look}
 
 .. property:: DRAMA.prompt ?
-.. property:: NPC.state tas.teatime.Motivation.acting
+.. property:: DRAMA.state tas.teatime.Operation.normal

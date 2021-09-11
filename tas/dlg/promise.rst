@@ -15,6 +15,7 @@
 
 .. entity:: DRAMA
    :types:  tas.sympathy.Sympathy
+   :states: tas.teatime.Operation.normal
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings

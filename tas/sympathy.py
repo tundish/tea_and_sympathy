@@ -39,6 +39,11 @@ from turberfield.dialogue.types import Stateful
 
 class MyDrama(Stateful, Mediator):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.prompt = "?"
+        self.input_text = ""
+
     @property
     def ensemble(self):
         raise NotImplementedError
@@ -67,7 +72,8 @@ class Sympathy(MyDrama):
             pkg="tas.dlg",
             description="Tea and Sympathy",
             metadata={},
-            paths=["promise.rst", "early.rst", "kettle.rst", "made.rst", "pause.rst", "quit.rst"],
+            #paths=["promise.rst", "early.rst", "kettle.rst", "made.rst", "pause.rst", "quit.rst"],
+            paths=["promise.rst", "pause.rst", "quit.rst"],
             interludes=None
         )
 
@@ -79,19 +85,30 @@ class Sympathy(MyDrama):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.outcomes = defaultdict(bool)
-        self.active.add(self.do_help)
-        self.active.add(self.do_history)
-        self.active.add(self.do_quit)
+        self.active = self.active.union(
+            {self.do_help, self.do_history, self.do_look, self.do_quit}
+        )
         self.refusal = "That's not an option right now."
-        self.input_text = ""
-        self.prompt = "?"
         self.lookup = defaultdict(set)
         for item in self.build():
             for n in item.names:
                 self.lookup[n].add(item)
         p = promise()
         flow = execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
+        self.state = Operation.normal
+
+    def do_look(self, this, text, context):
+        """
+        look | look around | look around kitchen
+        search | search kitchen
+        poke about
+        find
+        where | where am i | where is it
+        x
+
+        """
+        self.state = Operation.paused
+        return "* kitchen"
 
     def do_help(self, this, text, casting, *args, **kwargs):
         """
