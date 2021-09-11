@@ -13,10 +13,11 @@
 
 .. entity:: NPC
    :types:  tas.types.Character
-   :states: tas.teatime.Motivation.paused
+   :states: tas.teatime.Motivation.acting
 
-.. entity:: MEDIATOR
-   :types:  tas.tea_and_sympathy.TeaAndSympathy
+.. entity:: DRAMA
+   :types:  tas.sympathy.Sympathy
+   :states: tas.teatime.Operation.paused
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings
@@ -28,9 +29,9 @@ Paused
 Help
 ----
 
-.. condition:: MEDIATOR.history[0].name do_help
+.. condition:: DRAMA.history[0].name do_help
 
-[MEDIATOR]_
+[DRAMA]_
 
     You are woken early one Sunday morning.
     Your flatmate is up and anxious.
@@ -38,26 +39,26 @@ Help
 
 {do_help}
 
-[MEDIATOR]_
+[DRAMA]_
 
     Start with a *look around*.
     The character dialogue may give you some hints.
     To see how things are coming along, you can *check* an object.
     To see a list of past actions, use the *history* command.
 
-.. property:: MEDIATOR.prompt ?
+.. property:: DRAMA.prompt ?
 .. property:: NPC.state tas.teatime.Motivation.acting
 
 Look
 ----
 
-.. condition:: MEDIATOR.history[0].name do_look
+.. condition:: DRAMA.history[0].name do_look
 
-[MEDIATOR]_
+[DRAMA]_
 
     Looking around, you see:
 
 {do_look}
 
-.. property:: MEDIATOR.prompt ?
+.. property:: DRAMA.prompt ?
 .. property:: NPC.state tas.teatime.Motivation.acting

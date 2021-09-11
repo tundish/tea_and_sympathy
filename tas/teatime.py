@@ -40,8 +40,18 @@ from tas.types import Space
 class Motivation(enum.Enum):
 
     acting = 0
-    paused = 1
-    player = 2
+    player = 1
+
+
+@enum.unique
+class Operation(enum.Enum):
+
+    begins = 0
+    normal = 1
+    paused = 2
+    ending = 3
+    finish = 4
+
 
 
 class Location(enum.Enum):

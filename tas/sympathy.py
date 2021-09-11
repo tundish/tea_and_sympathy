@@ -27,6 +27,7 @@ from turberfield.dialogue.model import SceneScript
 from tas.tea import execute
 from tas.tea import promise
 from tas.teatime import Motivation
+from tas.teatime import Operation
 from tas.teatime import Location
 from tas.teatime import TeaTime
 from tas.types import Character
@@ -97,7 +98,7 @@ class Sympathy(MyDrama):
         help | ?
 
         """
-        self.state = Motivation.paused
+        self.state = Operation.paused
         options = list(filter(
             lambda x: len(x) > 1,
             (i[0] for fn in self.active for i in CommandParser.expand_commands(fn, self.ensemble))
@@ -109,7 +110,7 @@ class Sympathy(MyDrama):
         history
 
         """
-        self.state = Motivation.paused
+        self.state = Operation.paused
         yield from ("*{0.args[0]}*".format(i) for i in self.history)
 
     def do_refuse(self, this, text, casting, *args, **kwargs):
@@ -117,7 +118,7 @@ class Sympathy(MyDrama):
         refuse
 
         """
-        self.state = Motivation.paused
+        self.state = Operation.paused
         return f"{text}\n\n{self.refusal}"
 
     def do_quit(self, this, text, casting, *args, **kwargs):
@@ -125,7 +126,7 @@ class Sympathy(MyDrama):
         exit | finish | stop | quit
 
         """
-        self.state = Motivation.paused
+        self.state = Operation.paused
         for k, v in self.lookup.items():
             for p in v:
-                p.state = Motivation.paused
+                p.state = Operation.paused
