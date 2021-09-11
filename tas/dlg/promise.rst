@@ -13,7 +13,7 @@
    :types:  tas.types.Character
    :states: tas.teatime.Motivation.acting
 
-.. entity:: MEDIATOR
+.. entity:: DRAMA
    :types:  tas.sympathy.Sympathy
 
 .. entity:: SETTINGS
@@ -26,7 +26,7 @@ Early
 Caution
 -------
 
-.. condition:: MEDIATOR.turns 0
+.. condition:: DRAMA.turns 0
 
 {0}
 
@@ -36,12 +36,12 @@ Caution
 
     I am going to swear.
 
-.. property:: MEDIATOR.prompt Type 'help'. Or 'quit' if you don't want adult language.
+.. property:: DRAMA.prompt Type 'help'. Or 'quit' if you don't want adult language.
 
 Cold
 ----
 
-.. condition:: MEDIATOR.turns 1
+.. condition:: DRAMA.turns 1
 
 {0}
 
@@ -49,13 +49,13 @@ Cold
 
     It's freezing.
 
-.. property:: MEDIATOR.prompt ?
+.. property:: DRAMA.prompt ?
 
 
 Spam
 ----
 
-.. condition:: MEDIATOR.turns 2
+.. condition:: DRAMA.turns 2
 
 {0}
 
@@ -66,7 +66,7 @@ Spam
 Ignore them
 -----------
 
-.. condition:: MEDIATOR.turns 3
+.. condition:: DRAMA.turns 3
 
 {0}
 
@@ -81,7 +81,7 @@ Ignore them
 Idea
 ----
 
-.. condition:: MEDIATOR.turns 4
+.. condition:: DRAMA.turns 4
 
 {0}
 
@@ -93,7 +93,7 @@ Idea
 Stupidly
 --------
 
-.. condition:: MEDIATOR.turns 5
+.. condition:: DRAMA.turns 5
 
 {0}
 
@@ -106,7 +106,7 @@ Stupidly
 Every day
 ---------
 
-.. condition:: MEDIATOR.turns 6
+.. condition:: DRAMA.turns 6
 
 {0}
 
@@ -121,7 +121,7 @@ Every day
 Calm
 ----
 
-.. condition:: MEDIATOR.turns 7
+.. condition:: DRAMA.turns 7
 
 {0}
 
@@ -133,7 +133,7 @@ Calm
 Waiting
 -------
 
-.. condition:: MEDIATOR.turns 8
+.. condition:: DRAMA.turns 8
 
 {0}
 

@@ -36,7 +36,7 @@ from turberfield.dialogue.types import Stateful
 
 
 
-class MyDrama(Mediator, Stateful):
+class MyDrama(Stateful, Mediator):
 
     @property
     def ensemble(self):
@@ -51,7 +51,7 @@ class MyDrama(Mediator, Stateful):
 
     def play(self, cmd: str, casting:dict) -> dict:
         fn, args, kwargs = self.interpret(self.match(cmd, context=casting, ensemble=self.ensemble))
-        return self(fn, *args, **kwargs)
+        return fn and self(fn, *args, **kwargs)
 
 
 class Sympathy(MyDrama):
@@ -97,7 +97,7 @@ class Sympathy(MyDrama):
         help | ?
 
         """
-        self.pause()
+        self.state = Motivation.paused
         options = list(filter(
             lambda x: len(x) > 1,
             (i[0] for fn in self.active for i in CommandParser.expand_commands(fn, self.ensemble))
@@ -109,7 +109,7 @@ class Sympathy(MyDrama):
         history
 
         """
-        self.pause()
+        self.state = Motivation.paused
         yield from ("*{0.args[0]}*".format(i) for i in self.history)
 
     def do_refuse(self, this, text, casting, *args, **kwargs):
@@ -117,7 +117,7 @@ class Sympathy(MyDrama):
         refuse
 
         """
-        self.pause()
+        self.state = Motivation.paused
         return f"{text}\n\n{self.refusal}"
 
     def do_quit(self, this, text, casting, *args, **kwargs):
@@ -125,4 +125,7 @@ class Sympathy(MyDrama):
         exit | finish | stop | quit
 
         """
-        self.pause(Motivation.acting, Motivation.player)
+        self.state = Motivation.paused
+        for k, v in self.lookup.items():
+            for p in v:
+                p.state = Motivation.paused
