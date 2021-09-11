@@ -143,7 +143,4 @@ class Sympathy(MyDrama):
         exit | finish | stop | quit
 
         """
-        self.state = Operation.paused
-        for k, v in self.lookup.items():
-            for p in v:
-                p.state = Operation.paused
+        self.state = Operation.ending

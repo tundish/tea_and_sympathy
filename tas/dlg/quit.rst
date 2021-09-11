@@ -9,11 +9,15 @@
 
 .. entity:: PLAYER
    :types:  tas.types.Character
-   :states: tas.teatime.Motivation.paused
+   :states: tas.teatime.Motivation.player
 
 .. entity:: NPC
    :types:  tas.types.Character
-   :states: tas.teatime.Motivation.paused
+   :states: tas.teatime.Motivation.acting
+
+.. entity:: DRAMA
+   :types:  tas.sympathy.Sympathy
+   :states: tas.teatime.Operation.ending
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings
@@ -43,6 +47,8 @@ Your Interactive Story will be a work of art, and at the same time a nice piece 
 © 2021 D E Haynes.
 
 Why not `see how it's done`_?
+
+.. property:: DRAMA.state tas.teatime.Operation.finish
 
 .. _turberfield-catchphrase: https://github.com/tundish/turberfield-catchphrase
 .. _there: https://pypi.org/project/turberfield-catchphrase/
