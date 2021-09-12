@@ -49,6 +49,20 @@ Help
 .. property:: DRAMA.prompt ?
 .. property:: DRAMA.state tas.teatime.Operation.normal
 
+History
+-------
+
+.. condition:: DRAMA.history[0].name do_history
+
+[DRAMA]_
+
+    Recent commands:
+
+{do_history}
+
+.. property:: DRAMA.prompt ?
+.. property:: DRAMA.state tas.teatime.Operation.normal
+
 Look
 ----
 

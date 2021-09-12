@@ -91,11 +91,12 @@ class Sympathy(MyDrama):
             {self.do_help, self.do_history, self.do_look, self.do_quit}
         )
         self.default_fn = self.do_next
-        self.refusal = "That's not an option right now."
+
         self.lookup = defaultdict(set)
         for item in self.build():
             for n in item.names:
                 self.lookup[n].add(item)
+
         self.p = promise()
         self.flow = execute(self.p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
         self.state = Operation.normal
@@ -138,15 +139,7 @@ class Sympathy(MyDrama):
 
         """
         self.state = Operation.paused
-        yield from ("*{0.args[0]}*".format(i) for i in self.history)
-
-    def do_refuse(self, this, text, casting, *args, **kwargs):
-        """
-        refuse
-
-        """
-        self.state = Operation.paused
-        return f"{text}\n\n{self.refusal}"
+        yield from ("*{0.args[0]}*".format(i) for i in self.history if i.args[0])
 
     def do_quit(self, this, text, casting, *args, **kwargs):
         """
