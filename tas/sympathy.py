@@ -43,6 +43,7 @@ class MyDrama(Stateful, Mediator):
         super().__init__(*args, **kwargs)
         self.prompt = "?"
         self.input_text = ""
+        self.default_fn = None
 
     @property
     def ensemble(self):
@@ -57,6 +58,7 @@ class MyDrama(Stateful, Mediator):
 
     def play(self, cmd: str, casting:dict) -> dict:
         fn, args, kwargs = self.interpret(self.match(cmd, context=casting, ensemble=self.ensemble))
+        fn = fn or self.default_fn
         return fn and self(fn, *args, **kwargs)
 
 
@@ -88,16 +90,24 @@ class Sympathy(MyDrama):
         self.active = self.active.union(
             {self.do_help, self.do_history, self.do_look, self.do_quit}
         )
+        self.default_fn = self.do_next
         self.refusal = "That's not an option right now."
         self.lookup = defaultdict(set)
         for item in self.build():
             for n in item.names:
                 self.lookup[n].add(item)
-        p = promise()
-        flow = execute(p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
+        self.p = promise()
+        self.flow = execute(self.p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
         self.state = Operation.normal
 
-    def do_look(self, this, text, context):
+    def do_next(self, this, text, casting, *args, **kwargs):
+        """
+        more | next
+
+        """
+        return next(self.flow)
+
+    def do_look(self, this, text, casting, *args, **kwargs):
         """
         look | look around | look around kitchen
         search | search kitchen
