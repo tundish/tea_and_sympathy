@@ -13,17 +13,13 @@
    :types:  tas.types.Character
    :states: tas.teatime.Motivation.acting
 
-.. entity:: HOB
-   :types:  tas.teatime.Feature
-   :states: tas.teatime.Location.hob
-            tas.teatime.Motivation.acting
-
 .. entity:: KETTLE
    :types:  tas.teatime.Space
    :states: tas.teatime.Location.hob
 
-.. entity:: MEDIATOR
-   :types:  tas.tea_and_sympathy.TeaAndSympathy
+.. entity:: DRAMA
+   :types:  tas.sympathy.Sympathy
+   :states: tas.teatime.Operation.normal
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings
@@ -37,16 +33,16 @@ Input
 
 |INPUT_TEXT|
 
-.. |INPUT_TEXT| property:: MEDIATOR.input_text
+.. |INPUT_TEXT| property:: DRAMA.input_text
 
 
-.. property:: MEDIATOR.prompt ?
+.. property:: DRAMA.prompt ?
 .. property:: SETTINGS.catchphrase-reveal-extends both
 
 1
 -
 
-.. condition:: KETTLE.state 20
+.. condition:: DRAMA.p.kettle 20
 
 {0}
 
@@ -65,7 +61,7 @@ Input
 2
 -
 
-.. condition:: KETTLE.state 30
+.. condition:: DRAMA.p.kettle 30
 
 {0}
 
@@ -82,7 +78,7 @@ Input
 3
 -
 
-.. condition:: KETTLE.state 40
+.. condition:: DRAMA.p.kettle 40
 
 {0}
 
@@ -95,7 +91,7 @@ Input
 4
 -
 
-.. condition:: KETTLE.state 50
+.. condition:: DRAMA.p.kettle 50
 
 {0}
 
@@ -110,7 +106,7 @@ Input
 5
 -
 
-.. condition:: KETTLE.state 60
+.. condition:: DRAMA.p.kettle 60
 
 {0}
 
@@ -127,7 +123,7 @@ Input
 6
 -
 
-.. condition:: KETTLE.state 70
+.. condition:: DRAMA.p.kettle 70
 
 {0}
 
@@ -153,7 +149,7 @@ Input
 7
 -
 
-.. condition:: KETTLE.state 80
+.. condition:: DRAMA.p.kettle 80
 
 {0}
 
@@ -166,7 +162,7 @@ Input
 8
 -
 
-.. condition:: KETTLE.state 90
+.. condition:: DRAMA.p.kettle 90
 
 {0}
 
@@ -181,7 +177,7 @@ Input
 9
 -
 
-.. condition:: KETTLE.state 100
+.. condition:: DRAMA.p.kettle 100
 
 {0}
 
