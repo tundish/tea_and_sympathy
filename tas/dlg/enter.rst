@@ -7,15 +7,15 @@
 
 .. entity:: PLAYER
    :types:  tas.types.Character
-   :states: tas.teatime.Motivation.player
+   :states: tas.types.Motivation.player
 
 .. entity:: NPC
    :types:  tas.types.Character
-   :states: tas.teatime.Motivation.acting
+   :states: tas.types.Motivation.acting
 
 .. entity:: DRAMA
    :types:  tas.sympathy.Sympathy
-   :states: tas.teatime.Operation.normal
+   :states: tas.types.Operation.normal
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings
@@ -30,7 +30,7 @@ The hallway is in half darkness.
 
 Now the squeak of a door.
 
-The floor bathes in tobacco and tungsten.
+The bare floor bathes in tobacco and tungsten.
 
 |PLAYER_NAME| wears warm pyjamas. She pads clumsily past the stairs to
 the kitchen.

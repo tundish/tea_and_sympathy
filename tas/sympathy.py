@@ -82,6 +82,11 @@ class Sympathy(MyDrama):
             interludes=None
         )
 
+    @property
+    def fumble(self):
+        # TODO: Make a setter to defeat a Tidy promise.
+        return False
+
     def build(self):
         return [
             Character(names=["Sophie"]).set_state(Motivation.acting),
@@ -91,7 +96,8 @@ class Sympathy(MyDrama):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.active = self.active.union(
-            {self.do_help, self.do_history, self.do_look, self.do_quit}
+            {self.again, self.do_look,
+             self.do_help, self.do_history, self.do_quit}
         )
         self.default_fn = self.do_next
 
@@ -103,6 +109,13 @@ class Sympathy(MyDrama):
         self.p = promise()
         self.flow = execute(self.p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
         self.state = Operation.normal
+
+    def do_again(self, this, text, casting, *args, **kwargs):
+        """
+        again | undo
+
+        """
+        return NotImplemented
 
     def do_next(self, this, text, casting, *args, **kwargs):
         """

@@ -18,11 +18,34 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from collections import defaultdict
+import enum
 import random
 
 from turberfield.dialogue.types import DataObject
 from turberfield.dialogue.types import Stateful
 
+
+@enum.unique
+class Motivation(enum.Enum):
+
+    acting = 0
+    player = 1
+
+
+@enum.unique
+class Operation(enum.Enum):
+
+    begins = 0
+    normal = 1
+    paused = 2
+    ending = 3
+    finish = 4
+
+
+@enum.unique
+class Phase(enum.Enum):
+
+    enter = 0
 
 class Named(DataObject):
     """
