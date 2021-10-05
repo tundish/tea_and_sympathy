@@ -74,8 +74,11 @@ class Sympathy(MyDrama):
             pkg="tas.dlg",
             description="Tea and Sympathy",
             metadata={},
-            #paths=["promise.rst", "early.rst", "kettle.rst", "made.rst", "pause.rst", "quit.rst"],
-            paths=["promise.rst", "pause.rst", "quit.rst"],
+            paths=[
+                "enter.rst", # "explore.rst", "funnel.rst",
+                "pause.rst", "quit.rst"
+                # "verdict"
+            ],
             interludes=None
         )
 

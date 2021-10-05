@@ -13,10 +13,6 @@
    :types:  tas.types.Character
    :states: tas.teatime.Motivation.acting
 
-.. entity:: KETTLE
-   :types:  tas.teatime.Space
-   :states: tas.teatime.Location.hob
-
 .. entity:: DRAMA
    :types:  tas.sympathy.Sympathy
    :states: tas.teatime.Operation.normal
@@ -38,6 +34,17 @@ Input
 
 .. property:: DRAMA.prompt ?
 .. property:: SETTINGS.catchphrase-reveal-extends both
+
+Filling
+-------
+
+.. condition:: DRAMA.p.trace[1] pro_filling
+.. condition:: DRAMA.p.trace[0] pro_missing
+
+{0}
+
+
+|PLAYER_NAME| fills the kettle.
 
 1
 -

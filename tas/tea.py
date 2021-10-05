@@ -47,6 +47,7 @@ class Brew(Promise):
         self.actions = {
             Exit.deliver: Exit.confirm,
         }
+        self.kettle = None
 
     @property
     def net(self):
@@ -253,4 +254,5 @@ if __name__ == "__main__":
         if m is None:
             sys.exit(1)
 
+    print(p.tally)
     sys.exit(0)

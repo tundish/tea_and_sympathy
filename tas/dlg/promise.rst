@@ -24,6 +24,17 @@
 Early
 =====
 
+Filling
+-------
+
+.. condition:: DRAMA.p.trace[1] pro_filling
+.. condition:: DRAMA.p.trace[0] pro_missing
+
+{0}
+
+
+|PLAYER_NAME| fills the kettle.
+
 Caution
 -------
 
@@ -118,17 +129,6 @@ Every day
 [NPC]_
 
     They are doing it every day now. I swear to God.
-
-Calm
-----
-
-.. condition:: DRAMA.turns 7
-
-{0}
-
-[PLAYER]_
-
-    I'll put the kettle on.
 
 
 Waiting
