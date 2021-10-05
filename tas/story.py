@@ -90,9 +90,9 @@ class Story(Renderer):
         else:
             return refresh_state
 
-    def represent(self, data, facts=None):
+    def represent(self, *args, facts=None):
         presenter = Presenter.build_presenter(
-            self.context.folder, data, facts,
+            self.context.folder, *args, facts=facts,
             ensemble=self.context.ensemble + [self.context, self.settings]
         )
         if presenter and not(presenter.dwell or presenter.pause):
@@ -122,7 +122,7 @@ def main(opts):
     story = Story(**vars(opts))
     text = None
     while story.active:
-        presenter = story.represent(text, story.context.facts)
+        presenter = story.represent(text, facts=story.context.facts)
         if opts.debug:
             print(presenter.text, file=sys.stderr)
             print(*presenter.frames, sep="\n", file=sys.stderr)
@@ -141,8 +141,8 @@ def main(opts):
             break
 
         cmd = input("{0} ".format(story.context.prompt))
-        story.context.input_text = cmd
         text = story.context.play(cmd, casting=presenter.casting)
+        print(story.context.facts)
 
 def run():
     p = parser()

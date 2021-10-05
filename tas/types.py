@@ -43,9 +43,11 @@ class Operation(enum.Enum):
 
 
 @enum.unique
-class Phase(enum.Enum):
+class Journey(enum.Enum):
 
-    enter = 0
+    mentor = 0
+    ordeal = 1
+    reward = 2
 
 class Named(DataObject):
     """

@@ -58,6 +58,7 @@ class MyDrama(Stateful, Mediator):
         return []
 
     def play(self, cmd: str, casting:dict) -> dict:
+        self.input_text = cmd
         fn, args, kwargs = self.interpret(self.match(cmd, context=casting, ensemble=self.ensemble))
         fn = fn or self.default_fn
         return fn and self(fn, *args, **kwargs)
@@ -113,7 +114,7 @@ class Sympathy(MyDrama):
 
     def do_again(self, this, text, casting, *args, **kwargs):
         """
-        again | undo
+        again | back
 
         """
         n = len(list(itertools.takewhile(

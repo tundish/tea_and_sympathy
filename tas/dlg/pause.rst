@@ -37,7 +37,7 @@ Help
     Your flatmate is up and anxious.
     Maybe you could make her a cup of tea.
 
-{do_help}
+{0}
 
 [DRAMA]_
 
@@ -58,7 +58,7 @@ History
 
     Recent commands:
 
-{do_history}
+{0}
 
 .. property:: DRAMA.prompt ?
 .. property:: DRAMA.state tas.teatime.Operation.normal
@@ -72,7 +72,7 @@ Look
 
     Looking around, you see:
 
-{do_look}
+{0}
 
 .. property:: DRAMA.prompt ?
 .. property:: DRAMA.state tas.teatime.Operation.normal
