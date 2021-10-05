@@ -126,23 +126,23 @@ def main(opts):
         if opts.debug:
             print(presenter.text, file=sys.stderr)
             print(*presenter.frames, sep="\n", file=sys.stderr)
-        for frame in presenter.frames:
-            animation = presenter.animate(frame, dwell=presenter.dwell, pause=presenter.pause)
-            if not animation:
-                continue
-            for line, duration in story.render_frame_to_terminal(animation):
-                print(line, "\n")
-                if not opts.quick:
-                    time.sleep(duration)
+        animations = (
+            presenter.animate(
+                f, dwell=presenter.dwell, pause=presenter.pause
+            ) for f in presenter.frames
+        )
+        animation = next(filter(None, animations))
+        for line, duration in story.render_frame_to_terminal(animation):
+            print(line, "\n")
+            if not opts.quick:
+                time.sleep(duration)
 
-        else:
+        if story.context.get_state(Operation) == Operation.finish:
+            break
 
-            if story.context.get_state(Operation) == Operation.finish:
-                break
-
-            cmd = input("{0} ".format(story.context.prompt))
-            story.context.input_text = cmd
-            text = story.context.play(cmd, casting=presenter.casting)
+        cmd = input("{0} ".format(story.context.prompt))
+        story.context.input_text = cmd
+        text = story.context.play(cmd, casting=presenter.casting)
 
 def run():
     p = parser()

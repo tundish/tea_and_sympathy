@@ -19,6 +19,7 @@
 
 from collections import defaultdict
 from collections import namedtuple
+import itertools
 import random
 
 from turberfield.catchphrase.parser import CommandParser
@@ -96,7 +97,7 @@ class Sympathy(MyDrama):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.active = self.active.union(
-            {self.again, self.do_look,
+            {self.do_again, self.do_look,
              self.do_help, self.do_history, self.do_quit}
         )
         self.default_fn = self.do_next
@@ -115,7 +116,11 @@ class Sympathy(MyDrama):
         again | undo
 
         """
-        return NotImplemented
+        n = len(list(itertools.takewhile(
+            lambda x: x.name == this.__name__, self.history
+        )))
+        self.state = max(0, self.state - (n + 1))
+        return "again..."
 
     def do_next(self, this, text, casting, *args, **kwargs):
         """

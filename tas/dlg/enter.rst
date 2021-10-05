@@ -26,6 +26,8 @@ Enter
 Curtain
 -------
 
+.. condition:: DRAMA.state 0
+
 The hallway is in half darkness.
 
 Now the squeak of a door.
@@ -35,8 +37,26 @@ The bare floor bathes in tobacco and tungsten.
 |PLAYER_NAME| wears warm pyjamas. She pads clumsily past the stairs to
 the kitchen.
 
+.. property:: DRAMA.state 1
 
-.. property:: DRAMA.state tas.teatime.Operation.ending
+Intro
+-----
+
+.. condition:: DRAMA.state 1
+
+I wonder...?
+
+.. property:: DRAMA.state 2
+
+End
+---
+
+.. condition:: DRAMA.state 2
+
+Bye.
+
+.. property:: DRAMA.state tas.teatime.Operation.paused
+.. property:: DRAMA.state 3
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
