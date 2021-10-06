@@ -134,10 +134,7 @@ class Sympathy(MyDrama):
         """
         look | look around | look around kitchen
         search | search kitchen
-        poke about
-        find
         where | where am i | where is it
-        x
 
         """
         self.state = Operation.paused
@@ -145,15 +142,12 @@ class Sympathy(MyDrama):
 
     def do_help(self, this, text, casting, *args, **kwargs):
         """
-        help | ?
+        help
 
         """
         self.state = Operation.paused
-        options = list(filter(
-            lambda x: len(x) > 1,
-            (i[0] for fn in self.active for i in CommandParser.expand_commands(fn, self.ensemble))
-        ))
-        yield from ("* {0}".format(i) for i in random.sample(options, min(3, len(options))))
+        options = {fn.__name__: list(CommandParser.expand_commands(fn, self.ensemble)) for fn in self.active}
+        yield from ("* {0[0][0]}".format(random.sample(v, 1)) for k, v in sorted(options.items()))
 
     def do_history(self, this, text, casting, *args, **kwargs):
         """
@@ -165,7 +159,7 @@ class Sympathy(MyDrama):
 
     def do_quit(self, this, text, casting, *args, **kwargs):
         """
-        exit | finish | stop | quit
+        quit
 
         """
         self.state = Operation.ending

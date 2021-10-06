@@ -142,7 +142,6 @@ def main(opts):
 
         cmd = input("{0} ".format(story.context.prompt))
         text = story.context.play(cmd, casting=presenter.casting)
-        print(story.context.facts)
 
 def run():
     p = parser()

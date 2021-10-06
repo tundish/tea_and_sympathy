@@ -37,6 +37,7 @@ The bare floor bathes in tobacco and tungsten.
 |PLAYER_NAME| wears warm pyjamas. She pads clumsily past the stairs to
 the kitchen.
 
+.. property:: DRAMA.prompt Type 'help'. Or 'again' to read once more.
 .. property:: DRAMA.state 1
 
 Intro
