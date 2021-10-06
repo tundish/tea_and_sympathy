@@ -27,11 +27,11 @@ from turberfield.dialogue.model import SceneScript
 
 from tas.tea import execute
 from tas.tea import promise
-from tas.teatime import Motivation
-from tas.teatime import Operation
-from tas.teatime import Location
-from tas.teatime import TeaTime
 from tas.types import Character
+from tas.types import Journey
+from tas.types import Location
+from tas.types import Motivation
+from tas.types import Operation
 
 from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.types import Stateful
@@ -91,14 +91,15 @@ class Sympathy(MyDrama):
 
     def build(self):
         return [
-            Character(names=["Sophie"]).set_state(Motivation.acting),
-            Character(names=["Louise"]).set_state(Motivation.player),
+            Character(names=["Sophie"]).set_state(Motivation.acting, Location.kitchen),
+            Character(names=["Louise"]).set_state(Motivation.player, Location.bedroom),
         ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.active = self.active.union(
             {self.do_again, self.do_look,
+             self.do_go,
              self.do_help, self.do_history, self.do_quit}
         )
         self.default_fn = self.do_next
@@ -110,7 +111,8 @@ class Sympathy(MyDrama):
 
         self.p = promise()
         self.flow = execute(self.p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
-        self.state = Operation.normal
+        self.set_state(Journey.mentor)
+        self.set_state(Operation.normal)
 
     def do_again(self, this, text, casting, *args, **kwargs):
         """
@@ -128,12 +130,41 @@ class Sympathy(MyDrama):
         more | next
 
         """
-        return next(self.flow)
+        if self.get_state(Journey) == Journey.ordeal:
+            return next(self.flow)
+        else:
+            player = next(iter(self.lookup["Louise"]))
+            return random.choice([
+                f"{player.names[0]} hesitates.",
+                f"{player.names[0]} waits.",
+            ])
+
+    def do_go(self, this, text, casting, *args, locn: Location, **kwargs):
+        """
+        enter {locn.value[0]} | enter {locn.value[1]}
+        go {locn.value[0]} | go {locn.value[1]}
+        go into {locn.value[0]} | go into {locn.value[1]}
+
+        """
+        player = next(iter(self.lookup["Louise"]))
+        if player.get_state(Location) == locn:
+            yield random.choice([
+                f"{player.names[0]} stays in the {locn.value[0]}.",
+                f"{player.names[0]} is already in the {locn.value[0]}.",
+                f"{player.names[0]} decides to remain in the {locn.value[0]}."
+            ])
+        elif locn == Location.stairs:
+            yield f"{player.names[0]} looks upward."
+            yield "The stairs lead to an attic gallery, and Sophie's room."
+            yield f"{player.names[0]} hesitates."
+        else:
+            player.state = locn
+            yield f"{player.names[0]} goes into the {locn.value[0]}."
 
     def do_look(self, this, text, casting, *args, **kwargs):
         """
-        look | look around | look around kitchen
-        search | search kitchen
+        look | look around
+        what | what do i do
         where | where am i | where is it
 
         """

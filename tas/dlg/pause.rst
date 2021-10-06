@@ -43,7 +43,6 @@ Help
 
     Start with a *look around*.
     The character dialogue may give you some hints.
-    To see how things are coming along, you can *check* an object.
     To see a list of past actions, use the *history* command.
 
 .. property:: DRAMA.prompt ?
@@ -70,9 +69,13 @@ Look
 
 [DRAMA]_
 
-    Looking around, you see:
+    |PLAYER_NAME| is in the |PLAYER_LOCN|.
+    Looking around, she sees:
 
 {0}
 
 .. property:: DRAMA.prompt ?
 .. property:: DRAMA.state tas.teatime.Operation.normal
+
+.. |PLAYER_NAME| property:: PLAYER.name
+.. |PLAYER_LOCN| property:: PLAYER.locn

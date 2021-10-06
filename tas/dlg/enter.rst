@@ -45,6 +45,8 @@ Intro
 
 .. condition:: DRAMA.state 1
 
+{0}
+
 I wonder...?
 
 .. property:: DRAMA.state 2

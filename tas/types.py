@@ -76,7 +76,20 @@ class Component(Stateful):
             return self.parent.get_state(typ, default)
 
 
-class Character(Named, Stateful): pass
+class Location(enum.Enum):
+
+    bedroom = ["bedroom"]
+    hall = ["hall", "hallway"]
+    kitchen = ["kitchen"]
+    stairs = ["stairs", "up", "up stairs", "upstairs"]
+
+
+class Character(Named, Stateful):
+
+    @property
+    def locn(self):
+        return self.get_state(Location).value[0]
+
 class Feature(Named, Stateful): pass
 
 
