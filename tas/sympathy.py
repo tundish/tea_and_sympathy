@@ -19,6 +19,7 @@
 
 from collections import defaultdict
 from collections import namedtuple
+import functools
 import itertools
 import random
 
@@ -84,7 +85,7 @@ class Sympathy(MyDrama):
             interludes=None
         )
 
-    @property
+    @functools.cached_property
     def player(self):
         return next(i for i in self.ensemble if i.get_state(Motivation) == Motivation.player)
 
@@ -137,33 +138,31 @@ class Sympathy(MyDrama):
         if self.get_state(Journey) == Journey.ordeal:
             return next(self.flow)
         else:
-            player = next(iter(self.lookup["Louise"]))
             return random.choice([
-                f"{player.names[0]} hesitates.",
-                f"{player.names[0]} waits.",
+                f"{self.player.names[0]} hesitates.",
+                f"{self.player.names[0]} waits.",
             ])
 
-    def do_go(self, this, text, casting, *args, locn: "player.location", **kwargs):
+    def do_go(self, this, text, casting, *args, locn: "player.location.options", **kwargs):
         """
         enter {locn.value[0]} | enter {locn.value[1]}
         go {locn.value[0]} | go {locn.value[1]}
         go into {locn.value[0]} | go into {locn.value[1]}
 
         """
-        player = next(iter(self.lookup["Louise"]))
-        if player.get_state(Location) == locn:
+        if self.player.get_state(Location) == locn:
             yield random.choice([
-                f"{player.names[0]} stays in the {locn.value[0]}.",
-                f"{player.names[0]} is already in the {locn.value[0]}.",
-                f"{player.names[0]} decides to remain in the {locn.value[0]}."
+                f"{self.player.names[0]} stays in the {locn.title}.",
+                f"{self.player.names[0]} is already in the {locn.title}.",
+                f"{self.player.names[0]} decides to remain in the {locn.title}."
             ])
         elif locn == Location.stairs:
-            yield f"{player.names[0]} looks upward."
+            yield f"{self.player.names[0]} looks upward."
             yield "The stairs lead to an attic gallery, and Sophie's room."
-            yield f"{player.names[0]} hesitates."
+            yield f"{self.player.names[0]} hesitates."
         else:
-            player.state = locn
-            yield f"{player.names[0]} goes into the {locn.value[0]}."
+            self.player.state = locn
+            yield f"{self.player.names[0]} goes into the {locn.title}."
 
     def do_look(self, this, text, casting, *args, **kwargs):
         """

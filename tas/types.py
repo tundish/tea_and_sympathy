@@ -85,11 +85,20 @@ class Location(enum.Enum):
 
     @property
     def label(self):
-        return self.name[0]
+        return self.value[0]
 
     @property
     def title(self):
         return self.label.title()
+
+    @property
+    def options(self):
+        topology = {
+            Location.bedroom: [Location.hall],
+            Location.hall: [Location.kitchen, Location.stairs],
+            Location.kitchen: [Location.hall],
+        }
+        return topology.get(self, [])
 
 
 class Character(Named, Stateful):
