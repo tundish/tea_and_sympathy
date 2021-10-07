@@ -78,4 +78,4 @@ Look
 .. property:: DRAMA.state tas.teatime.Operation.normal
 
 .. |PLAYER_NAME| property:: PLAYER.name
-.. |PLAYER_LOCN| property:: PLAYER.locn
+.. |PLAYER_LOCN| property:: PLAYER.location.title

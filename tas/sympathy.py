@@ -85,6 +85,10 @@ class Sympathy(MyDrama):
         )
 
     @property
+    def player(self):
+        return next(i for i in self.ensemble if i.get_state(Motivation) == Motivation.player)
+
+    @property
     def fumble(self):
         # TODO: Make a setter to defeat a Tidy promise.
         return False
@@ -139,7 +143,7 @@ class Sympathy(MyDrama):
                 f"{player.names[0]} waits.",
             ])
 
-    def do_go(self, this, text, casting, *args, locn: Location, **kwargs):
+    def do_go(self, this, text, casting, *args, locn: "player.location", **kwargs):
         """
         enter {locn.value[0]} | enter {locn.value[1]}
         go {locn.value[0]} | go {locn.value[1]}
@@ -177,8 +181,11 @@ class Sympathy(MyDrama):
 
         """
         self.state = Operation.paused
-        options = {fn.__name__: list(CommandParser.expand_commands(fn, self.ensemble)) for fn in self.active}
-        yield from ("* {0[0][0]}".format(random.sample(v, 1)) for k, v in sorted(options.items()))
+        options = {
+            fn.__name__: list(CommandParser.expand_commands(fn, self.ensemble, parent=self))
+            for fn in self.active
+        }
+        yield from ("* {0[0][0]}".format(random.sample(v, 1)) for k, v in sorted(options.items()) if v)
 
     def do_history(self, this, text, casting, *args, **kwargs):
         """

@@ -83,12 +83,20 @@ class Location(enum.Enum):
     kitchen = ["kitchen"]
     stairs = ["stairs", "up", "up stairs", "upstairs"]
 
+    @property
+    def label(self):
+        return self.name[0]
+
+    @property
+    def title(self):
+        return self.label.title()
+
 
 class Character(Named, Stateful):
 
     @property
-    def locn(self):
-        return self.get_state(Location).value[0]
+    def location(self):
+        return self.get_state(Location)
 
 class Feature(Named, Stateful): pass
 
