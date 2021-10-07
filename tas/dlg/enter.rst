@@ -47,7 +47,7 @@ Intro
 
 {0}
 
-I wonder...?
+Groggy.
 
 .. property:: DRAMA.state 2
 
@@ -56,7 +56,9 @@ End
 
 .. condition:: DRAMA.state 2
 
-Bye.
+{0}
+
+Thirsty.
 
 .. property:: DRAMA.state tas.teatime.Operation.paused
 .. property:: DRAMA.state 3

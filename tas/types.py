@@ -81,7 +81,7 @@ class Location(enum.Enum):
     bedroom = ["bedroom"]
     hall = ["hall", "hallway"]
     kitchen = ["kitchen"]
-    stairs = ["stairs", "up", "up stairs", "upstairs"]
+    stairs = ["stairs", "stairway", "up", "up stairs", "upstairs"]
 
     @property
     def label(self):

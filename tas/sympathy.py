@@ -146,8 +146,7 @@ class Sympathy(MyDrama):
     def do_go(self, this, text, casting, *args, locn: "player.location.options", **kwargs):
         """
         enter {locn.value[0]} | enter {locn.value[1]}
-        go {locn.value[0]} | go {locn.value[1]}
-        go into {locn.value[0]} | go into {locn.value[1]}
+        go {locn.value[0]} | go {locn.value[1]} | go {locn.value[2]} | go {locn.value[3]} | go {locn.value[4]}
 
         """
         if self.player.get_state(Location) == locn:
@@ -160,6 +159,7 @@ class Sympathy(MyDrama):
             yield f"{self.player.names[0]} looks upward."
             yield "The stairs lead to an attic gallery, and Sophie's room."
             yield f"{self.player.names[0]} hesitates."
+            yield "She doesn't want to go up there."
         else:
             self.player.state = locn
             yield f"{self.player.names[0]} goes into the {locn.title}."
@@ -172,7 +172,7 @@ class Sympathy(MyDrama):
 
         """
         self.state = Operation.paused
-        return "* kitchen"
+        yield from ("* {0.label}".format(i) for i in self.player.location.options)
 
     def do_help(self, this, text, casting, *args, **kwargs):
         """
