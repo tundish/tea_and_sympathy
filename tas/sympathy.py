@@ -38,7 +38,6 @@ from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.types import Stateful
 
 
-
 class MyDrama(Stateful, Mediator):
 
     def __init__(self, *args, **kwargs):
@@ -192,7 +191,7 @@ class Sympathy(MyDrama):
 
         """
         self.state = Operation.paused
-        yield from ("*{0.args[0]}*".format(i) for i in self.history if i.args[0])
+        yield from ("* {0.args[0]}*".format(i) for i in self.history if i.args[0])
 
     def do_quit(self, this, text, casting, *args, **kwargs):
         """
