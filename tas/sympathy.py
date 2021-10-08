@@ -29,6 +29,7 @@ from turberfield.dialogue.model import SceneScript
 from tas.tea import execute
 from tas.tea import promise
 from tas.types import Character
+from tas.types import Container
 from tas.types import Journey
 from tas.types import Location
 from tas.types import Motivation
@@ -97,6 +98,7 @@ class Sympathy(MyDrama):
         return [
             Character(names=["Sophie"]).set_state(Motivation.acting, Location.kitchen),
             Character(names=["Louise"]).set_state(Motivation.player, Location.bedroom),
+            Container(names=["Mug"]).set_state(Location.bedroom),
         ]
 
     def __init__(self, *args, **kwargs):

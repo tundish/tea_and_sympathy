@@ -100,12 +100,20 @@ class Location(enum.Enum):
         }
         return topology.get(self, [])
 
-
-class Character(Named, Stateful):
+class Located(Stateful):
 
     @property
     def location(self):
         return self.get_state(Location)
+
+
+class Character(Named, Located):
+
+    @property
+    def location(self):
+        return self.get_state(Location)
+
+class Container(Named, Located): pass
 
 class Feature(Named, Stateful): pass
 
