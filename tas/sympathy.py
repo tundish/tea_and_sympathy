@@ -28,12 +28,15 @@ from turberfield.dialogue.model import SceneScript
 
 from tas.tea import execute
 from tas.tea import promise
+from tas.types import Article
 from tas.types import Character
 from tas.types import Container
 from tas.types import Journey
 from tas.types import Location
 from tas.types import Motivation
+from tas.types import Name
 from tas.types import Operation
+from tas.types import Pronoun
 
 from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.types import Stateful
@@ -85,6 +88,11 @@ class Sympathy(MyDrama):
             interludes=None
         )
 
+    @property
+    def local(self):
+        reach = (self.player.location, Location.inventory)
+        return [i for i in self.ensemble if i.get_state(Location) in reach]
+
     @functools.cached_property
     def player(self):
         return next(i for i in self.ensemble if i.get_state(Motivation) == Motivation.player)
@@ -96,16 +104,20 @@ class Sympathy(MyDrama):
 
     def build(self):
         return [
-            Character(names=["Sophie"]).set_state(Motivation.acting, Location.kitchen),
-            Character(names=["Louise"]).set_state(Motivation.player, Location.bedroom),
-            Container(names=["Mug"]).set_state(Location.bedroom),
+            Container(names=[Name("Mug")]).set_state(Location.bedroom),
+            Character(
+                names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))]
+            ).set_state(Motivation.acting, Location.kitchen),
+            Character(
+                names=[Name("Louise", Article("", ""), Pronoun("she", "her", "herself", "hers"))]
+            ).set_state(Motivation.player, Location.bedroom),
         ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.active = self.active.union(
             {self.do_again, self.do_look,
-             self.do_go,
+             self.do_go, self.do_inspect,
              self.do_help, self.do_history, self.do_quit}
         )
         self.default_fn = self.do_next
@@ -140,8 +152,8 @@ class Sympathy(MyDrama):
             return next(self.flow)
         else:
             return random.choice([
-                f"{self.player.names[0]} hesitates.",
-                f"{self.player.names[0]} waits.",
+                f"{self.player.name} hesitates.",
+                f"{self.player.name} waits.",
             ])
 
     def do_go(self, this, text, casting, *args, locn: "player.location.options", **kwargs):
@@ -152,18 +164,26 @@ class Sympathy(MyDrama):
         """
         if self.player.get_state(Location) == locn:
             yield random.choice([
-                f"{self.player.names[0]} stays in the {locn.title}.",
-                f"{self.player.names[0]} is already in the {locn.title}.",
-                f"{self.player.names[0]} decides to remain in the {locn.title}."
+                f"{self.player.name} stays in the {locn.title}.",
+                f"{self.player.name} is already in the {locn.title}.",
+                f"{self.player.name} decides to remain in the {locn.title}."
             ])
         elif locn == Location.stairs:
-            yield f"{self.player.names[0]} looks upward."
+            yield f"{self.player.name} looks upward."
             yield "The stairs lead to an attic gallery, and Sophie's room."
-            yield f"{self.player.names[0]} hesitates."
+            yield f"{self.player.name} hesitates."
             yield "She doesn't want to go up there."
         else:
             self.player.state = locn
-            yield f"{self.player.names[0]} goes into the {locn.title}."
+            yield f"{self.player.name} goes into the {locn.title}."
+
+    def do_inspect(self, this, text, casting, obj: "local", *args, **kwargs):
+        """
+        inspect {obj.names[0].noun}
+
+        """
+        self.state = Operation.paused
+        return ""
 
     def do_look(self, this, text, casting, *args, **kwargs):
         """

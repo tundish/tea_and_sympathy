@@ -18,12 +18,28 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from collections import defaultdict
+from collections import namedtuple
 import enum
 import random
 
 from turberfield.dialogue.types import DataObject
 from turberfield.dialogue.types import Stateful
 
+Article = namedtuple(
+    "Article",
+    ("definite", "indefinite"),
+    defaults=("the", "a")
+)
+Pronoun = namedtuple(
+    "Pronoun",
+    ("subject", "object", "reflexive", "genitive"),
+    defaults=("it", "it", "itself", "its")
+)
+Name = namedtuple(
+    "Name",
+    ("noun", "article", "pronoun"),
+    defaults=("", Article(), Pronoun())
+)
 
 @enum.unique
 class Motivation(enum.Enum):
@@ -58,7 +74,9 @@ class Named(DataObject):
 
     @property
     def name(self):
-        return random.choice(getattr(self, "names", [""]))
+        name = random.choice(getattr(self, "names", [Name()]))
+        article = name.article.definite and f"{name.article.definite} "
+        return f"{article}{name.noun}"
 
 
 class Component(Stateful):
