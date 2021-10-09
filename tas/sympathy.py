@@ -31,6 +31,7 @@ from tas.tea import execute
 from tas.tea import promise
 from tas.types import Article
 from tas.types import Character
+from tas.types import Consumable
 from tas.types import Container
 from tas.types import Journey
 from tas.types import Location
@@ -111,8 +112,16 @@ class Sympathy(MyDrama):
                     """
                     A pale blue mug. It has on it a cartoon teddy bear
                     and the slogan 'I Fly Luton'.
-                    """
-                )
+
+                    It is dusted with ash. Inside are several cigarette butts.
+                    They are crushed and soggy.
+
+                    One however is almost pristine.
+                    Only slightly charred and no trace of any lipstick.
+                    
+                    """,
+                ),
+                contents=Consumable.cigarette
             ).set_state(Location.bedroom),
             Character(
                 names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
@@ -120,7 +129,7 @@ class Sympathy(MyDrama):
             ).set_state(Motivation.acting, Location.kitchen),
             Character(
                 names=[Name("Louise", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
-                description="{0.name} is young woman from Manchester. She works as a nurse."
+                description="{0.name} is a young woman from Manchester. She works as a nurse."
             ).set_state(Motivation.player, Location.bedroom),
         ]
 
@@ -128,6 +137,7 @@ class Sympathy(MyDrama):
         super().__init__(*args, **kwargs)
         self.active = self.active.union(
             {self.do_again, self.do_look,
+             self.do_consume,
              self.do_go, self.do_inspect,
              self.do_help, self.do_history, self.do_quit}
         )
@@ -154,18 +164,13 @@ class Sympathy(MyDrama):
         self.state = max(0, self.state - (n + 1))
         return "again..."
 
-    def do_next(self, this, text, casting, *args, **kwargs):
+    def do_consume(self, this, text, casting, obj: "local", *args, **kwargs):
         """
-        more | next
+        {obj.contents.value} {obj.contents.name}
 
         """
-        if self.get_state(Journey) == Journey.ordeal:
-            return next(self.flow)
-        else:
-            return random.choice([
-                f"{self.player.name} hesitates.",
-                f"{self.player.name} waits.",
-            ])
+        self.state = Operation.paused
+        return obj.description.format(obj, **self.facts)
 
     def do_go(self, this, text, casting, *args, locn: "player.location.options", **kwargs):
         """
@@ -188,23 +193,6 @@ class Sympathy(MyDrama):
             self.player.state = locn
             yield f"{self.player.name} goes into the {locn.title}."
 
-    def do_inspect(self, this, text, casting, obj: "local", *args, **kwargs):
-        """
-        inspect {obj.names[0].noun}
-
-        """
-        self.state = Operation.paused
-        return obj.description.format(obj, **self.facts)
-
-    def do_look(self, this, text, casting, *args, **kwargs):
-        """
-        look | look around
-        where | where am i | where is it
-
-        """
-        self.state = Operation.paused
-        yield from ("* {0.label}".format(i) for i in self.player.location.options)
-
     def do_help(self, this, text, casting, *args, **kwargs):
         """
         help
@@ -225,6 +213,36 @@ class Sympathy(MyDrama):
         """
         self.state = Operation.paused
         yield from ("* {0.args[0]}".format(i) for i in self.history if i.args[0])
+
+    def do_inspect(self, this, text, casting, obj: "local", *args, **kwargs):
+        """
+        inspect {obj.names[0].noun}
+
+        """
+        self.state = Operation.paused
+        return obj.description.format(obj, **self.facts)
+
+    def do_look(self, this, text, casting, *args, **kwargs):
+        """
+        look | look around
+        where | where am i | where is it
+
+        """
+        self.state = Operation.paused
+        yield from ("* {0.label}".format(i) for i in self.player.location.options)
+
+    def do_next(self, this, text, casting, *args, **kwargs):
+        """
+        more | next
+
+        """
+        if self.get_state(Journey) == Journey.ordeal:
+            return next(self.flow)
+        else:
+            return random.choice([
+                f"{self.player.name} hesitates.",
+                f"{self.player.name} waits.",
+            ])
 
     def do_quit(self, this, text, casting, *args, **kwargs):
         """

@@ -41,6 +41,7 @@ Name = namedtuple(
     defaults=("", Article(), Pronoun())
 )
 
+# Simple Progressive Perfect Imperative
 
 @enum.unique
 class Motivation(enum.Enum):
@@ -138,6 +139,13 @@ class Character(Named, Located):
 
 class Container(Named, Located): pass
 class Feature(Named, Stateful): pass
+
+
+# TODO: Keep local to TaS
+class Consumable(enum.Enum):
+
+    tea = "drink"
+    cigarette = "smoke"
 
 
 class Space(Named, Stateful):
