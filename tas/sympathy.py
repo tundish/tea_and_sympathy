@@ -22,6 +22,7 @@ from collections import namedtuple
 import functools
 import itertools
 import random
+import textwrap
 
 from turberfield.catchphrase.parser import CommandParser
 from turberfield.dialogue.model import SceneScript
@@ -104,12 +105,22 @@ class Sympathy(MyDrama):
 
     def build(self):
         return [
-            Container(names=[Name("Mug")]).set_state(Location.bedroom),
+            Container(
+                names=[Name("Mug")],
+                description=textwrap.dedent(
+                    """
+                    A pale blue mug. It has on it a cartoon teddy bear
+                    and the slogan 'I Fly Luton'.
+                    """
+                )
+            ).set_state(Location.bedroom),
             Character(
-                names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))]
+                names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
+                description="{0.name} goes to art college."
             ).set_state(Motivation.acting, Location.kitchen),
             Character(
-                names=[Name("Louise", Article("", ""), Pronoun("she", "her", "herself", "hers"))]
+                names=[Name("Louise", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
+                description="{0.name} is young woman from Manchester. She works as a nurse."
             ).set_state(Motivation.player, Location.bedroom),
         ]
 
@@ -183,7 +194,7 @@ class Sympathy(MyDrama):
 
         """
         self.state = Operation.paused
-        return ""
+        return obj.description.format(obj, **self.facts)
 
     def do_look(self, this, text, casting, *args, **kwargs):
         """

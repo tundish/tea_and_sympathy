@@ -41,6 +41,7 @@ Name = namedtuple(
     defaults=("", Article(), Pronoun())
 )
 
+
 @enum.unique
 class Motivation(enum.Enum):
 
@@ -64,6 +65,7 @@ class Journey(enum.Enum):
     mentor = 0
     ordeal = 1
     reward = 2
+
 
 class Named(DataObject):
     """
@@ -119,6 +121,7 @@ class Location(enum.Enum):
         }
         return topology.get(self, [])
 
+
 class Located(Stateful):
 
     @property
@@ -132,8 +135,8 @@ class Character(Named, Located):
     def location(self):
         return self.get_state(Location)
 
-class Container(Named, Located): pass
 
+class Container(Named, Located): pass
 class Feature(Named, Stateful): pass
 
 
@@ -190,4 +193,3 @@ class Drama:
 
     def interlude(self, folder, index, **kwargs) -> dict:
         return {}
-

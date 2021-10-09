@@ -83,6 +83,18 @@ See Mug in Bedroom
 .. property:: DRAMA.prompt ?
 .. property:: DRAMA.state tas.teatime.Operation.normal
 
+Inspect
+-------
+
+.. condition:: DRAMA.history[0].name do_inspect
+
+[DRAMA]_
+
+    |INPUT_TEXT|
+
+{0}
+
+
 Look
 ----
 
@@ -95,5 +107,6 @@ Look
 
 {0}
 
+.. |INPUT_TEXT| property:: DRAMA.input_text
 .. |PLAYER_NAME| property:: PLAYER.name
 .. |PLAYER_LOCN| property:: PLAYER.location.title
