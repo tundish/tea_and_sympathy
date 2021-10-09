@@ -13,6 +13,9 @@
    :types:  tas.types.Character
    :states: tas.types.Motivation.acting
 
+.. entity:: MUG
+   :types:  tas.types.Container
+
 .. entity:: DRAMA
    :types:  tas.sympathy.Sympathy
    :states: tas.types.Operation.normal
@@ -28,14 +31,11 @@ Curtain
 
 .. condition:: DRAMA.state 0
 
-The hallway is in half darkness.
+A thud. From above.
 
-Now the squeak of a door.
+Louise sits up in bed. She listens for a moment, confused.
 
-The bare floor bathes in tobacco and tungsten.
-
-|PLAYER_NAME| wears warm pyjamas. She pads clumsily past the stairs to
-the kitchen.
+Then looks towards the door.
 
 .. property:: DRAMA.prompt Type 'help'. Or 'again' to read once more.
 .. property:: DRAMA.state 1
@@ -62,6 +62,21 @@ Thirsty.
 
 .. property:: DRAMA.state tas.teatime.Operation.paused
 .. property:: DRAMA.state 3
+
+Hallway
+-------
+
+.. condition:: DRAMA.state 9
+
+The hallway is in half darkness.
+
+Now the squeak of a door.
+
+The bare floor bathes in tobacco and tungsten.
+
+|PLAYER_NAME| wears warm pyjamas. She pads clumsily past the stairs to
+the kitchen.
+
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name

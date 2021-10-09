@@ -82,6 +82,7 @@ class Location(enum.Enum):
     hall = ["hall", "hallway"]
     kitchen = ["kitchen"]
     stairs = ["stairs", "stairway", "up", "up stairs", "upstairs"]
+    inventory = None
 
     @property
     def label(self):

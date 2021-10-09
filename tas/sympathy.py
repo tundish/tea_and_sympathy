@@ -168,7 +168,6 @@ class Sympathy(MyDrama):
     def do_look(self, this, text, casting, *args, **kwargs):
         """
         look | look around
-        what | what do i do
         where | where am i | where is it
 
         """
@@ -178,6 +177,7 @@ class Sympathy(MyDrama):
     def do_help(self, this, text, casting, *args, **kwargs):
         """
         help
+        what | what do i do
 
         """
         self.state = Operation.paused
@@ -193,7 +193,7 @@ class Sympathy(MyDrama):
 
         """
         self.state = Operation.paused
-        yield from ("* {0.args[0]}*".format(i) for i in self.history if i.args[0])
+        yield from ("* {0.args[0]}".format(i) for i in self.history if i.args[0])
 
     def do_quit(self, this, text, casting, *args, **kwargs):
         """

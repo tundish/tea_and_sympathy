@@ -15,6 +15,9 @@
    :types:  tas.types.Character
    :states: tas.teatime.Motivation.acting
 
+.. entity:: MUG
+   :types:  tas.types.Container
+
 .. entity:: DRAMA
    :types:  tas.sympathy.Sympathy
    :states: tas.teatime.Operation.paused
@@ -35,15 +38,12 @@ Help
 
     You are woken early one Sunday morning.
     Your flatmate is up and anxious.
-    Maybe you could make her a cup of tea.
+
+    It doesn't hurt to *look around*.
+    The dialogue may give you hints too.
+    Here are some commands to try:
 
 {0}
-
-[DRAMA]_
-
-    Start with a *look around*.
-    The character dialogue may give you some hints.
-    To see a list of past actions, use the *history* command.
 
 .. property:: DRAMA.prompt ?
 .. property:: DRAMA.state tas.teatime.Operation.normal
@@ -62,6 +62,27 @@ History
 .. property:: DRAMA.prompt ?
 .. property:: DRAMA.state tas.teatime.Operation.normal
 
+See Mug in Bedroom
+------------------
+
+.. condition:: DRAMA.history[0].name do_look
+.. condition:: PLAYER.state tas.types.Location.bedroom
+.. condition:: MUG.state tas.types.Location.bedroom
+
+[DRAMA]_
+
+    |PLAYER_NAME| is in the |PLAYER_LOCN|.
+
+    The curtains are closed.
+    A vertical strip of early grey light makes a mist of stale exhalation.
+
+    Next to the bed is a tatty old table, and on it a ceramic mug.
+
+    The door is shut. Beyond it is a hallway.
+
+.. property:: DRAMA.prompt ?
+.. property:: DRAMA.state tas.teatime.Operation.normal
+
 Look
 ----
 
@@ -70,12 +91,9 @@ Look
 [DRAMA]_
 
     |PLAYER_NAME| is in the |PLAYER_LOCN|.
-    Looking around, she sees:
+    Looking around, she is aware of:
 
 {0}
-
-.. property:: DRAMA.prompt ?
-.. property:: DRAMA.state tas.teatime.Operation.normal
 
 .. |PLAYER_NAME| property:: PLAYER.name
 .. |PLAYER_LOCN| property:: PLAYER.location.title
