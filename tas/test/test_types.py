@@ -20,6 +20,7 @@
 import unittest
 
 from tas.types import Component
+from tas.types import Verb
 
 
 class ComponentTests(unittest.TestCase):
@@ -35,3 +36,14 @@ class ComponentTests(unittest.TestCase):
         self.assertEqual(1, b.state)
         b.parent = b
         self.assertEqual(3, b.state)
+
+
+class VerbTests(unittest.TestCase):
+
+    def test_simple(self):
+        v = Verb("show")
+        self.assertEqual("shows", v.simple)
+        self.assertEqual("is showing", v.progressive)
+        self.assertEqual("showed", v.perfect)
+        self.assertEqual("show", v.imperative)
+

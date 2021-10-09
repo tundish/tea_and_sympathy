@@ -41,7 +41,13 @@ Name = namedtuple(
     defaults=("", Article(), Pronoun())
 )
 
-# Simple Progressive Perfect Imperative
+Tensed = namedtuple("Tensed", ("simple", "progressive", "perfect", "imperative"))
+
+class Verb(Tensed):
+
+    def __new__(cls, root, simple="{0}s", progressive="is {0}ing", perfect="{0}ed", imperative="{0}"):
+        l = locals()
+        return super().__new__(cls, *(l[i].format(root) for i in super()._fields))
 
 @enum.unique
 class Motivation(enum.Enum):
