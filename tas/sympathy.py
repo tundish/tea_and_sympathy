@@ -31,7 +31,7 @@ from tas.tea import execute
 from tas.tea import promise
 from tas.types import Article
 from tas.types import Character
-from tas.types import Consumable
+from tas.types import Consumption
 from tas.types import Container
 from tas.types import Journey
 from tas.types import Location
@@ -110,7 +110,7 @@ class Sympathy(MyDrama):
                 names=[Name("Mug")],
                 description=textwrap.dedent(
                     """
-                    A pale blue mug. It has on it a cartoon teddy bear
+                    A pale blue mug. It has on it a cartoon Teddy Bear
                     and the slogan 'I Fly Luton'.
 
                     It is dusted with ash. Inside are several cigarette butts.
@@ -121,7 +121,7 @@ class Sympathy(MyDrama):
                     
                     """,
                 ),
-                contents=Consumable.cigarette
+                contents=Consumption.cigarette
             ).set_state(Location.bedroom),
             Character(
                 names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
@@ -166,10 +166,10 @@ class Sympathy(MyDrama):
 
     def do_consume(self, this, text, casting, obj: "local", *args, **kwargs):
         """
-        {obj.contents.value} {obj.contents.name}
+        {obj.contents.value.verb.imperative} {obj.contents.value.name.noun}
 
         """
-        self.state = Operation.paused
+        self.player.state = obj.contents
         return obj.description.format(obj, **self.facts)
 
     def do_go(self, this, text, casting, *args, locn: "player.location.options", **kwargs):

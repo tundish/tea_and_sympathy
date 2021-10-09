@@ -49,6 +49,9 @@ class Verb(Tensed):
         l = locals()
         return super().__new__(cls, *(l[i].format(root) for i in super()._fields))
 
+Phrase = namedtuple("Phrase", ("verb", "name"))
+
+
 @enum.unique
 class Motivation(enum.Enum):
 
@@ -148,10 +151,10 @@ class Feature(Named, Stateful): pass
 
 
 # TODO: Keep local to TaS
-class Consumable(enum.Enum):
+class Consumption(enum.Enum):
 
-    tea = "drink"
-    cigarette = "smoke"
+    tea = Phrase(Verb("drink"), Name("tea"))
+    cigarette = Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette"))
 
 
 class Space(Named, Stateful):
