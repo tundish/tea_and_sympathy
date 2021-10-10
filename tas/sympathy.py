@@ -17,14 +17,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from collections import Counter
 from collections import defaultdict
 from collections import namedtuple
 import functools
 import itertools
 import random
+import sys
 import textwrap
 
 from turberfield.catchphrase.parser import CommandParser
+from turberfield.dialogue.model import Model
 from turberfield.dialogue.model import SceneScript
 
 from tas.tea import execute
@@ -51,6 +54,7 @@ class MyDrama(Stateful, Mediator):
         self.prompt = "?"
         self.input_text = ""
         self.default_fn = None
+        self.max_state = sys.maxsize
 
     @property
     def ensemble(self):
@@ -63,9 +67,14 @@ class MyDrama(Stateful, Mediator):
     def build(self):
         return []
 
-    def play(self, cmd: str, casting:dict) -> dict:
+    def deliver(self, cmd, presenter):
         self.input_text = cmd
-        fn, args, kwargs = self.interpret(self.match(cmd, context=casting, ensemble=self.ensemble))
+        self.max_state = [
+            p for f in presenter.frames for p in f[Model.Property]
+            if p.attr == "state" and isinstance(p.val, int)
+        ]
+        print(self.max_state)
+        fn, args, kwargs = self.interpret(self.match(cmd, context=presenter, ensemble=self.ensemble))
         fn = fn or self.default_fn
         return fn and self(fn, *args, **kwargs)
 
@@ -153,7 +162,7 @@ class Sympathy(MyDrama):
         self.set_state(Journey.mentor)
         self.set_state(Operation.normal)
 
-    def do_again(self, this, text, casting, *args, **kwargs):
+    def do_again(self, this, text, presenter, *args, **kwargs):
         """
         again | back
 
@@ -164,7 +173,7 @@ class Sympathy(MyDrama):
         self.state = max(0, self.state - (n + 1))
         return "again..."
 
-    def do_consume(self, this, text, casting, obj: "local", *args, **kwargs):
+    def do_consume(self, this, text, presenter, obj: "local", *args, **kwargs):
         """
         {obj.contents.value.verb.imperative} {obj.contents.value.name.noun}
 
@@ -172,7 +181,7 @@ class Sympathy(MyDrama):
         self.player.state = obj.contents
         return obj.description.format(obj, **self.facts)
 
-    def do_go(self, this, text, casting, *args, locn: "player.location.options", **kwargs):
+    def do_go(self, this, text, presenter, *args, locn: "player.location.options", **kwargs):
         """
         enter {locn.value[0]} | enter {locn.value[1]}
         go {locn.value[0]} | go {locn.value[1]} | go {locn.value[2]} | go {locn.value[3]} | go {locn.value[4]}
@@ -190,10 +199,11 @@ class Sympathy(MyDrama):
             yield f"{self.player.name} hesitates."
             yield "She doesn't want to go up there."
         else:
+            self.state = 0
             self.player.state = locn
             yield f"{self.player.name} goes into the {locn.title}."
 
-    def do_help(self, this, text, casting, *args, **kwargs):
+    def do_help(self, this, text, presenter, *args, **kwargs):
         """
         help
         what | what do i do
@@ -206,7 +216,7 @@ class Sympathy(MyDrama):
         }
         yield from ("* {0[0][0]}".format(random.sample(v, 1)) for k, v in sorted(options.items()) if v)
 
-    def do_history(self, this, text, casting, *args, **kwargs):
+    def do_history(self, this, text, presenter, *args, **kwargs):
         """
         history
 
@@ -214,7 +224,7 @@ class Sympathy(MyDrama):
         self.state = Operation.paused
         yield from ("* {0.args[0]}".format(i) for i in self.history if i.args[0])
 
-    def do_inspect(self, this, text, casting, obj: "local", *args, **kwargs):
+    def do_inspect(self, this, text, presenter, obj: "local", *args, **kwargs):
         """
         inspect {obj.names[0].noun}
 
@@ -222,7 +232,7 @@ class Sympathy(MyDrama):
         self.state = Operation.paused
         return obj.description.format(obj, **self.facts)
 
-    def do_look(self, this, text, casting, *args, **kwargs):
+    def do_look(self, this, text, presenter, *args, **kwargs):
         """
         look | look around
         where | where am i | where is it
@@ -231,7 +241,7 @@ class Sympathy(MyDrama):
         self.state = Operation.paused
         yield from ("* {0.label}".format(i) for i in self.player.location.options)
 
-    def do_next(self, this, text, casting, *args, **kwargs):
+    def do_next(self, this, text, presenter, *args, **kwargs):
         """
         more | next
 
@@ -239,12 +249,13 @@ class Sympathy(MyDrama):
         if self.get_state(Journey) == Journey.ordeal:
             return next(self.flow)
         else:
+            self.state = self.state + 1
             return random.choice([
                 f"{self.player.name} hesitates.",
                 f"{self.player.name} waits.",
             ])
 
-    def do_quit(self, this, text, casting, *args, **kwargs):
+    def do_quit(self, this, text, presenter, *args, **kwargs):
         """
         quit
 

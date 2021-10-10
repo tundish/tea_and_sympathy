@@ -1,7 +1,7 @@
 .. |VERSION| property:: tas.story.version
 
 :author:    D E Haynes
-:made_at:   2021-05-10
+:made_at:   2021-10-05
 :project:   Tea and Sympathy
 :version:   |VERSION|
 
@@ -18,7 +18,8 @@
 
 .. entity:: DRAMA
    :types:  tas.sympathy.Sympathy
-   :states: tas.types.Operation.normal
+   :states: tas.types.Journey.mentor
+            tas.types.Operation.normal
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings
@@ -29,11 +30,12 @@ Enter
 Curtain
 -------
 
+.. condition:: PLAYER.state tas.types.Location.bedroom
 .. condition:: DRAMA.state 0
 
 A thud. From above.
 
-Louise sits up in bed. She listens for a moment, confused.
+|PLAYER_NAME| sits up in bed. She listens for a moment, confused.
 
 Then looks towards the door.
 
@@ -43,6 +45,7 @@ Then looks towards the door.
 Intro
 -----
 
+.. condition:: PLAYER.state tas.types.Location.bedroom
 .. condition:: DRAMA.state 1
 
 {0}
@@ -54,6 +57,7 @@ Groggy.
 End
 ---
 
+.. condition:: PLAYER.state tas.types.Location.bedroom
 .. condition:: DRAMA.state 2
 
 {0}
@@ -61,7 +65,7 @@ End
 Thirsty.
 
 .. property:: DRAMA.state tas.teatime.Operation.paused
-.. property:: DRAMA.state 3
+.. property:: DRAMA.state 1
 
 Hallway
 -------

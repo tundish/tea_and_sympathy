@@ -141,7 +141,7 @@ def main(opts):
             break
 
         cmd = input("{0} ".format(story.context.prompt))
-        text = story.context.play(cmd, casting=presenter.casting)
+        text = story.context.deliver(cmd, presenter=presenter)
 
 def run():
     p = parser()
