@@ -17,13 +17,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import bisect
 from collections import Counter
 from collections import defaultdict
 from collections import namedtuple
 import functools
 import itertools
 import random
-import sys
 import textwrap
 
 from turberfield.catchphrase.parser import CommandParser
@@ -54,7 +54,7 @@ class MyDrama(Stateful, Mediator):
         self.prompt = "?"
         self.input_text = ""
         self.default_fn = None
-        self.max_state = sys.maxsize
+        self.valid_states = [0]
 
     @property
     def ensemble(self):
@@ -64,16 +64,30 @@ class MyDrama(Stateful, Mediator):
     def turns(self):
         return len(self.history)
 
+    def __call__(self, fn, *args, **kwargs):
+        text, presenter, *_ = args
+        if presenter and (presenter.dwell or presenter.pause):
+            self.valid_states = self.find_valid_states(presenter)
+
+        return super().__call__(fn, *args, **kwargs)
+
     def build(self):
         return []
 
+    def find_valid_states(self, presenter):
+        return sorted(
+            c.value for f in presenter.frames for c in f[Model.Condition]
+            if c.object is self and c.format == "state" and isinstance(c.value, int)
+        ) or [0]
+
+    def next_states(self, n=1):
+        fwd = min(bisect.bisect_right(self.valid_states, self.state) + n - 1, len(self.valid_states) - 1)
+        bck = max(0, bisect.bisect_left(self.valid_states, self.state) - n)
+        rv = (self.valid_states[bck], self.valid_states[fwd])
+        return rv
+
     def deliver(self, cmd, presenter):
         self.input_text = cmd
-        self.max_state = [
-            p for f in presenter.frames for p in f[Model.Property]
-            if p.attr == "state" and isinstance(p.val, int)
-        ]
-        print(self.max_state)
         fn, args, kwargs = self.interpret(self.match(cmd, context=presenter, ensemble=self.ensemble))
         fn = fn or self.default_fn
         return fn and self(fn, *args, **kwargs)
@@ -169,8 +183,8 @@ class Sympathy(MyDrama):
         """
         n = len(list(itertools.takewhile(
             lambda x: x.name == this.__name__, self.history
-        )))
-        self.state = max(0, self.state - (n + 1))
+        ))) + 1
+        self.state = self.next_states(n)[0]
         return "again..."
 
     def do_consume(self, this, text, presenter, obj: "local", *args, **kwargs):
@@ -246,10 +260,11 @@ class Sympathy(MyDrama):
         more | next
 
         """
+        self.state = self.next_states(0)[1]
+
         if self.get_state(Journey) == Journey.ordeal:
             return next(self.flow)
         else:
-            self.state = self.state + 1
             return random.choice([
                 f"{self.player.name} hesitates.",
                 f"{self.player.name} waits.",

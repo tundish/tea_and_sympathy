@@ -64,8 +64,7 @@ End
 
 Thirsty.
 
-.. property:: DRAMA.state tas.teatime.Operation.paused
-.. property:: DRAMA.state 1
+.. property:: DRAMA.state 9
 
 Hallway
 -------
@@ -81,6 +80,7 @@ The bare floor bathes in tobacco and tungsten.
 |PLAYER_NAME| wears warm pyjamas. She pads clumsily past the stairs to
 the kitchen.
 
+.. property:: DRAMA.state 1
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
