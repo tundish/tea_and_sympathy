@@ -160,7 +160,6 @@ class Sympathy(MyDrama):
         super().__init__(*args, **kwargs)
         self.active = self.active.union(
             {self.do_again, self.do_look,
-             self.do_consume,
              self.do_go, self.do_inspect,
              self.do_help, self.do_history, self.do_quit}
         )

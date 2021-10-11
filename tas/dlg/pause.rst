@@ -80,6 +80,10 @@ See Mug in Bedroom
 
     The door is shut. Beyond it is a hallway.
 
+    |PLAYER_NAME| sees:
+
+{0}
+
 .. property:: DRAMA.prompt ?
 .. property:: DRAMA.state tas.teatime.Operation.normal
 

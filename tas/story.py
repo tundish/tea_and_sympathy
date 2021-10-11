@@ -49,7 +49,6 @@ class Story(Renderer):
     """
 
     def __init__(self, cfg=None, **kwargs):
-        #self.drama = TeaAndSympathy(**kwargs)
         self.drama = {
             "sympathy": Sympathy(**kwargs)
         }
