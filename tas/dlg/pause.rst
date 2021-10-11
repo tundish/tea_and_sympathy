@@ -84,6 +84,7 @@ See Mug in Bedroom
 
 {0}
 
+.. property:: MUG.state tas.types.Availability.allowed
 .. property:: DRAMA.prompt ?
 .. property:: DRAMA.state tas.teatime.Operation.normal
 

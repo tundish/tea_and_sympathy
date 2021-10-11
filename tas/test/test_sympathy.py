@@ -53,7 +53,7 @@ class SympathyTests(unittest.TestCase):
         self.assertEqual(1, len([i for i in self.drama.ensemble if isinstance(i, Container)]))
         self.assertEqual(1, len([i for i in self.drama.local if isinstance(i, Container)]))
         presenter, animation, lines, text = self.turn("help", self.drama, self.settings)
-        self.assertNotIn("mug", text.lower())
+        self.assertNotIn("mug", text.lower(), text)
 
     def test_look(self):
         cmds = ["look"]

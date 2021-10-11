@@ -33,6 +33,7 @@ from turberfield.dialogue.model import SceneScript
 from tas.tea import execute
 from tas.tea import promise
 from tas.types import Article
+from tas.types import Availability
 from tas.types import Character
 from tas.types import Consumption
 from tas.types import Container
@@ -145,7 +146,7 @@ class Sympathy(MyDrama):
                     """,
                 ),
                 contents=Consumption.cigarette
-            ).set_state(Location.bedroom),
+            ).set_state(Location.bedroom, Availability.removed),
             Character(
                 names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
                 description="{0.name} goes to art college."
@@ -227,7 +228,16 @@ class Sympathy(MyDrama):
             fn.__name__: list(CommandParser.expand_commands(fn, self.ensemble, parent=self))
             for fn in self.active
         }
-        yield from ("* {0[0][0]}".format(random.sample(v, 1)) for k, v in sorted(options.items()) if v)
+        yield from (
+            "* {0}".format(random.choice([
+                cmd for cmd, (fn, kwargs) in v
+                if not any(
+                    isinstance(i, Stateful) and i.get_state(Availability) == Availability.removed
+                    for i in kwargs.values()
+                )
+            ]))
+            for k, v in options.items()
+        )
 
     def do_history(self, this, text, presenter, *args, **kwargs):
         """
