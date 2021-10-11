@@ -52,29 +52,32 @@ class Verb(Tensed):
 Phrase = namedtuple("Phrase", ("verb", "name"))
 
 
-@enum.unique
 class Motivation(enum.Enum):
 
-    acting = 0
-    player = 1
+    acting = enum.auto()
+    player = enum.auto()
 
 
-@enum.unique
 class Operation(enum.Enum):
 
-    begins = 0
-    normal = 1
-    paused = 2
-    ending = 3
-    finish = 4
+    begins = enum.auto()
+    normal = enum.auto()
+    paused = enum.auto()
+    ending = enum.auto()
+    finish = enum.auto()
 
 
-@enum.unique
 class Journey(enum.Enum):
 
-    mentor = 0
-    ordeal = 1
-    reward = 2
+    mentor = enum.auto()
+    ordeal = enum.auto()
+    reward = enum.auto()
+
+
+class Availability(enum.Enum):
+
+    allowed = enum.auto()
+    removed = enum.auto()
 
 
 class Named(DataObject):

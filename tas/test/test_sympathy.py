@@ -29,6 +29,22 @@ from tas.types import Container
 
 class SympathyTests(unittest.TestCase):
 
+    @staticmethod
+    def turn(cmd, drama, settings, text=None):
+        presenter = Presenter.build_presenter(
+            drama.folder, text, facts=drama.facts,
+            ensemble=drama.ensemble + [drama, settings]
+        )
+        animations = (
+            presenter.animate(
+                f, dwell=presenter.dwell, pause=presenter.pause
+            ) for f in presenter.frames
+        )
+        animation = next(filter(None, animations))
+        lines = list(Renderer.render_frame_to_terminal(animation))
+        text = drama.deliver(cmd, presenter=presenter)
+        return presenter, animation, lines, text
+
     def setUp(self):
         self.settings = Settings()
         self.drama = Sympathy()
@@ -36,22 +52,14 @@ class SympathyTests(unittest.TestCase):
     def test_enter(self):
         self.assertEqual(1, len([i for i in self.drama.ensemble if isinstance(i, Container)]))
         self.assertEqual(1, len([i for i in self.drama.local if isinstance(i, Container)]))
+        presenter, animation, lines, text = self.turn("help", self.drama, self.settings)
+        self.assertNotIn("mug", text.lower())
 
     def test_look(self):
         cmds = ["look"]
         text = None
         for n, cmd in enumerate(cmds):
-            presenter = Presenter.build_presenter(
-                self.drama.folder, text, facts=self.drama.facts,
-                ensemble=self.drama.ensemble + [self.drama, self.settings]
-            )
-            animations = (
-                presenter.animate(
-                    f, dwell=presenter.dwell, pause=presenter.pause
-                ) for f in presenter.frames
-            )
-            animation = next(filter(None, animations))
-            lines = list(Renderer.render_frame_to_terminal(animation))
-            text = self.drama.deliver(cmd, presenter=presenter)
-            self.assertIn("hall", text.lower())
-            self.assertIn("mug", text.lower())
+            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text)
+
+        self.assertIn("hall", text.lower())
+        self.assertIn("mug", text.lower())
