@@ -252,7 +252,8 @@ class Sympathy(MyDrama):
 
         """
         self.state = Operation.paused
-        yield from ("* {0.label}".format(i) for i in self.player.location.options)
+        yield from ("* {0.names[0].noun}".format(i) for i in self.local if i is not self.player)
+        yield from ("* {0}".format(i.label.title()) for i in self.player.location.options)
 
     def do_next(self, this, text, presenter, *args, **kwargs):
         """

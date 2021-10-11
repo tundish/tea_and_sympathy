@@ -24,6 +24,7 @@ from turberfield.catchphrase.render import Renderer
 from turberfield.catchphrase.render import Settings
 
 from tas.sympathy import Sympathy
+from tas.types import Container
 
 
 class SympathyTests(unittest.TestCase):
@@ -33,12 +34,13 @@ class SympathyTests(unittest.TestCase):
         self.drama = Sympathy()
 
     def test_enter(self):
-        self.assertEqual(3, len(self.drama.local), self.drama.local)
+        self.assertEqual(1, len([i for i in self.drama.ensemble if isinstance(i, Container)]))
+        self.assertEqual(1, len([i for i in self.drama.local if isinstance(i, Container)]))
 
     def test_look(self):
         cmds = ["look"]
         text = None
-        for cmd in cmds:
+        for n, cmd in enumerate(cmds):
             presenter = Presenter.build_presenter(
                 self.drama.folder, text, facts=self.drama.facts,
                 ensemble=self.drama.ensemble + [self.drama, self.settings]
@@ -50,5 +52,6 @@ class SympathyTests(unittest.TestCase):
             )
             animation = next(filter(None, animations))
             lines = list(Renderer.render_frame_to_terminal(animation))
-            print(lines)
             text = self.drama.deliver(cmd, presenter=presenter)
+            self.assertIn("hall", text.lower())
+            self.assertIn("mug", text.lower())
