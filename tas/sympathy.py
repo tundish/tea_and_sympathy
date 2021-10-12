@@ -161,7 +161,7 @@ class Sympathy(MyDrama):
         super().__init__(*args, **kwargs)
         self.active = self.active.union(
             {self.do_again, self.do_look,
-             self.do_go, self.do_inspect,
+             self.do_get, self.do_go, self.do_inspect,
              self.do_help, self.do_history, self.do_quit}
         )
         self.default_fn = self.do_next
@@ -194,6 +194,18 @@ class Sympathy(MyDrama):
         """
         self.player.state = obj.contents
         return obj.description.format(obj, **self.facts)
+
+    def do_get(self, this, text, presenter, obj: Container, *args, **kwargs):
+        """
+        get {obj.names[0]}
+        grab {obj.names[0]}
+        take {obj.names[0]}
+        pick up {obj.names[0]}
+
+        """
+        obj.state = Location.inventory
+        self.active.discard(this)
+        return f"{self.player.name} picks up the {obj.names[0]}.",
 
     def do_go(self, this, text, presenter, *args, locn: "player.location.options", **kwargs):
         """
@@ -228,16 +240,17 @@ class Sympathy(MyDrama):
             fn.__name__: list(CommandParser.expand_commands(fn, self.ensemble, parent=self))
             for fn in self.active
         }
-        yield from (
-            "* {0}".format(random.choice([
-                cmd for cmd, (fn, kwargs) in v
+        for k, v in sorted(options.items()):
+            cmds = []
+            for cmd, (fn, kwargs) in v:
                 if not any(
                     isinstance(i, Stateful) and i.get_state(Availability) == Availability.removed
                     for i in kwargs.values()
-                )
-            ]))
-            for k, v in options.items()
-        )
+                ):
+                    cmds.append(cmd)
+
+            if cmds:
+                yield "* {0}".format(random.choice(cmds))
 
     def do_history(self, this, text, presenter, *args, **kwargs):
         """
