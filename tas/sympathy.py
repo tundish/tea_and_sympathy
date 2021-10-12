@@ -119,6 +119,10 @@ class Sympathy(MyDrama):
         reach = (self.player.location, Location.inventory)
         return [i for i in self.ensemble if i.get_state(Location) in reach]
 
+    @property
+    def visible(self):
+        return [i for i in self.local if not i.get_state(Availability) == Availability.removed]
+
     @functools.cached_property
     def player(self):
         return next(i for i in self.ensemble if i.get_state(Motivation) == Motivation.player)
@@ -237,10 +241,7 @@ class Sympathy(MyDrama):
         for k, v in sorted(options.items()):
             cmds = []
             for cmd, (fn, kwargs) in v:
-                if not any(
-                    isinstance(i, Stateful) and i.get_state(Availability) == Availability.removed
-                    for i in kwargs.values()
-                ):
+                if all(isinstance(i, Location) or i in self.visible for i in kwargs.values()):
                     cmds.append(cmd)
 
             if cmds:
@@ -273,7 +274,7 @@ class Sympathy(MyDrama):
             if i is not self.player:
                 yield "* {0.names[0].noun}".format(i)
 
-            if isinstance(i, Container):
+            if isinstance(i, Container) and not i.get_state(Location) == Location.inventory:
                 self.active.add(self.do_get)
 
         yield from ("* {0}".format(i.label.title()) for i in self.player.location.options)
