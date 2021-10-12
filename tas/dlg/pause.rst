@@ -100,11 +100,6 @@ Inspect
 {0}
 
 
-.. property:: MUG.description   {{0.name}} has
-                                many lines
-                                on
-                                it
-
 Look
 ----
 

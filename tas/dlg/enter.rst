@@ -50,7 +50,7 @@ Intro
 
 {0}
 
-Groggy.
+Someone is moving around the house.
 
 .. property:: DRAMA.state 2
 
@@ -62,9 +62,9 @@ End
 
 {0}
 
-Thirsty.
+It's cold. And it's early.
 
-.. property:: DRAMA.state 9
+.. property:: DRAMA.state 1
 
 Hallway
 -------

@@ -25,6 +25,7 @@ from turberfield.catchphrase.render import Settings
 
 from tas.sympathy import Sympathy
 from tas.types import Container
+from tas.types import Location
 
 
 class SympathyTests(unittest.TestCase):
@@ -63,6 +64,17 @@ class SympathyTests(unittest.TestCase):
 
         self.assertIn("hall", text.lower())
         self.assertIn("mug", text.lower())
+
+    def test_get(self):
+        cmds = ["inspect mug", "get mug", "help"]
+        text = None
+        for n, cmd in enumerate(cmds):
+            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text)
+
+            with self.subTest(n=n, cmd=cmd):
+                mug = next(i for i in self.drama.ensemble if isinstance(i, Container))
+                if n == 1:
+                    self.assertEqual(Location.inventory, mug.get_state(Location))
 
     def test_go(self):
         cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]
