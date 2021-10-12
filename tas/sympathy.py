@@ -161,7 +161,7 @@ class Sympathy(MyDrama):
         super().__init__(*args, **kwargs)
         self.active = self.active.union(
             {self.do_again, self.do_look,
-             self.do_get, self.do_go, self.do_inspect,
+             self.do_go, self.do_inspect,
              self.do_help, self.do_history, self.do_quit}
         )
         self.default_fn = self.do_next
@@ -197,15 +197,15 @@ class Sympathy(MyDrama):
 
     def do_get(self, this, text, presenter, obj: Container, *args, **kwargs):
         """
-        get {obj.names[0]}
-        grab {obj.names[0]}
-        take {obj.names[0]}
-        pick up {obj.names[0]}
+        get {obj.names[0].noun}
+        grab {obj.names[0].noun}
+        take {obj.names[0].noun}
+        pick up {obj.names[0].noun}
 
         """
         obj.state = Location.inventory
         self.active.discard(this)
-        return f"{self.player.name} picks up the {obj.names[0]}.",
+        return f"{self.player.name} picks up {obj.names[0].article.definite} {obj.names[0].noun}.",
 
     def do_go(self, this, text, presenter, *args, locn: "player.location.options", **kwargs):
         """
@@ -275,7 +275,13 @@ class Sympathy(MyDrama):
 
         """
         self.state = Operation.paused
-        yield from ("* {0.names[0].noun}".format(i) for i in self.local if i is not self.player)
+        for i in self.local:
+            if i is not self.player:
+                yield "* {0.names[0].noun}".format(i)
+
+            if isinstance(i, Container):
+                self.active.add(self.do_get)
+
         yield from ("* {0}".format(i.label.title()) for i in self.player.location.options)
 
     def do_next(self, this, text, presenter, *args, **kwargs):
