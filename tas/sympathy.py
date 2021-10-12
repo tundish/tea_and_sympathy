@@ -107,7 +107,7 @@ class Sympathy(MyDrama):
             description="Tea and Sympathy",
             metadata={},
             paths=[
-                "enter.rst", # "explore.rst", "funnel.rst",
+                "kitchen.rst", "enter.rst", # "funnel.rst",
                 "pause.rst", "quit.rst"
                 # "verdict"
             ],
@@ -213,13 +213,7 @@ class Sympathy(MyDrama):
         go {locn.value[0]} | go {locn.value[1]} | go {locn.value[2]} | go {locn.value[3]} | go {locn.value[4]}
 
         """
-        if self.player.get_state(Location) == locn:
-            yield random.choice([
-                f"{self.player.name} stays in the {locn.title}.",
-                f"{self.player.name} is already in the {locn.title}.",
-                f"{self.player.name} decides to remain in the {locn.title}."
-            ])
-        elif locn == Location.stairs:
+        if locn == Location.stairs:
             yield f"{self.player.name} looks upward."
             yield "The stairs lead to an attic gallery, and Sophie's room."
             yield f"{self.player.name} hesitates."
@@ -296,7 +290,8 @@ class Sympathy(MyDrama):
         else:
             return random.choice([
                 f"{self.player.name} hesitates.",
-                f"{self.player.name} waits.",
+                f"{self.player.name} pauses.",
+                f"{self.player.name} waits in the {self.player.location.title} for a moment.",
             ])
 
     def do_quit(self, this, text, presenter, *args, **kwargs):

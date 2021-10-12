@@ -129,7 +129,7 @@ class Location(enum.Enum):
     def options(self):
         topology = {
             Location.bedroom: [Location.hall],
-            Location.hall: [Location.kitchen, Location.stairs],
+            Location.hall: [Location.bedroom, Location.kitchen, Location.stairs],
             Location.kitchen: [Location.hall],
         }
         return topology.get(self, [])

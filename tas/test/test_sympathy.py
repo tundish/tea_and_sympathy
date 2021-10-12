@@ -63,3 +63,12 @@ class SympathyTests(unittest.TestCase):
 
         self.assertIn("hall", text.lower())
         self.assertIn("mug", text.lower())
+
+    def test_go(self):
+        cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]
+        text = None
+        for n, cmd in enumerate(cmds):
+            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text)
+
+            with self.subTest(n=n, cmd=cmd):
+                self.assertIn(cmd.split()[-1], text.lower())

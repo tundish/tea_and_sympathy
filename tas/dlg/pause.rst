@@ -36,8 +36,8 @@ Help
 
 [DRAMA]_
 
-    You are woken early one Sunday morning.
-    Your flatmate is up and anxious.
+    Louise wakes early one Sunday morning.
+    Her flatmate is already up and anxious.
 
     It doesn't hurt to *look around*.
     The dialogue may give you hints too.

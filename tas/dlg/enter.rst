@@ -69,7 +69,8 @@ Thirsty.
 Hallway
 -------
 
-.. condition:: DRAMA.state 9
+.. condition:: PLAYER.state tas.types.Location.hall
+.. condition:: DRAMA.state 0
 
 The hallway is in half darkness.
 
@@ -77,10 +78,18 @@ Now the squeak of a door.
 
 The bare floor bathes in tobacco and tungsten.
 
-|PLAYER_NAME| wears warm pyjamas. She pads clumsily past the stairs to
+|PLAYER_NAME|, in pyjamas, pads clumsily past the stairs to
 the kitchen.
 
 .. property:: DRAMA.state 1
+
+Hesitation
+----------
+
+.. condition:: PLAYER.state tas.types.Location.hall
+.. condition:: DRAMA.state 1
+
+{0}
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
