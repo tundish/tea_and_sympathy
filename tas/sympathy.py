@@ -27,12 +27,12 @@ import random
 import re
 import textwrap
 
+from proclets.tea import execute
+from proclets.tea import promise
 from turberfield.catchphrase.parser import CommandParser
 from turberfield.dialogue.model import Model
 from turberfield.dialogue.model import SceneScript
 
-from tas.tea import execute
-from tas.tea import promise
 from tas.types import Article
 from tas.types import Availability
 from tas.types import Character
