@@ -24,6 +24,7 @@ from collections import namedtuple
 import functools
 import itertools
 import random
+import re
 import textwrap
 
 from turberfield.catchphrase.parser import CommandParser
@@ -52,6 +53,7 @@ class MyDrama(Stateful, Mediator):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.validator = re.compile("[\\w ]+")
         self.prompt = "?"
         self.input_text = ""
         self.default_fn = None

@@ -76,9 +76,9 @@ See Mug in Bedroom
     The curtains are closed.
     A vertical strip of early grey light makes a mist of stale exhalation.
 
-    Next to the bed is a tatty old table, and on it a ceramic mug.
+    Next to the bed is a tatty old table, and on it a ceramic **mug**.
 
-    The door is shut. Beyond it is a hallway.
+    The door is shut. Beyond it is a **hallway**.
 
     |PLAYER_NAME| sees:
 

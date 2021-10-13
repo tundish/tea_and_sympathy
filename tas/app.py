@@ -39,22 +39,16 @@ async def get_frame(request):
             frame = story.presenter.frames.pop(0)
             animation = story.presenter.animate(frame, dwell=story.presenter.dwell, pause=story.presenter.pause)
     except (AttributeError, IndexError):
-        story.drama.input_text = ""
         story.presenter = story.represent("")
         frame = story.presenter.frames.pop(0)
         animation = story.presenter.animate(frame)
 
-    refresh = Presenter.refresh_animations(animation, min_val=2) if story.presenter.pending else None
-    refresh_target = story.refresh_target("/") if not (
-        story.drama.outcomes["finish"] or story.drama.outcomes["paused"]
-    ) else None
     title = next(iter(story.presenter.metadata.get("project", ["Tea and Sympathy"])), "Tea and Sympathy")
     controls = [
         "\n".join(story.render_action_form(action, autofocus=not n))
         for n, action in enumerate(story.actions)
-        if not (story.presenter.pending or story.drama.outcomes["finish"])
     ]
-    rv = story.render_body_html(title=title, next_=refresh_target, refresh=refresh).format(
+    rv = story.render_body_html(title=title).format(
         '<link rel="stylesheet" href="/css/theme/tas.css" />',
         story.render_dict_to_css(vars(story.settings)),
         story.render_animated_frame_to_html(animation, controls)
@@ -66,11 +60,11 @@ async def post_command(request):
     story = request.app["story"][0]
     data = await request.post()
     cmd = data["cmd"]
-    if not story.drama.validator.match(cmd):
+    if not story.context.validator.match(cmd):
         raise web.HTTPUnauthorized(reason="User sent invalid command.")
     else:
-        text = story.drama.play(cmd, context=story.presenter.casting)
-        story.presenter = story.represent(text, story.drama.facts)
+        text = story.context.deliver(cmd, presenter=story.presenter)
+        story.presenter = story.represent(text, facts=story.context.facts)
     raise web.HTTPFound("/")
 
 
