@@ -177,8 +177,8 @@ class Sympathy(MyDrama):
             for n in item.names:
                 self.lookup[n].add(item)
 
-        self.p = promise()
-        self.flow = execute(self.p, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
+        self.promise = promise()
+        self.flow = execute(self.promise, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
         self.set_state(Journey.mentor)
         self.set_state(Operation.normal)
 

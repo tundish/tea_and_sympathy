@@ -28,32 +28,19 @@
 Kitchen
 =======
 
-Input
------
+Arrive
+------
 
-|INPUT_TEXT|
+.. condition:: DRAMA.promise.kettle None
+.. condition:: DRAMA.state 0
 
-.. |INPUT_TEXT| property:: DRAMA.input_text
-
-
-.. property:: DRAMA.prompt ?
-.. property:: SETTINGS.catchphrase-reveal-extends both
-
-Filling
--------
-
-.. condition:: DRAMA.p.trace[1] pro_filling
-.. condition:: DRAMA.p.trace[0] pro_missing
-
-{0}
-
-
-|PLAYER_NAME| fills the kettle.
+The Kitchen is less gloomy that the rest of the house.
+It has mostly white walls. The shaky cupboards are painted white too. Several years ago though.
 
 1
 -
 
-.. condition:: DRAMA.p.kettle 20
+.. condition:: DRAMA.promise.kettle 20
 
 {0}
 
@@ -72,7 +59,7 @@ Filling
 2
 -
 
-.. condition:: DRAMA.p.kettle 30
+.. condition:: DRAMA.promise.kettle 30
 
 {0}
 
@@ -89,7 +76,7 @@ Filling
 3
 -
 
-.. condition:: DRAMA.p.kettle 40
+.. condition:: DRAMA.promise.kettle 40
 
 {0}
 
@@ -102,7 +89,7 @@ Filling
 4
 -
 
-.. condition:: DRAMA.p.kettle 50
+.. condition:: DRAMA.promise.kettle 50
 
 {0}
 
@@ -117,7 +104,7 @@ Filling
 5
 -
 
-.. condition:: DRAMA.p.kettle 60
+.. condition:: DRAMA.promise.kettle 60
 
 {0}
 
@@ -134,7 +121,7 @@ Filling
 6
 -
 
-.. condition:: DRAMA.p.kettle 70
+.. condition:: DRAMA.promise.kettle 70
 
 {0}
 
@@ -160,7 +147,7 @@ Filling
 7
 -
 
-.. condition:: DRAMA.p.kettle 80
+.. condition:: DRAMA.promise.kettle 80
 
 {0}
 
@@ -173,7 +160,7 @@ Filling
 8
 -
 
-.. condition:: DRAMA.p.kettle 90
+.. condition:: DRAMA.promise.kettle 90
 
 {0}
 
@@ -188,7 +175,7 @@ Filling
 9
 -
 
-.. condition:: DRAMA.p.kettle 100
+.. condition:: DRAMA.promise.kettle 100
 
 {0}
 
