@@ -99,6 +99,7 @@ Inspect
 
 {0}
 
+.. property:: DRAMA.state tas.teatime.Operation.normal
 
 Look
 ----
@@ -111,6 +112,8 @@ Look
     Looking around, she is aware of:
 
 {0}
+
+.. property:: DRAMA.state tas.teatime.Operation.normal
 
 .. |INPUT_TEXT| property:: DRAMA.input_text
 .. |PLAYER_NAME| property:: PLAYER.name

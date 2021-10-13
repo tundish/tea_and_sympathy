@@ -66,15 +66,23 @@ class SympathyTests(unittest.TestCase):
         self.assertIn("mug", text.lower())
 
     def test_get(self):
-        cmds = ["inspect mug", "get mug", "help"]
+        cmds = ["look", "inspect mug", "get mug", "help"]
         text = None
         for n, cmd in enumerate(cmds):
+
+            with self.subTest(n=n, cmd=cmd, phase="pre"):
+                mug = next(i for i in self.drama.ensemble if isinstance(i, Container))
+                if n == 0:
+                    self.assertNotIn(self.drama.do_get, self.drama.active)
+
             presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text)
 
-            with self.subTest(n=n, cmd=cmd):
+            with self.subTest(n=n, cmd=cmd, phase="post"):
                 mug = next(i for i in self.drama.ensemble if isinstance(i, Container))
-                if n == 1:
-                    self.assertEqual(Location.inventory, mug.get_state(Location))
+                if n == 0:
+                    self.assertIn(self.drama.do_get, self.drama.active)
+                elif n == 2:
+                    self.assertEqual(Location.inventory, mug.get_state(Location), text)
 
     def test_go(self):
         cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]
