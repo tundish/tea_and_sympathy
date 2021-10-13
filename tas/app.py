@@ -33,15 +33,12 @@ from tas.story import Story
 
 async def get_frame(request):
     story = request.app["story"][0]
-    try:
-        animation = None
-        while not animation:
-            frame = story.presenter.frames.pop(0)
-            animation = story.presenter.animate(frame, dwell=story.presenter.dwell, pause=story.presenter.pause)
-    except (AttributeError, IndexError):
-        story.presenter = story.represent("")
-        frame = story.presenter.frames.pop(0)
-        animation = story.presenter.animate(frame)
+    animations = (story.presenter.animate(
+        f,
+        dwell=story.presenter.dwell,
+        pause=story.presenter.pause
+    ) for f in story.presenter.frames)
+    animation = next(filter(None, animations))
 
     title = next(iter(story.presenter.metadata.get("project", ["Tea and Sympathy"])), "Tea and Sympathy")
     controls = [
@@ -83,6 +80,7 @@ def build_app(args):
         pkg_resources.resource_filename("tas", "css")
     )
     story = Story()
+    story.presenter = story.represent("", facts=story.context.facts)
     app["story"] = deque([story], maxlen=1)
     return app
 
