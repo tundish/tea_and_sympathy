@@ -61,8 +61,9 @@ class Motivation(enum.Enum):
 class Operation(enum.Enum):
 
     begins = enum.auto()
-    normal = enum.auto()
+    frames = enum.auto()
     paused = enum.auto()
+    prompt = enum.auto()
     ending = enum.auto()
     finish = enum.auto()
 

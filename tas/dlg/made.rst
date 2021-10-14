@@ -7,20 +7,20 @@
 
 .. entity:: PLAYER
    :types:  tas.types.Character
-   :states: tas.teatime.Motivation.player
+   :states: tas.types.Motivation.player
 
 .. entity:: NPC
    :types:  tas.types.Character
-   :states: tas.teatime.Motivation.acting
+   :states: tas.types.Motivation.acting
 
 .. entity:: HOB
-   :types:  tas.teatime.Feature
-   :states: tas.teatime.Location.hob
-            tas.teatime.Motivation.paused
+   :types:  tas.types.Feature
+   :states: tas.types.Location.hob
+            tas.types.Motivation.paused
 
 .. entity:: KETTLE
-   :types:  tas.teatime.Space
-   :states: tas.teatime.Location.hob
+   :types:  tas.types.Space
+   :states: tas.types.Location.hob
             100
 
 .. entity:: MEDIATOR

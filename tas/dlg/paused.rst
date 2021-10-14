@@ -9,18 +9,18 @@
 
 .. entity:: PLAYER
    :types:  tas.types.Character
-   :states: tas.teatime.Motivation.player
+   :states: tas.types.Motivation.player
 
 .. entity:: NPC
    :types:  tas.types.Character
-   :states: tas.teatime.Motivation.acting
+   :states: tas.types.Motivation.acting
 
 .. entity:: MUG
    :types:  tas.types.Container
 
 .. entity:: DRAMA
    :types:  tas.sympathy.Sympathy
-   :states: tas.teatime.Operation.paused
+   :states: tas.types.Operation.paused
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings
@@ -46,7 +46,7 @@ Help
 {0}
 
 .. property:: DRAMA.prompt ?
-.. property:: DRAMA.state tas.teatime.Operation.normal
+.. property:: DRAMA.state tas.types.Operation.prompt
 
 History
 -------
@@ -60,7 +60,7 @@ History
 {0}
 
 .. property:: DRAMA.prompt ?
-.. property:: DRAMA.state tas.teatime.Operation.normal
+.. property:: DRAMA.state tas.types.Operation.prompt
 
 See Mug in Bedroom
 ------------------
@@ -86,7 +86,7 @@ See Mug in Bedroom
 
 .. property:: MUG.state tas.types.Availability.allowed
 .. property:: DRAMA.prompt ?
-.. property:: DRAMA.state tas.teatime.Operation.normal
+.. property:: DRAMA.state tas.types.Operation.prompt
 
 Inspect
 -------
@@ -99,7 +99,7 @@ Inspect
 
 {0}
 
-.. property:: DRAMA.state tas.teatime.Operation.normal
+.. property:: DRAMA.state tas.types.Operation.prompt
 
 Look
 ----
@@ -113,7 +113,7 @@ Look
 
 {0}
 
-.. property:: DRAMA.state tas.teatime.Operation.normal
+.. property:: DRAMA.state tas.types.Operation.prompt
 
 .. |INPUT_TEXT| property:: DRAMA.input_text
 .. |PLAYER_NAME| property:: PLAYER.name

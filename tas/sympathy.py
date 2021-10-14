@@ -64,7 +64,7 @@ class Sympathy(Drama):
             metadata={},
             paths=[
                 "kitchen.rst", "enter.rst", # "funnel.rst",
-                "pause.rst", "quit.rst"
+                "paused.rst", "quit.rst"
                 # "verdict"
             ],
             interludes=None
@@ -134,7 +134,7 @@ class Sympathy(Drama):
         self.promise = promise()
         self.flow = execute(self.promise, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
         self.set_state(Journey.mentor)
-        self.set_state(Operation.normal)
+        self.set_state(Operation.prompt)
 
     def do_again(self, this, text, presenter, *args, **kwargs):
         """

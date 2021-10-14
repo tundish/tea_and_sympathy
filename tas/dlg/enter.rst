@@ -19,7 +19,7 @@
 .. entity:: DRAMA
    :types:  tas.sympathy.Sympathy
    :states: tas.types.Journey.mentor
-            tas.types.Operation.normal
+            tas.types.Operation.prompt
 
 .. entity:: SETTINGS
    :types:  turberfield.catchphrase.render.Settings
