@@ -43,6 +43,7 @@ Name = namedtuple(
 
 Tensed = namedtuple("Tensed", ("simple", "progressive", "perfect", "imperative"))
 
+
 class Verb(Tensed):
 
     def __new__(cls, root, simple="{0}s", progressive="is {0}ing", perfect="{0}ed", imperative="{0}"):
@@ -159,6 +160,11 @@ class Consumption(enum.Enum):
 
     tea = Phrase(Verb("drink"), Name("tea"))
     cigarette = Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette"))
+
+class Production(enum.Enum):
+
+    tea = Phrase(Verb("make"), Name("tea"))
+
 
 
 class Space(Named, Stateful):

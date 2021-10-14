@@ -44,6 +44,7 @@ from tas.types import Location
 from tas.types import Motivation
 from tas.types import Name
 from tas.types import Operation
+from tas.types import Production
 from tas.types import Pronoun
 
 from turberfield.catchphrase.mediator import Mediator
@@ -107,6 +108,16 @@ class Sympathy(Drama):
                 ),
                 contents=Consumption.cigarette
             ).set_state(Location.bedroom, Availability.removed),
+            Container(
+                names=[Name("Kettle")],
+                description=textwrap.dedent(
+                    """
+                    A battered old kettle.
+
+                    """,
+                ),
+                contents=Production.tea
+            ).set_state(Location.kitchen, Availability.removed),
             Character(
                 names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
                 description="{0.name} goes to art college."

@@ -51,7 +51,7 @@ class SympathyTests(unittest.TestCase):
         self.drama = Sympathy()
 
     def test_enter(self):
-        self.assertEqual(1, len([i for i in self.drama.ensemble if isinstance(i, Container)]))
+        self.assertEqual(2, len([i for i in self.drama.ensemble if isinstance(i, Container)]))
         self.assertEqual(1, len([i for i in self.drama.local if isinstance(i, Container)]))
         presenter, animation, lines, text = self.turn("help", self.drama, self.settings)
         self.assertNotIn("mug", text.lower(), text)
