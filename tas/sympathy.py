@@ -55,38 +55,44 @@ from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.types import Stateful
 
 
-class Sympathy(Drama):
+class World:
 
     @property
-    def ensemble(self):
-        return list({i for s in self.lookup.values() for i in s})
-
-    @property
-    def folder(self):
-        return SceneScript.Folder(
-            pkg="tas.dlg",
-            description="Tea and Sympathy",
-            metadata={},
-            paths=[
-                "kitchen.rst", "enter.rst", # "funnel.rst",
-                "paused.rst", "quit.rst"
-                # "verdict"
-            ],
-            interludes=None
-        )
+    def facility(self):
+        return {
+            "{0.phrase.verb.imperative} {0.phrase.name.noun}".format(i): i for i in [
+                Facility(phrase=Phrase(Verb("drink"), Name("tea")), interaction=Interaction.consume),
+                Facility(phrase=Phrase(Verb("make"), Name("tea")), interaction=Interaction.produce),
+                Facility(
+                    phrase=Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette")),
+                    interaction=Interaction.consume
+                ),
+            ]
+        }
 
     @property
     def local(self):
         reach = (self.player.location, Location.inventory)
         return [i for i in self.ensemble if i.get_state(Location) in reach]
 
+    @functools.cached_property
+    def player(self):
+        return next(i for i in self.ensemble if i.get_state(Motivation) == Motivation.player)
+
     @property
     def visible(self):
         return [i for i in self.local if not i.get_state(Availability) == Availability.removed]
 
-    @functools.cached_property
-    def player(self):
-        return next(i for i in self.ensemble if i.get_state(Motivation) == Motivation.player)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.lookup = defaultdict(set)
+        for item in self.build():
+            for n in item.names:
+                self.lookup[n].add(item)
+
+        self.promise = promise()
+        self.flow = execute(self.promise, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
 
     def build(self):
         return [
@@ -105,7 +111,7 @@ class Sympathy(Drama):
                     
                     """,
                 ),
-                contents=Consumption.cigarette
+                facility=self.facility["smoke cigarette"]
             ).set_state(Location.bedroom, Availability.removed),
             Container(
                 names=[Name("Kettle")],
@@ -115,7 +121,7 @@ class Sympathy(Drama):
 
                     """,
                 ),
-                contents=Production.tea
+                facility=self.facility["make tea"]
             ).set_state(Location.kitchen, Availability.removed),
             Character(
                 names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
@@ -127,18 +133,26 @@ class Sympathy(Drama):
             ).set_state(Motivation.player, Location.bedroom),
         ]
 
+
+class Sympathy(Drama):
+
     @property
-    def facility(self):
-        return {
-            "{0.phrase.verb.imperative} {0.phrase.name.noun}".format(i) for i in [
-                Facility(phrase=Phrase(Verb("drink"), Name("tea")), interaction=Interaction.consume),
-                Facility(phrase=Phrase(Verb("make"), Name("tea")), interaction=Interaction.produce),
-                Facility(
-                    phrase=Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette")),
-                    interaction=Interaction.consume
-                ),
-            ]
-        }
+    def ensemble(self):
+        return list({i for s in self.world.lookup.values() for i in s})
+
+    @property
+    def folder(self):
+        return SceneScript.Folder(
+            pkg="tas.dlg",
+            description="Tea and Sympathy",
+            metadata={},
+            paths=[
+                "kitchen.rst", "enter.rst", # "funnel.rst",
+                "paused.rst", "quit.rst"
+                # "verdict"
+            ],
+            interludes=None
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -149,15 +163,9 @@ class Sympathy(Drama):
         )
         self.default_fn = self.do_next
 
-        self.lookup = defaultdict(set)
-        for item in self.build():
-            for n in item.names:
-                self.lookup[n].add(item)
-
-        self.promise = promise()
-        self.flow = execute(self.promise, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
         self.set_state(Journey.mentor)
         self.set_state(Operation.prompt)
+        self.world = World(*args, **kwargs)
 
     def do_again(self, this, text, presenter, *args, **kwargs):
         """
@@ -170,7 +178,7 @@ class Sympathy(Drama):
         self.state = self.next_states(n)[0]
         return "again..."
 
-    def do_consume(self, this, text, presenter, obj: "local", *args, **kwargs):
+    def do_consume(self, this, text, presenter, obj: "world.local", *args, **kwargs):
         """
         {obj.contents.value.verb.imperative} {obj.contents.value.name.noun}
 
@@ -236,7 +244,7 @@ class Sympathy(Drama):
         self.state = Operation.paused
         yield from ("* {0.args[0]}".format(i) for i in self.history if i.args[0])
 
-    def do_inspect(self, this, text, presenter, obj: "local", *args, **kwargs):
+    def do_inspect(self, this, text, presenter, obj: "world.local", *args, **kwargs):
         """
         inspect {obj.names[0].noun}
 
@@ -251,7 +259,7 @@ class Sympathy(Drama):
 
         """
         self.state = Operation.paused
-        for i in self.local:
+        for i in self.world.local:
             if i is not self.player:
                 yield "* {0.names[0].noun}".format(i)
 
