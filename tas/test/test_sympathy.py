@@ -26,6 +26,7 @@ from turberfield.catchphrase.render import Settings
 from tas.sympathy import Sympathy
 from tas.types import Container
 from tas.types import Location
+from tas.types import Name
 
 
 class SympathyTests(unittest.TestCase):
@@ -68,17 +69,16 @@ class SympathyTests(unittest.TestCase):
     def test_get(self):
         cmds = ["look", "inspect mug", "get mug", "help"]
         text = None
+        mug = next(iter(self.drama.world.lookup[Name("Mug")]))
         for n, cmd in enumerate(cmds):
 
             with self.subTest(n=n, cmd=cmd, phase="pre"):
-                mug = next(i for i in self.drama.ensemble if isinstance(i, Container))
                 if n == 0:
                     self.assertNotIn(self.drama.do_get, self.drama.active)
 
             presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text)
 
             with self.subTest(n=n, cmd=cmd, phase="post"):
-                mug = next(i for i in self.drama.ensemble if isinstance(i, Container))
                 if n == 0:
                     self.assertIn(self.drama.do_get, self.drama.active)
                 elif n == 2:
