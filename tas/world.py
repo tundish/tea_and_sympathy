@@ -66,6 +66,7 @@ class Grouping(defaultdict):
 
 class World:
 
+    # FIXME. This all goes away. Manipulate drama.active from __call_ instead.
     @property
     def facility(self):
         return {
