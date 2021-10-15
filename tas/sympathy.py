@@ -39,13 +39,17 @@ from tas.types import Availability
 from tas.types import Character
 from tas.types import Consumption
 from tas.types import Container
+from tas.types import Facility
+from tas.types import Interaction
 from tas.types import Journey
 from tas.types import Location
 from tas.types import Motivation
 from tas.types import Name
 from tas.types import Operation
+from tas.types import Phrase
 from tas.types import Production
 from tas.types import Pronoun
+from tas.types import Verb
 
 from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.types import Stateful
@@ -83,11 +87,6 @@ class Sympathy(Drama):
     @functools.cached_property
     def player(self):
         return next(i for i in self.ensemble if i.get_state(Motivation) == Motivation.player)
-
-    @property
-    def fumble(self):
-        # TODO: Make a setter to defeat a Tidy promise.
-        return False
 
     def build(self):
         return [
@@ -128,6 +127,19 @@ class Sympathy(Drama):
             ).set_state(Motivation.player, Location.bedroom),
         ]
 
+    @property
+    def facility(self):
+        return {
+            "{0.phrase.verb.imperative} {0.phrase.name.noun}".format(i) for i in [
+                Facility(phrase=Phrase(Verb("drink"), Name("tea")), interaction=Interaction.consume),
+                Facility(phrase=Phrase(Verb("make"), Name("tea")), interaction=Interaction.produce),
+                Facility(
+                    phrase=Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette")),
+                    interaction=Interaction.consume
+                ),
+            ]
+        }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.active = self.active.union(
@@ -163,6 +175,8 @@ class Sympathy(Drama):
         {obj.contents.value.verb.imperative} {obj.contents.value.name.noun}
 
         """
+        # TODO: Remove consumption from container
+        # TODO: Create a memory of subject=player, object=obj.contents, state=?
         self.player.state = obj.contents
         return obj.description.format(obj, **self.facts)
 

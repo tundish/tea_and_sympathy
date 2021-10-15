@@ -42,6 +42,12 @@ Then looks towards the door.
 .. property:: DRAMA.prompt Type 'help'. Or 'again' to read once more.
 .. property:: DRAMA.state 1
 
+.. memory:: tas.types.Consumption.cigarette
+   :subject: PLAYER
+   :object: tas.types.Consumption.cigarette
+
+   The Player smokes a fag.
+
 Intro
 -----
 

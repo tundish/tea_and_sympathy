@@ -155,6 +155,13 @@ class Container(Named, Located): pass
 class Feature(Named, Stateful): pass
 
 
+class Facility(DataObject, Stateful): pass
+
+class Interaction(enum.Enum):
+
+    consume = enum.auto()
+    produce = enum.auto()
+
 # TODO: Keep local to TaS
 class Consumption(enum.Enum):
 
