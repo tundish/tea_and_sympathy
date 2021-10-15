@@ -155,7 +155,7 @@ class Container(Named, Located): pass
 class Feature(Named, Stateful): pass
 
 
-class Facility(DataObject, Stateful): pass
+class Gesture(DataObject, Stateful): pass
 
 class Interaction(enum.Enum):
 

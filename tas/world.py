@@ -40,7 +40,7 @@ from tas.types import Availability
 from tas.types import Character
 from tas.types import Consumption
 from tas.types import Container
-from tas.types import Facility
+from tas.types import Gesture
 from tas.types import Interaction
 from tas.types import Journey
 from tas.types import Location
@@ -71,9 +71,9 @@ class World:
     def facility(self):
         return {
             "{0.phrase.verb.imperative} {0.phrase.name.noun}".format(i): i for i in [
-                Facility(phrase=Phrase(Verb("drink"), Name("tea")), interaction=Interaction.consume),
-                Facility(phrase=Phrase(Verb("make"), Name("tea")), interaction=Interaction.produce),
-                Facility(
+                Gesture(phrase=Phrase(Verb("drink"), Name("tea")), interaction=Interaction.consume),
+                Gesture(phrase=Phrase(Verb("make"), Name("tea")), interaction=Interaction.produce),
+                Gesture(
                     phrase=Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette")),
                     interaction=Interaction.consume
                 ),

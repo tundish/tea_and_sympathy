@@ -39,7 +39,7 @@ from tas.types import Availability
 from tas.types import Character
 from tas.types import Consumption
 from tas.types import Container
-from tas.types import Facility
+from tas.types import Gesture
 from tas.types import Interaction
 from tas.types import Journey
 from tas.types import Location
@@ -85,8 +85,7 @@ class Sympathy(Drama):
         )
         self.default_fn = self.do_next
 
-        self.set_state(Journey.mentor)
-        self.set_state(Operation.prompt)
+        self.set_state(Journey.mentor, Operation.prompt)
         self.world = World(*args, **kwargs)
 
     def do_again(self, this, text, presenter, *args, **kwargs):
