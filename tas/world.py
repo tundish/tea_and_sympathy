@@ -32,6 +32,7 @@ from proclets.tea import promise
 from turberfield.catchphrase.parser import CommandParser
 from turberfield.dialogue.model import Model
 from turberfield.dialogue.model import SceneScript
+from turberfield.utils.misc import group_by_type
 
 from tas.drama import Drama
 from tas.types import Article
@@ -51,8 +52,16 @@ from tas.types import Production
 from tas.types import Pronoun
 from tas.types import Verb
 
-from turberfield.catchphrase.mediator import Mediator
-from turberfield.dialogue.types import Stateful
+#TODO: balladeer.types, balladeer.speech
+class Grouping(defaultdict):
+
+    @property
+    def all(self):
+        return [i for s in self.values() for i in s]
+
+    @property
+    def each(self):
+        return set(self.all)
 
 
 class World:
@@ -73,10 +82,8 @@ class World:
     @property
     def local(self):
         reach = (self.player.location, Location.inventory)
-        return [
-            i for s in self.lookup.values() for i in s
-            if i.get_state(Location) in reach
-        ]
+        grouped = group_by_type(i for i in self.lookup.each if i.get_state(Location) in reach)
+        return Grouping(list, {k.__name__: v for k, v in grouped.items()})
 
     @functools.cached_property
     def player(self):
@@ -89,16 +96,14 @@ class World:
     def visible(self):
         return [
             i for s in self.lookup.values() for i in s
-            if not i.get_state(Availability) == Availability.removed
+            if i.get_state(Availability) != Availability.removed
         ]
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.lookup = defaultdict(set)
+        self.lookup = Grouping(list)
         for item in self.build():
             for n in item.names:
-                self.lookup[n].add(item)
+                self.lookup[n].append(item)
 
         self.promise = promise()
         self.flow = execute(self.promise, mugs=2, tea=2, milk=2, spoons=1, sugar=1)

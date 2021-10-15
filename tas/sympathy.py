@@ -60,7 +60,7 @@ class Sympathy(Drama):
 
     @property
     def ensemble(self):
-        return list({i for s in self.world.lookup.values() for i in s})
+        return list(self.world.lookup.each)
 
     @property
     def folder(self):
@@ -100,7 +100,7 @@ class Sympathy(Drama):
         self.state = self.next_states(n)[0]
         return "again..."
 
-    def do_consume(self, this, text, presenter, obj: "world.local", *args, **kwargs):
+    def do_consume(self, this, text, presenter, obj: "world.local.each", *args, **kwargs):
         """
         {obj.contents.value.verb.imperative} {obj.contents.value.name.noun}
 
@@ -110,7 +110,7 @@ class Sympathy(Drama):
         self.world.player.state = obj.contents
         return obj.description.format(obj, **self.facts)
 
-    def do_get(self, this, text, presenter, obj: "world.local", *args, **kwargs):
+    def do_get(self, this, text, presenter, obj: "world.local[Container]", *args, **kwargs):
         """
         get {obj.names[0].noun}
         grab {obj.names[0].noun}
@@ -118,9 +118,6 @@ class Sympathy(Drama):
         pick up {obj.names[0].noun}
 
         """
-        if obj not in self.world.lookup[Name("Mug")]:
-            return f"There is no way for {self.world.player.name} to get {obj.names[0].noun}.",
-
         obj.state = Location.inventory
         self.active.discard(this)
         return f"{self.world.player.name} picks up {obj.names[0].article.definite} {obj.names[0].noun}.",
@@ -169,7 +166,7 @@ class Sympathy(Drama):
         self.state = Operation.paused
         yield from ("* {0.args[0]}".format(i) for i in self.history if i.args[0])
 
-    def do_inspect(self, this, text, presenter, obj: "world.local", *args, **kwargs):
+    def do_inspect(self, this, text, presenter, obj: "world.local.each", *args, **kwargs):
         """
         inspect {obj.names[0].noun}
 
@@ -184,7 +181,7 @@ class Sympathy(Drama):
 
         """
         self.state = Operation.paused
-        for i in self.world.local:
+        for i in self.world.local.each:
             if i is not self.world.player:
                 yield "* {0.names[0].noun}".format(i)
 
