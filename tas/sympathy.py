@@ -73,15 +73,24 @@ class World:
     @property
     def local(self):
         reach = (self.player.location, Location.inventory)
-        return [i for i in self.ensemble if i.get_state(Location) in reach]
+        return [
+            i for s in self.lookup.values() for i in s
+            if i.get_state(Location) in reach
+        ]
 
     @functools.cached_property
     def player(self):
-        return next(i for i in self.ensemble if i.get_state(Motivation) == Motivation.player)
+        return next(
+            i for s in self.lookup.values() for i in s
+            if i.get_state(Motivation) == Motivation.player
+        )
 
     @property
     def visible(self):
-        return [i for i in self.local if not i.get_state(Availability) == Availability.removed]
+        return [
+            i for s in self.lookup.values() for i in s
+            if not i.get_state(Availability) == Availability.removed
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -185,7 +194,7 @@ class Sympathy(Drama):
         """
         # TODO: Remove consumption from container
         # TODO: Create a memory of subject=player, object=obj.contents, state=?
-        self.player.state = obj.contents
+        self.world.player.state = obj.contents
         return obj.description.format(obj, **self.facts)
 
     def do_get(self, this, text, presenter, obj: Container, *args, **kwargs):
@@ -198,23 +207,23 @@ class Sympathy(Drama):
         """
         obj.state = Location.inventory
         self.active.discard(this)
-        return f"{self.player.name} picks up {obj.names[0].article.definite} {obj.names[0].noun}.",
+        return f"{self.world.player.name} picks up {obj.names[0].article.definite} {obj.names[0].noun}.",
 
-    def do_go(self, this, text, presenter, *args, locn: "player.location.options", **kwargs):
+    def do_go(self, this, text, presenter, *args, locn: "world.player.location.options", **kwargs):
         """
         enter {locn.value[0]} | enter {locn.value[1]}
         go {locn.value[0]} | go {locn.value[1]} | go {locn.value[2]} | go {locn.value[3]} | go {locn.value[4]}
 
         """
         if locn == Location.stairs:
-            yield f"{self.player.name} looks upward."
+            yield f"{self.world.player.name} looks upward."
             yield "The stairs lead to an attic gallery, and Sophie's room."
-            yield f"{self.player.name} hesitates."
+            yield f"{self.world.player.name} hesitates."
             yield "She doesn't want to go up there."
         else:
             self.state = 0
-            self.player.state = locn
-            yield f"{self.player.name} goes into the {locn.title}."
+            self.world.player.state = locn
+            yield f"{self.world.player.name} goes into the {locn.title}."
 
     def do_help(self, this, text, presenter, *args, **kwargs):
         """
@@ -230,7 +239,7 @@ class Sympathy(Drama):
         for k, v in sorted(options.items()):
             cmds = []
             for cmd, (fn, kwargs) in v:
-                if all(isinstance(i, Location) or i in self.visible for i in kwargs.values()):
+                if all(isinstance(i, Location) or i in self.world.visible for i in kwargs.values()):
                     cmds.append(cmd)
 
             if cmds:
@@ -260,13 +269,13 @@ class Sympathy(Drama):
         """
         self.state = Operation.paused
         for i in self.world.local:
-            if i is not self.player:
+            if i is not self.world.player:
                 yield "* {0.names[0].noun}".format(i)
 
             if isinstance(i, Container) and not i.get_state(Location) == Location.inventory:
                 self.active.add(self.do_get)
 
-        yield from ("* {0}".format(i.label.title()) for i in self.player.location.options)
+        yield from ("* {0}".format(i.label.title()) for i in self.world.player.location.options)
 
     def do_next(self, this, text, presenter, *args, **kwargs):
         """
@@ -279,9 +288,9 @@ class Sympathy(Drama):
             return next(self.flow)
         else:
             return random.choice([
-                f"{self.player.name} hesitates.",
-                f"{self.player.name} pauses.",
-                f"{self.player.name} waits in the {self.player.location.title} for a moment.",
+                f"{self.world.player.name} hesitates.",
+                f"{self.world.player.name} pauses.",
+                f"{self.world.player.name} waits in the {self.world.player.location.title} for a moment.",
             ])
 
     def do_quit(self, this, text, presenter, *args, **kwargs):

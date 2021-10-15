@@ -94,4 +94,4 @@ class SympathyTests(unittest.TestCase):
                 self.assertIn(cmd.split()[-1], text.lower())
 
     def test_enter(self):
-        self.assertEqual(3, len(self.drama.facility), self.drama.facility)
+        self.assertEqual(3, len(self.drama.world.facility), self.drama.world.facility)
