@@ -31,7 +31,7 @@ Kitchen
 Arrive
 ------
 
-.. condition:: DRAMA.promise.kettle None
+.. condition:: DRAMA.world.promise.kettle None
 .. condition:: DRAMA.state 0
 
 The Kitchen is less gloomy that the rest of the house.
@@ -40,7 +40,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 1
 -
 
-.. condition:: DRAMA.promise.kettle 20
+.. condition:: DRAMA.world.promise.kettle 20
 
 {0}
 
@@ -59,7 +59,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 2
 -
 
-.. condition:: DRAMA.promise.kettle 30
+.. condition:: DRAMA.world.promise.kettle 30
 
 {0}
 
@@ -76,7 +76,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 3
 -
 
-.. condition:: DRAMA.promise.kettle 40
+.. condition:: DRAMA.world.promise.kettle 40
 
 {0}
 
@@ -89,7 +89,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 4
 -
 
-.. condition:: DRAMA.promise.kettle 50
+.. condition:: DRAMA.world.promise.kettle 50
 
 {0}
 
@@ -104,7 +104,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 5
 -
 
-.. condition:: DRAMA.promise.kettle 60
+.. condition:: DRAMA.world.promise.kettle 60
 
 {0}
 
@@ -121,7 +121,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 6
 -
 
-.. condition:: DRAMA.promise.kettle 70
+.. condition:: DRAMA.world.promise.kettle 70
 
 {0}
 
@@ -147,7 +147,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 7
 -
 
-.. condition:: DRAMA.promise.kettle 80
+.. condition:: DRAMA.world.promise.kettle 80
 
 {0}
 
@@ -160,7 +160,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 8
 -
 
-.. condition:: DRAMA.promise.kettle 90
+.. condition:: DRAMA.world.promise.kettle 90
 
 {0}
 
@@ -175,7 +175,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 9
 -
 
-.. condition:: DRAMA.promise.kettle 100
+.. condition:: DRAMA.world.promise.kettle 100
 
 {0}
 
