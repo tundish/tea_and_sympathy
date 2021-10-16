@@ -66,27 +66,6 @@ class Grouping(defaultdict):
 
 class World:
 
-    @property
-    def local(self):
-        reach = (self.player.location, Location.inventory)
-        grouped = group_by_type(i for i in self.lookup.each if i.get_state(Location) in reach)
-        return Grouping(list, {k.__name__: v for k, v in grouped.items()})
-
-    @functools.cached_property
-    def player(self):
-        return next(
-            i for s in self.lookup.values() for i in s
-            if i.get_state(Motivation) == Motivation.player
-        )
-
-    @property
-    def visible(self):
-        return Grouping(
-            list,
-            {k: [i for i in v if i.get_state(Availability) != Availability.removed]
-             for k, v in self.local.items()
-        })
-
     def __init__(self, *args, **kwargs):
         self.lookup = Grouping(list)
         for item in self.build():
@@ -105,6 +84,30 @@ class World:
                 self.lookup[name.strip().lower()].remove(item)
             except ValueError:
                 pass
+
+
+class TASWorld(World):
+
+    @functools.cached_property
+    def player(self):
+        return next(
+            i for s in self.lookup.values() for i in s
+            if i.get_state(Motivation) == Motivation.player
+        )
+
+    @property
+    def local(self):
+        reach = (self.player.location, Location.inventory)
+        grouped = group_by_type(i for i in self.lookup.each if i.get_state(Location) in reach)
+        return Grouping(list, {k.__name__: v for k, v in grouped.items()})
+
+    @property
+    def visible(self):
+        return Grouping(
+            list,
+            {k: [i for i in v if i.get_state(Availability) != Availability.removed]
+             for k, v in self.local.items()
+        })
 
     def build(self):
         return [

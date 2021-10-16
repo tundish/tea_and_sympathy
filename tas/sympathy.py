@@ -50,7 +50,7 @@ from tas.types import Phrase
 from tas.types import Production
 from tas.types import Pronoun
 from tas.types import Verb
-from tas.world import World
+from tas.world import TASWorld
 
 from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.types import Stateful
@@ -86,7 +86,7 @@ class Sympathy(Drama):
         self.default_fn = self.do_next
 
         self.set_state(Journey.mentor, Operation.prompt)
-        self.world = World(*args, **kwargs)
+        self.world = TASWorld(*args, **kwargs)
 
     def interlude(self, folder, index, *args, **kwargs):
         return {}
