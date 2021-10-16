@@ -13,6 +13,10 @@
    :types:  tas.types.Character
    :states: tas.types.Motivation.acting
 
+.. entity:: KETTLE
+   :types:  tas.types.Container
+   :states: tas.types.Availability.fixture
+
 .. entity:: DRAMA
    :types:  tas.sympathy.Sympathy
    :states: tas.types.Operation.prompt
@@ -35,21 +39,10 @@ Input
 .. property:: DRAMA.promiserompt ?
 .. property:: SETTINGS.catchphrase-reveal-extends both
 
-Filling
--------
-
-.. condition:: DRAMA.promise.trace[1] pro_filling
-.. condition:: DRAMA.promise.trace[0] pro_missing
-
-{0}
-
-
-|PLAYER_NAME| fills the kettle.
-
 1
 -
 
-.. condition:: DRAMA.promise.kettle 20
+.. condition:: KETTLE.state 20
 
 {0}
 
@@ -68,7 +61,7 @@ Filling
 2
 -
 
-.. condition:: DRAMA.promise.kettle 30
+.. condition:: KETTLE.state 30
 
 {0}
 
@@ -85,7 +78,7 @@ Filling
 3
 -
 
-.. condition:: DRAMA.promise.kettle 40
+.. condition:: KETTLE.state 40
 
 {0}
 
@@ -98,7 +91,7 @@ Filling
 4
 -
 
-.. condition:: DRAMA.promise.kettle 50
+.. condition:: KETTLE.state 50
 
 {0}
 
@@ -113,7 +106,7 @@ Filling
 5
 -
 
-.. condition:: DRAMA.promise.kettle 60
+.. condition:: KETTLE.state 60
 
 {0}
 
@@ -130,7 +123,7 @@ Filling
 6
 -
 
-.. condition:: DRAMA.promise.kettle 70
+.. condition:: KETTLE.state 70
 
 {0}
 
@@ -156,7 +149,7 @@ Filling
 7
 -
 
-.. condition:: DRAMA.promise.kettle 80
+.. condition:: KETTLE.state 80
 
 {0}
 
@@ -169,7 +162,7 @@ Filling
 8
 -
 
-.. condition:: DRAMA.promise.kettle 90
+.. condition:: KETTLE.state 90
 
 {0}
 
@@ -184,7 +177,7 @@ Filling
 9
 -
 
-.. condition:: DRAMA.promise.kettle 100
+.. condition:: KETTLE.state 100
 
 {0}
 

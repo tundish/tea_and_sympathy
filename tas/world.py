@@ -27,8 +27,6 @@ import random
 import re
 import textwrap
 
-from proclets.tea import execute
-from proclets.tea import promise
 from turberfield.catchphrase.parser import CommandParser
 from turberfield.dialogue.model import Model
 from turberfield.dialogue.model import SceneScript
@@ -70,9 +68,6 @@ class World:
         self.lookup = Grouping(list)
         for item in self.build():
             self.add(item)
-
-        self.promise = promise()
-        self.flow = execute(self.promise, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
 
     def add(self, item):
         for name in str(item).splitlines():

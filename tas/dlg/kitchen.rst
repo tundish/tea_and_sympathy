@@ -14,6 +14,10 @@
    :types:  tas.types.Character
    :states: tas.types.Motivation.acting
 
+.. entity:: KETTLE
+   :types:  tas.types.Container
+   :states: tas.types.Availability.fixture
+
 .. entity:: MUG
    :types:  tas.types.Container
 
@@ -31,7 +35,7 @@ Kitchen
 Arrive
 ------
 
-.. condition:: DRAMA.world.promise.kettle None
+.. condition:: KETTLE.state None
 .. condition:: DRAMA.state 0
 
 The Kitchen is less gloomy that the rest of the house.
@@ -40,7 +44,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 1
 -
 
-.. condition:: DRAMA.world.promise.kettle 20
+.. condition:: KETTLE.state 20
 
 {0}
 
@@ -59,7 +63,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 2
 -
 
-.. condition:: DRAMA.world.promise.kettle 30
+.. condition:: KETTLE.state 30
 
 {0}
 
@@ -76,7 +80,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 3
 -
 
-.. condition:: DRAMA.world.promise.kettle 40
+.. condition:: KETTLE.state 40
 
 {0}
 
@@ -89,7 +93,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 4
 -
 
-.. condition:: DRAMA.world.promise.kettle 50
+.. condition:: KETTLE.state 50
 
 {0}
 
@@ -104,7 +108,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 5
 -
 
-.. condition:: DRAMA.world.promise.kettle 60
+.. condition:: KETTLE.state 60
 
 {0}
 
@@ -121,7 +125,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 6
 -
 
-.. condition:: DRAMA.world.promise.kettle 70
+.. condition:: KETTLE.state 70
 
 {0}
 
@@ -147,7 +151,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 7
 -
 
-.. condition:: DRAMA.world.promise.kettle 80
+.. condition:: KETTLE.state 80
 
 {0}
 
@@ -160,7 +164,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 8
 -
 
-.. condition:: DRAMA.world.promise.kettle 90
+.. condition:: KETTLE.state 90
 
 {0}
 
@@ -175,7 +179,7 @@ It has mostly white walls. The shaky cupboards are painted white too. Several ye
 9
 -
 
-.. condition:: DRAMA.world.promise.kettle 100
+.. condition:: KETTLE.state 100
 
 {0}
 
