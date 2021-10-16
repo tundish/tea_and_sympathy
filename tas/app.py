@@ -29,27 +29,39 @@ from turberfield.catchphrase.presenter import Presenter
 
 import tas
 from tas.story import Story
+from tas.types import Operation
 
 
 async def get_frame(request):
     story = request.app["story"][0]
-    animations = (story.presenter.animate(
-        f,
+    animation = story.presenter.animate(
+        story.presenter.frames[0],
         dwell=story.presenter.dwell,
         pause=story.presenter.pause
-    ) for f in story.presenter.frames)
-    animation = next(filter(None, animations))
+    )
+
+    if story.context.get_state(Operation) == Operation.frames:
+        refresh = Presenter.refresh_animations(animation, min_val=2)
+        refresh_target = story.refresh_target("/")
+    else:
+        refresh = None
+        refresh_target = None
 
     title = next(iter(story.presenter.metadata.get("project", ["Tea and Sympathy"])), "Tea and Sympathy")
     controls = [
         "\n".join(story.render_action_form(action, autofocus=not n))
         for n, action in enumerate(story.actions)
+        if story.context.get_state(Operation) not in (Operation.finish, Operation.frames)
     ]
-    rv = story.render_body_html(title=title).format(
+    rv = story.render_body_html(title=title, next_=refresh_target, refresh=refresh).format(
         '<link rel="stylesheet" href="/css/theme/tas.css" />',
         story.render_dict_to_css(vars(story.settings)),
         story.render_animated_frame_to_html(animation, controls)
     )
+
+    if len(story.presenter.frames) > 1:
+        story.presenter.frames.pop(0)
+
     return web.Response(text=rv, content_type="text/html")
 
 

@@ -33,7 +33,7 @@ from turberfield.catchphrase.render import Settings
 import tas
 from tas.sympathy import Sympathy
 from tas.tea_and_sympathy import TeaAndSympathy
-from tas.teatime import Operation
+from tas.types import Operation
 
 version = tas.__version__
 
@@ -131,16 +131,25 @@ def main(opts):
         if opts.debug:
             print(presenter.text, file=sys.stderr)
             print(*presenter.frames, sep="\n", file=sys.stderr)
-        animations = (
-            presenter.animate(
-                f, dwell=presenter.dwell, pause=presenter.pause
-            ) for f in presenter.frames
-        )
-        animation = next(filter(None, animations))
-        for line, duration in story.render_frame_to_terminal(animation):
-            print(line, "\n")
-            if not opts.quick:
-                time.sleep(duration)
+
+        for frame in presenter.frames:
+            animation = presenter.animate(
+                frame, dwell=presenter.dwell, pause=presenter.pause
+            )
+            if animation is None:
+                continue
+
+            try:
+                for line, duration in story.render_frame_to_terminal(animation):
+                    print(line, "\n")
+                    if not opts.quick:
+                        time.sleep(duration)
+            except TypeError:
+                print(story.context.history)
+                raise
+
+            if story.context.get_state(Operation) != Operation.frames:
+                break
 
         if story.context.get_state(Operation) == Operation.finish:
             break
