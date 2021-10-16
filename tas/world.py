@@ -66,20 +66,6 @@ class Grouping(defaultdict):
 
 class World:
 
-    # FIXME. This all goes away. Manipulate drama.active from __call_ instead.
-    @property
-    def facility(self):
-        return {
-            "{0.phrase.verb.imperative} {0.phrase.name.noun}".format(i): i for i in [
-                Gesture(phrase=Phrase(Verb("drink"), Name("tea")), interaction=Interaction.consume),
-                Gesture(phrase=Phrase(Verb("make"), Name("tea")), interaction=Interaction.produce),
-                Gesture(
-                    phrase=Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette")),
-                    interaction=Interaction.consume
-                ),
-            ]
-        }
-
     @property
     def local(self):
         reach = (self.player.location, Location.inventory)
@@ -137,7 +123,6 @@ class World:
                     
                     """,
                 ),
-                facility=self.facility["smoke cigarette"]
             ).set_state(Location.bedroom, Availability.allowed),
             Container(
                 names=[Name("Kettle")],
@@ -147,7 +132,6 @@ class World:
 
                     """,
                 ),
-                facility=self.facility["make tea"]
             ).set_state(20, Location.kitchen, Availability.fixture),
             Character(
                 names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
@@ -157,4 +141,13 @@ class World:
                 names=[Name("Louise", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
                 description="{0.name} is a young woman from Manchester. She works as a nurse."
             ).set_state(Motivation.player, Location.bedroom),
+            Gesture(
+                phrases=[Phrase(Verb("drink"), Name("tea"))]
+            ).set_state(Location.inventory, Availability.removed),
+            Gesture(
+                phrases=[Phrase(Verb("make"), Name("tea"))]
+            ).set_state(Location.inventory, Availability.removed),
+            Gesture(
+                phrases=[Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette"))]
+            ).set_state(Location.inventory, Availability.removed),
         ]

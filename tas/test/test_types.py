@@ -50,6 +50,7 @@ class NamedTests(unittest.TestCase):
         self.assertIn("\n", str(mug))
         self.assertIn("Mug", str(mug))
 
+
 class GestureTests(unittest.TestCase):
 
     def test_simple(self):
@@ -60,6 +61,7 @@ class GestureTests(unittest.TestCase):
         self.assertIn("make tea", str(g))
         self.assertIn("\n", str(g))
         self.assertIn("make brew", str(g))
+
 
 class VerbTests(unittest.TestCase):
 
