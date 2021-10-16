@@ -61,7 +61,7 @@ async def post_command(request):
         raise web.HTTPUnauthorized(reason="User sent invalid command.")
     else:
         text = story.context.deliver(cmd, presenter=story.presenter)
-        story.presenter = story.represent(text, facts=story.context.facts)
+        story.presenter = story.represent(text, facts=story.context.facts, previous=story.presenter)
     raise web.HTTPFound("/")
 
 

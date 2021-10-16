@@ -32,7 +32,8 @@ from tas.types import Name
 class SympathyTests(unittest.TestCase):
 
     @staticmethod
-    def turn(cmd, drama, settings, text=None):
+    def turn(cmd, drama, settings, text=None, previous=None):
+        drama.interlude(drama.folder, previous and previous.index, previous and previous.ensemble)
         presenter = Presenter.build_presenter(
             drama.folder, text, facts=drama.facts,
             ensemble=drama.ensemble + [drama, settings]
@@ -87,6 +88,7 @@ class SympathyTests(unittest.TestCase):
     def test_go(self):
         cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]
         text = None
+        presenter = None
         for n, cmd in enumerate(cmds):
             presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text)
 

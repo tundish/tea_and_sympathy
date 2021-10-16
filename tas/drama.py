@@ -65,6 +65,9 @@ class Drama(Stateful, Mediator):
         rv = (self.valid_states[bck], self.valid_states[fwd])
         return rv
 
+    def interlude(self, folder, index, *args, **kwargs):
+        return {}
+
     def deliver(self, cmd, presenter):
         self.input_text = cmd
         fn, args, kwargs = self.interpret(self.match(cmd, context=presenter, ensemble=self.ensemble))

@@ -78,15 +78,18 @@ class Sympathy(Drama):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.active = self.active.union(
-            {self.do_again, self.do_look,
-             self.do_go, self.do_inspect,
-             self.do_help, self.do_history, self.do_quit}
-        )
+        self.active = self.active.union({
+            self.do_again, self.do_look,
+            self.do_go, self.do_inspect,
+            self.do_help, self.do_history, self.do_quit
+        })
         self.default_fn = self.do_next
 
         self.set_state(Journey.mentor, Operation.prompt)
         self.world = World(*args, **kwargs)
+
+    def interlude(self, folder, index, *args, **kwargs):
+        return {}
 
     def do_again(self, this, text, presenter, *args, **kwargs):
         """

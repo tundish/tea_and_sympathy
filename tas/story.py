@@ -89,7 +89,12 @@ class Story(Renderer):
         else:
             return refresh_state
 
-    def represent(self, *args, facts=None):
+    def represent(self, *args, facts=None, previous=None):
+        self.context.interlude(
+            self.context.folder,
+            previous and previous.index,
+            previous and previous.ensemble
+        )
         presenter = Presenter.build_presenter(
             self.context.folder, *args, facts=facts,
             ensemble=self.context.ensemble + [self.context, self.settings]
@@ -120,8 +125,9 @@ def parser():
 def main(opts):
     story = Story(**vars(opts))
     text = None
+    presenter = None
     while story.active:
-        presenter = story.represent(text, facts=story.context.facts)
+        presenter = story.represent(text, facts=story.context.facts, previous=presenter)
         if opts.debug:
             print(presenter.text, file=sys.stderr)
             print(*presenter.frames, sep="\n", file=sys.stderr)
