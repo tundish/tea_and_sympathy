@@ -34,14 +34,20 @@ from tas.types import Operation
 
 async def get_frame(request):
     story = request.app["story"][0]
-    animation = story.presenter.animate(
-        story.presenter.frames[0],
-        dwell=story.presenter.dwell,
-        pause=story.presenter.pause
-    )
+
+    while story.presenter.frames:
+        frame = story.presenter.frames.pop(0)
+        animation = story.presenter.animate(
+            frame,
+            dwell=story.presenter.dwell,
+            pause=story.presenter.pause
+        )
+        if animation:
+            story.animation = animation
+            break
 
     if story.context.get_state(Operation) == Operation.frames:
-        refresh = Presenter.refresh_animations(animation, min_val=2)
+        refresh = Presenter.refresh_animations(story.animation, min_val=2)
         refresh_target = story.refresh_target("/")
     else:
         refresh = None
@@ -56,11 +62,8 @@ async def get_frame(request):
     rv = story.render_body_html(title=title, next_=refresh_target, refresh=refresh).format(
         '<link rel="stylesheet" href="/css/theme/tas.css" />',
         story.render_dict_to_css(vars(story.settings)),
-        story.render_animated_frame_to_html(animation, controls)
+        story.render_animated_frame_to_html(story.animation, controls)
     )
-
-    if len(story.presenter.frames) > 1:
-        story.presenter.frames.pop(0)
 
     return web.Response(text=rv, content_type="text/html")
 
