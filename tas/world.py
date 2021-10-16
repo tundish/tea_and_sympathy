@@ -104,11 +104,21 @@ class World:
     def __init__(self, *args, **kwargs):
         self.lookup = Grouping(list)
         for item in self.build():
-            for n in item.names:
-                self.lookup[n].append(item)
+            self.add(item)
 
         self.promise = promise()
         self.flow = execute(self.promise, mugs=2, tea=2, milk=2, spoons=1, sugar=1)
+
+    def add(self, item):
+        for name in str(item).splitlines():
+            self.lookup[name.strip().lower()].append(item)
+
+    def remove(self, item):
+        for name in str(item).splitlines():
+            try:
+                self.lookup[name.strip().lower()].remove(item)
+            except ValueError:
+                pass
 
     def build(self):
         return [
@@ -138,7 +148,7 @@ class World:
                     """,
                 ),
                 facility=self.facility["make tea"]
-            ).set_state(Location.kitchen, Availability.fixture),
+            ).set_state(20, Location.kitchen, Availability.fixture),
             Character(
                 names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
                 description="{0.name} goes to art college."

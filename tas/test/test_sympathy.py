@@ -55,14 +55,15 @@ class SympathyTests(unittest.TestCase):
     def test_enter(self):
         self.assertEqual(2, len([i for i in self.drama.ensemble if isinstance(i, Container)]))
         self.assertEqual(1, len([i for i in self.drama.local if isinstance(i, Container)]))
-        presenter, animation, lines, text = self.turn("help", self.drama, self.settings)
+        presenter, animation, lines, text = self.turn("help", self.drama, self.settings, text, previous=presenter)
         self.assertNotIn("mug", text.lower(), text)
 
     def test_look(self):
         cmds = ["look"]
         text = None
+        presenter = None
         for n, cmd in enumerate(cmds):
-            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text)
+            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text, previous=presenter)
 
         self.assertIn("hall", text.lower())
         self.assertIn("mug", text.lower())
@@ -70,20 +71,21 @@ class SympathyTests(unittest.TestCase):
     def test_get(self):
         cmds = ["look", "inspect mug", "get mug", "help"]
         text = None
-        mug = next(iter(self.drama.world.lookup[Name("Mug")]))
+        presenter = None
+        mug = next(iter(self.drama.world.lookup["mug"]))
         for n, cmd in enumerate(cmds):
 
             with self.subTest(n=n, cmd=cmd, phase="pre"):
                 if n == 0:
                     self.assertNotIn(self.drama.do_get, self.drama.active)
 
-            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text)
+            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text, previous=presenter)
 
             with self.subTest(n=n, cmd=cmd, phase="post"):
                 if n == 0:
                     self.assertIn(self.drama.do_get, self.drama.active)
                 elif n == 1:
-                    self.assertIn("Luton", text, self.drama.world.local.each)
+                    self.assertIn("Luton", text, self.drama.world.visible.each)
                 elif n == 2:
                     self.assertEqual(Location.inventory, mug.get_state(Location), text)
 
@@ -92,7 +94,7 @@ class SympathyTests(unittest.TestCase):
         text = None
         presenter = None
         for n, cmd in enumerate(cmds):
-            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text)
+            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text, previous=presenter)
 
             with self.subTest(n=n, cmd=cmd):
                 self.assertIn(cmd.split()[-1], text.lower())

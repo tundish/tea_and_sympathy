@@ -96,6 +96,9 @@ class Named(DataObject):
         article = name.article.definite and f"{name.article.definite} "
         return f"{article}{name.noun}"
 
+    def __str__(self):
+        return "\n".join(i.noun for i in self.names)
+
 
 class Component(Stateful):
 
@@ -156,7 +159,10 @@ class Container(Named, Located): pass
 class Feature(Named, Stateful): pass
 
 
-class Gesture(DataObject, Stateful): pass
+class Gesture(DataObject, Stateful):
+
+    def __str__(self):
+        return "\n".join("{0.verb.imperative} {0.name.noun}".format(i) for i in self.phrases)
 
 class Interaction(enum.Enum):
 

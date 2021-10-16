@@ -20,6 +20,10 @@
 import unittest
 
 from tas.types import Component
+from tas.types import Gesture
+from tas.types import Phrase
+from tas.types import Name
+from tas.types import Named
 from tas.types import Verb
 
 
@@ -37,6 +41,25 @@ class ComponentTests(unittest.TestCase):
         b.parent = b
         self.assertEqual(3, b.state)
 
+
+class NamedTests(unittest.TestCase):
+
+    def test_simple(self):
+        mug = Named(names=[Name("Cup"), Name("Mug")])
+        self.assertIn("Cup", str(mug))
+        self.assertIn("\n", str(mug))
+        self.assertIn("Mug", str(mug))
+
+class GestureTests(unittest.TestCase):
+
+    def test_simple(self):
+        g = Gesture(phrases=[
+            Phrase(Verb("make"), Name("tea")),
+            Phrase(Verb("make"), Name("brew")),
+        ])
+        self.assertIn("make tea", str(g))
+        self.assertIn("\n", str(g))
+        self.assertIn("make brew", str(g))
 
 class VerbTests(unittest.TestCase):
 
