@@ -82,6 +82,8 @@ class SympathyTests(unittest.TestCase):
             with self.subTest(n=n, cmd=cmd, phase="post"):
                 if n == 0:
                     self.assertIn(self.drama.do_get, self.drama.active)
+                elif n == 1:
+                    self.assertIn("Luton", text, self.drama.world.local.each)
                 elif n == 2:
                     self.assertEqual(Location.inventory, mug.get_state(Location), text)
 

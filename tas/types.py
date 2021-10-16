@@ -79,6 +79,7 @@ class Journey(enum.Enum):
 class Availability(enum.Enum):
 
     allowed = enum.auto()
+    fixture = enum.auto()
     removed = enum.auto()
 
 

@@ -61,7 +61,7 @@ class Grouping(defaultdict):
 
     @property
     def each(self):
-        return set(self.all)
+        return list(set(self.all))
 
 
 class World:
@@ -95,10 +95,11 @@ class World:
 
     @property
     def visible(self):
-        return [
-            i for s in self.lookup.values() for i in s
-            if i.get_state(Availability) != Availability.removed
-        ]
+        return Grouping(
+            list,
+            {k: [i for i in v if i.get_state(Availability) != Availability.removed]
+             for k, v in self.local.items()
+        })
 
     def __init__(self, *args, **kwargs):
         self.lookup = Grouping(list)
@@ -127,7 +128,7 @@ class World:
                     """,
                 ),
                 facility=self.facility["smoke cigarette"]
-            ).set_state(Location.bedroom, Availability.removed),
+            ).set_state(Location.bedroom, Availability.allowed),
             Container(
                 names=[Name("Kettle")],
                 description=textwrap.dedent(
@@ -137,7 +138,7 @@ class World:
                     """,
                 ),
                 facility=self.facility["make tea"]
-            ).set_state(Location.kitchen, Availability.removed),
+            ).set_state(Location.kitchen, Availability.fixture),
             Character(
                 names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
                 description="{0.name} goes to art college."

@@ -168,7 +168,7 @@ class Sympathy(Drama):
         self.state = Operation.paused
         yield from ("* {0.args[0]}".format(i) for i in self.history if i.args[0])
 
-    def do_inspect(self, this, text, presenter, obj: "world.local.each", *args, **kwargs):
+    def do_inspect(self, this, text, presenter, obj: "world.visible.each", *args, **kwargs):
         """
         inspect {obj.names[0].noun}
 
@@ -183,12 +183,10 @@ class Sympathy(Drama):
 
         """
         self.state = Operation.paused
-        for i in self.world.local.each:
+        self.active.add(self.do_get)
+        for i in self.world.visible.each:
             if i is not self.world.player:
                 yield "* {0.names[0].noun}".format(i)
-
-            if isinstance(i, Container) and not i.get_state(Location) == Location.inventory:
-                self.active.add(self.do_get)
 
         yield from ("* {0}".format(i.label.title()) for i in self.world.player.location.options)
 
