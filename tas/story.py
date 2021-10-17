@@ -32,7 +32,6 @@ from turberfield.catchphrase.render import Settings
 
 import tas
 from tas.sympathy import Sympathy
-from tas.tea_and_sympathy import TeaAndSympathy
 from tas.types import Operation
 
 version = tas.__version__

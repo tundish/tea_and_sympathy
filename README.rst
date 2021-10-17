@@ -84,9 +84,9 @@ You can run the demo in two modes.
 
     C:\Users\author\catchphrase-app\Scripts\python -m tas.story
 
-#. Launch a local web server to play the web app (`http://localhost:8080`)::
+#. Launch a local web server to play in a browser (`http://localhost:8080`)::
 
-    C:\Users\author\catchphrase-app\Scripts\python -m tas.app
+    C:\Users\author\catchphrase-app\Scripts\python -m tas.server
 
 Linux
 =====
