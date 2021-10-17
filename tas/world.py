@@ -27,58 +27,20 @@ import random
 import re
 import textwrap
 
-from turberfield.catchphrase.parser import CommandParser
-from turberfield.dialogue.model import Model
-from turberfield.dialogue.model import SceneScript
-from turberfield.utils.misc import group_by_type
+from balladeer import Article
+from balladeer import Gesture
+from balladeer import Grouping
+from balladeer import Name
+from balladeer import Phrase
+from balladeer import Pronoun
+from balladeer import Verb
+from balladeer import World
 
-from tas.drama import Drama
-from tas.types import Article
 from tas.types import Availability
 from tas.types import Character
-from tas.types import Consumption
 from tas.types import Container
-from tas.types import Gesture
-from tas.types import Interaction
-from tas.types import Journey
 from tas.types import Location
 from tas.types import Motivation
-from tas.types import Name
-from tas.types import Operation
-from tas.types import Phrase
-from tas.types import Production
-from tas.types import Pronoun
-from tas.types import Verb
-
-#TODO: balladeer.types, balladeer.speech
-class Grouping(defaultdict):
-
-    @property
-    def all(self):
-        return [i for s in self.values() for i in s]
-
-    @property
-    def each(self):
-        return list(set(self.all))
-
-
-class World:
-
-    def __init__(self, *args, **kwargs):
-        self.lookup = Grouping(list)
-        for item in self.build():
-            self.add(item)
-
-    def add(self, item):
-        for name in str(item).splitlines():
-            self.lookup[name.strip().lower()].append(item)
-
-    def remove(self, item):
-        for name in str(item).splitlines():
-            try:
-                self.lookup[name.strip().lower()].remove(item)
-            except ValueError:
-                pass
 
 
 class TASWorld(World):
@@ -93,7 +55,7 @@ class TASWorld(World):
     @property
     def local(self):
         reach = (self.player.location, Location.inventory)
-        grouped = group_by_type(i for i in self.lookup.each if i.get_state(Location) in reach)
+        grouped = self.arrange(i for i in self.lookup.each if i.get_state(Location) in reach)
         return Grouping(list, {k.__name__: v for k, v in grouped.items()})
 
     @property

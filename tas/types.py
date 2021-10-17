@@ -22,35 +22,9 @@ from collections import namedtuple
 import enum
 import random
 
-from turberfield.dialogue.types import DataObject
+from balladeer import Named
+
 from turberfield.dialogue.types import Stateful
-
-Article = namedtuple(
-    "Article",
-    ("definite", "indefinite"),
-    defaults=("the", "a")
-)
-Pronoun = namedtuple(
-    "Pronoun",
-    ("subject", "object", "reflexive", "genitive"),
-    defaults=("it", "it", "itself", "its")
-)
-Name = namedtuple(
-    "Name",
-    ("noun", "article", "pronoun"),
-    defaults=("", Article(), Pronoun())
-)
-
-Tensed = namedtuple("Tensed", ("simple", "progressive", "perfect", "imperative"))
-
-
-class Verb(Tensed):
-
-    def __new__(cls, root, simple="{0}s", progressive="is {0}ing", perfect="{0}ed", imperative="{0}"):
-        l = locals()
-        return super().__new__(cls, *(l[i].format(root) for i in super()._fields))
-
-Phrase = namedtuple("Phrase", ("verb", "name"))
 
 
 class Motivation(enum.Enum):
@@ -81,38 +55,6 @@ class Availability(enum.Enum):
     allowed = enum.auto()
     fixture = enum.auto()
     removed = enum.auto()
-
-
-class Named(DataObject):
-    """
-
-    See https://pypi.org/project/inflect/ for grammar support.
-
-    """
-
-    @property
-    def name(self):
-        name = random.choice(getattr(self, "names", [Name()]))
-        article = name.article.definite and f"{name.article.definite} "
-        return f"{article}{name.noun}"
-
-    def __str__(self):
-        return "\n".join(i.noun for i in self.names)
-
-
-class Component(Stateful):
-
-    """An object which derives its state from another. """
-
-    def __init__(self, parent=None, **kwargs):
-        super().__init__(**kwargs)
-        self.parent = parent or self
-
-    def get_state(self, typ=int, default=0):
-        if self.parent is self:
-            return super().get_state(typ, default)
-        else:
-            return self.parent.get_state(typ, default)
 
 
 class Location(enum.Enum):
@@ -156,81 +98,3 @@ class Character(Named, Located):
 
 
 class Container(Named, Located): pass
-class Feature(Named, Stateful): pass
-
-
-class Gesture(DataObject, Stateful):
-
-    def __str__(self):
-        return "\n".join("{0.verb.imperative} {0.name.noun}".format(i) for i in self.phrases)
-
-class Interaction(enum.Enum):
-
-    consume = enum.auto()
-    produce = enum.auto()
-
-# TODO: Keep local to TaS
-class Consumption(enum.Enum):
-
-    tea = Phrase(Verb("drink"), Name("tea"))
-    cigarette = Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette"))
-
-class Production(enum.Enum):
-
-    tea = Phrase(Verb("make"), Name("tea"))
-
-
-
-class Space(Named, Stateful):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def contents(self, ensemble):
-        return [i for i in ensemble if getattr(i, "parent", None) is self]
-
-
-class Liquid(Named, Component):
-
-    @property
-    def heat(self):
-        if self.state <= 20:
-            return "cold"
-        elif self.state >= 60:
-            return "hot"
-        else:
-            return "warm"
-
-
-class Item(Named, Component): pass
-class Mass(Named, Component): pass
-
-
-class Drama:
-
-    @property
-    def ensemble(self):
-        return list({i for s in self.lookup.values() for i in s})
-
-    @property
-    def turns(self):
-        return len(self.history)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.lookup = defaultdict(set)
-
-    def build(self):
-        return []
-
-    def add(self, *args):
-        for item in args:
-            for n in getattr(item, "names", []):
-                self.lookup[n].add(item)
-
-    def play(self, cmd: str, context:dict) -> dict:
-        fn, args, kwargs = self.interpret(self.match(cmd, context=context, ensemble=self.ensemble))
-        return self(fn, *args, **kwargs)
-
-    def interlude(self, folder, index, **kwargs) -> dict:
-        return {}

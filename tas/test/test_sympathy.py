@@ -19,14 +19,14 @@
 
 import unittest
 
-from turberfield.catchphrase.presenter import Presenter
-from turberfield.catchphrase.render import Renderer
-from turberfield.catchphrase.render import Settings
+from balladeer import Name
+from balladeer import Presenter
+from balladeer import Renderer
+from balladeer import Settings
 
 from tas.sympathy import Sympathy
 from tas.types import Container
 from tas.types import Location
-from tas.types import Name
 
 
 class SympathyTests(unittest.TestCase):
@@ -53,8 +53,10 @@ class SympathyTests(unittest.TestCase):
         self.drama = Sympathy()
 
     def test_enter(self):
+        text = None
+        presenter = None
         self.assertEqual(2, len([i for i in self.drama.ensemble if isinstance(i, Container)]))
-        self.assertEqual(1, len([i for i in self.drama.local if isinstance(i, Container)]))
+        self.assertEqual(1, len([i for i in self.drama.world.local.each if isinstance(i, Container)]))
         presenter, animation, lines, text = self.turn("help", self.drama, self.settings, text, previous=presenter)
         self.assertNotIn("mug", text.lower(), text)
 
@@ -99,7 +101,7 @@ class SympathyTests(unittest.TestCase):
             with self.subTest(n=n, cmd=cmd):
                 self.assertIn(cmd.split()[-1], text.lower())
 
-    def test_enter(self):
+    def test_world_lookup(self):
         self.assertIn("sophie", self.drama.world.lookup)
         self.assertIn("kettle", self.drama.world.lookup)
         self.assertIn("smoke cigarette", self.drama.world.lookup)
