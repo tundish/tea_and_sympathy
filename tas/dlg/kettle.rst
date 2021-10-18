@@ -18,11 +18,11 @@
    :states: tas.types.Availability.fixture
 
 .. entity:: DRAMA
-   :types:  tas.sympathy.Sympathy
+   :types:  tas.drama.Sympathy
    :states: tas.types.Operation.prompt
 
 .. entity:: SETTINGS
-   :types:  turberfield.catchphrase.render.Settings
+   :types:  balladeer.Settings
 
 
 Boiling

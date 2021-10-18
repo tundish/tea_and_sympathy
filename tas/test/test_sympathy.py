@@ -24,7 +24,7 @@ from balladeer import Presenter
 from balladeer import Renderer
 from balladeer import Settings
 
-from tas.sympathy import Sympathy
+from tas.drama import Sympathy
 from tas.types import Container
 from tas.types import Location
 

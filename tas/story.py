@@ -31,7 +31,7 @@ from turberfield.catchphrase.render import Settings
 # logging.basicConfig(level=logging.DEBUG)
 
 import tas
-from tas.sympathy import Sympathy
+from tas.drama import Sympathy
 from tas.types import Operation
 
 version = tas.__version__

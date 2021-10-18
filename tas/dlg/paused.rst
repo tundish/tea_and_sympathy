@@ -19,11 +19,11 @@
    :types:  tas.types.Container
 
 .. entity:: DRAMA
-   :types:  tas.sympathy.Sympathy
+   :types:  tas.drama.Sympathy
    :states: tas.types.Operation.paused
 
 .. entity:: SETTINGS
-   :types:  turberfield.catchphrase.render.Settings
+   :types:  balladeer.Settings
 
 
 Paused

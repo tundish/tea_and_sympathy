@@ -16,11 +16,11 @@
    :states: tas.types.Motivation.acting
 
 .. entity:: DRAMA
-   :types:  tas.sympathy.Sympathy
+   :types:  tas.drama.Sympathy
    :states: tas.types.Operation.ending
 
 .. entity:: SETTINGS
-   :types:  turberfield.catchphrase.render.Settings
+   :types:  balladeer.Settings
 
 
 About
@@ -32,7 +32,7 @@ Info
 .. property:: SETTINGS.catchphrase-colour-gravity hsl(113.33, 96.92%, 12.75%)
 .. property:: SETTINGS.catchphrase-reveal-extends both
 
-This is a technical demo and teaching example for the `turberfield-catchphrase`_ package.
+This is a technical demo and teaching example for the `Balladeer`_ package.
 A modern, web-native Python library you can download and install today. It's there_ for you to use.
 
 Catchphrase is unique in the way it lets you layer beautifully-written dialogue on top of well-tested game logic.
@@ -50,7 +50,7 @@ Why not `see how it's done`_?
 
 .. property:: DRAMA.state tas.types.Operation.finish
 
-.. _turberfield-catchphrase: https://github.com/tundish/turberfield-catchphrase
+.. _balladeer: https://github.com/tundish/balladeer
 .. _there: https://pypi.org/project/turberfield-catchphrase/
 .. _see how it's done: https://github.com/tundish/tea-and-sympathy
 
