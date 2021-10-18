@@ -43,7 +43,7 @@ from tas.types import Location
 from tas.types import Motivation
 
 
-class TASWorld(World):
+class Tea(World):
 
     @functools.cached_property
     def player(self):

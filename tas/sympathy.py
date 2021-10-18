@@ -38,7 +38,7 @@ from tas.types import Journey
 from tas.types import Location
 from tas.types import Motivation
 from tas.types import Operation
-from tas.world import TASWorld
+from tas.world import Tea
 
 
 class Sympathy(Drama):
@@ -71,7 +71,7 @@ class Sympathy(Drama):
         self.default_fn = self.do_next
 
         self.set_state(Journey.mentor, Operation.prompt)
-        self.world = TASWorld(*args, **kwargs)
+        self.world = Tea(*args, **kwargs)
 
     def interlude(self, folder, index, *args, **kwargs):
         return {}
