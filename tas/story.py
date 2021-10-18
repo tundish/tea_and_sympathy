@@ -76,14 +76,10 @@ def main(opts):
             if animation is None:
                 continue
 
-            try:
-                for line, duration in story.render_frame_to_terminal(animation):
-                    print(line, "\n")
-                    if not opts.quick:
-                        time.sleep(duration)
-            except TypeError:
-                print(story.context.history)
-                raise
+            for line, duration in story.render_frame_to_terminal(animation):
+                print(line, "\n")
+                if not opts.quick:
+                    time.sleep(duration)
 
             if story.context.get_state(Operation) != Operation.frames:
                 break
@@ -93,6 +89,7 @@ def main(opts):
 
         cmd = input("{0} ".format(story.context.prompt))
         text = story.context.deliver(cmd, presenter=presenter)
+
 
 def run():
     p = parser()

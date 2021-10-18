@@ -20,7 +20,11 @@
 
 import argparse
 from collections import deque
+from collections import namedtuple
+import datetime
+import re
 import sys
+import uuid
 
 from aiohttp import web
 import pkg_resources
@@ -32,8 +36,32 @@ from tas.story import TeaAndSympathy
 from tas.types import Operation
 
 
-async def get_frame(request):
-    story = request.app["story"][0]
+VALIDATION = {
+    "email": re.compile(
+        "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]"
+        "+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9]"
+        "(?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+"
+        # http://www.w3.org/TR/html5/forms.html#valid-e-mail-address
+    ),
+    "name": re.compile("[A-Z a-z]{2,42}"),
+    "session": re.compile("[0-9a-f]{32}"),
+}
+
+Session = namedtuple("Session", ["ts", "story"])
+
+
+async def get_root(request):
+    story = TeaAndSympathy()
+    story.presenter = story.represent("", facts=story.context.facts)
+    session = Session(datetime.datetime.utcnow(), story)
+    request.app["sessions"][story.id] = session
+    raise web.HTTPFound("/{0.id.hex}".format(story))
+
+
+async def get_session(request):
+    uid = uuid.UUID(hex=request.match_info["session"])
+    session = request.app["sessions"][uid]
+    story = session.story
 
     while story.presenter.frames:
         frame = story.presenter.frames.pop(0)
@@ -48,7 +76,7 @@ async def get_frame(request):
 
     if story.context.get_state(Operation) == Operation.frames:
         refresh = Presenter.refresh_animations(story.animation, min_val=2)
-        refresh_target = story.refresh_target("/")
+        refresh_target = story.refresh_target("/{0.hex}".format(uid))
     else:
         refresh = None
         refresh_target = None
@@ -69,7 +97,9 @@ async def get_frame(request):
 
 
 async def post_command(request):
-    story = request.app["story"][0]
+    uid = uuid.UUID(hex=request.match_info["session"])
+    session = request.app["sessions"][uid]
+    story = session.story
     data = await request.post()
     cmd = data["cmd"]
     if not story.context.validator.match(cmd):
@@ -77,14 +107,15 @@ async def post_command(request):
     else:
         text = story.context.deliver(cmd, presenter=story.presenter)
         story.presenter = story.represent(text, facts=story.context.facts, previous=story.presenter)
-    raise web.HTTPFound("/")
+    raise web.HTTPFound("/{0.hex}".format(uid))
 
 
 def build_app(args):
     app = web.Application()
     app.add_routes([
-        web.get("/", get_frame),
-        web.post("/drama/cmd/", post_command),
+        web.get("/", get_root),
+        web.get("/{{session:{0}}}".format(VALIDATION["session"].pattern), get_session),
+        web.post("/{{session:{0}}}/cmd/".format(VALIDATION["session"].pattern), post_command),
     ])
     app.router.add_static(
         "/css/base/",
@@ -94,9 +125,7 @@ def build_app(args):
         "/css/theme/",
         pkg_resources.resource_filename("tas", "css")
     )
-    story = TeaAndSympathy(**vars(args))
-    story.presenter = story.represent("", facts=story.context.facts)
-    app["story"] = deque([story], maxlen=1)
+    app["sessions"] = {}
     return app
 
 
