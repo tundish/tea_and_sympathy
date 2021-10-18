@@ -28,7 +28,7 @@ import pkg_resources
 from turberfield.catchphrase.presenter import Presenter
 
 import tas
-from tas.story import Story
+from tas.story import TeaAndSympathy
 from tas.types import Operation
 
 
@@ -94,7 +94,7 @@ def build_app(args):
         "/css/theme/",
         pkg_resources.resource_filename("tas", "css")
     )
-    story = Story()
+    story = TeaAndSympathy(**vars(args))
     story.presenter = story.represent("", facts=story.context.facts)
     app["story"] = deque([story], maxlen=1)
     return app

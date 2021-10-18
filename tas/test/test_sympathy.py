@@ -27,6 +27,7 @@ from balladeer import Settings
 from tas.drama import Sympathy
 from tas.types import Container
 from tas.types import Location
+from tas.world import Tea
 
 
 class SympathyTests(unittest.TestCase):
@@ -50,7 +51,8 @@ class SympathyTests(unittest.TestCase):
 
     def setUp(self):
         self.settings = Settings()
-        self.drama = Sympathy()
+        world = Tea()
+        self.drama = Sympathy(world)
 
     def test_enter(self):
         text = None

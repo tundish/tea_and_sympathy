@@ -21,91 +21,29 @@ import argparse
 import sys
 import time
 
-from turberfield.catchphrase.presenter import Presenter
-from turberfield.catchphrase.render import Action
-from turberfield.catchphrase.render import Parameter
-from turberfield.catchphrase.render import Renderer
-from turberfield.catchphrase.render import Settings
-
-# import logging
-# logging.basicConfig(level=logging.DEBUG)
+from balladeer import Story
 
 import tas
 from tas.drama import Sympathy
 from tas.types import Operation
+from tas.world import Tea
 
 version = tas.__version__
 
 
-class Story(Renderer):
-    """
-    Some methods of this class are likely to end up in a later
-    version of the Catchphrase library.
-
-    You should keep a regular eye on https://github.com/tundish/turberfield-catchphrase
-    to spot new releases.
-
-    """
+class TeaAndSympathy(Story):
 
     def __init__(self, cfg=None, **kwargs):
+        super().__init__(**kwargs)
+        world = Tea(**kwargs)
         self.drama = {
-            "sympathy": Sympathy(**kwargs)
+            "sympathy": Sympathy(world, **kwargs)
         }
         self.context = self.drama["sympathy"]
-        self.definitions = {
-            "catchphrase-colour-washout": "hsl(50, 0%, 100%, 1.0)",
-            "catchphrase-colour-shadows": "hsl(202.86, 100%, 4.12%)",
-            "catchphrase-colour-midtone": "hsl(203.39, 96.72%, 11.96%)",
-            "catchphrase-colour-hilight": "hsl(203.06, 97.3%, 56.47%)",
-            "catchphrase-colour-glamour": "hsl(353.33, 96.92%, 12.75%)",
-            "catchphrase-colour-gravity": "hsl(293.33, 96.92%, 12.75%)",
-            "catchphrase-reveal-extends": "both",
-        }
-        self.settings = Settings(**self.definitions)
-
-    @property
-    def actions(self):
-        yield Action(
-            "cmd", None, "/drama/cmd/", [], "post",
-            [Parameter("cmd", True, self.context.validator, [self.context.prompt], ">")],
-            "Enter"
-        )
 
     @property
     def active(self):
         return [i for i in self.drama.values() if i.active]
-
-    @property
-    def facts(self):
-        return {record.name: record.result for record in reversed(self.context.history)}
-
-    def refresh_target(self, url):
-        refresh_state = getattr(self.settings, "catchphrase-states-refresh", "inherit").lower()
-        if refresh_state == "none":
-            return None
-        elif refresh_state == "inherit":
-            return url
-        else:
-            return refresh_state
-
-    def represent(self, *args, facts=None, previous=None):
-        self.context.interlude(
-            self.context.folder,
-            previous and previous.index,
-            previous and previous.ensemble
-        )
-        presenter = Presenter.build_presenter(
-            self.context.folder, *args, facts=facts,
-            ensemble=self.context.ensemble + [self.context, self.settings]
-        )
-        if presenter and not(presenter.dwell or presenter.pause):
-            setattr(self.settings, "catchphrase-reveal-extends", "none")
-            setattr(self.settings, "catchphrase-states-scrolls", "scroll")
-        else:
-            setattr(self.settings, "catchphrase-reveal-extends", "both")
-            setattr(self.settings, "catchphrase-states-scrolls", "visible")
-
-        return presenter
 
 
 def parser():
@@ -122,7 +60,7 @@ def parser():
 
 
 def main(opts):
-    story = Story(**vars(opts))
+    story = TeaAndSympathy(**vars(opts))
     text = None
     presenter = None
     while story.active:
