@@ -54,9 +54,19 @@ class Sympathy(Drama):
             description="Tea and Sympathy",
             metadata={},
             paths=[
-                "kitchen.rst", "enter.rst", # "funnel.rst",
-                "paused.rst", "quit.rst"
-                # "verdict"
+                "00_introduction.rst",
+                "01_inception.rst",
+                "02_elaboration.rst",
+                "03_construction.rst",
+                "04_transition.rst",
+                "05_completion.rst",
+                "06_discussion.rst",
+                "07_defaulted.rst",
+                "08_withdrawn.rst",
+                "09_cancelled.rst",
+                "10_resolution.rst",
+                "11_conclusion.rst",
+                "12_intervention.rst",
             ],
             interludes=None
         )
