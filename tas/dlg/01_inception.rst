@@ -1,0 +1,2 @@
+.. Smoke cigarette
+.. Make tea

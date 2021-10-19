@@ -1,0 +1,5 @@
+.. Bedroom
+.. Hallway
+.. Kitchen
+.. Sophie
+
