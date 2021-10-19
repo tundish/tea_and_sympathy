@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # encoding: utf-8
 
-# This is a technical demo and teaching example for the turberfield-catchphrase library.
+# This is a technical demo and teaching example for the Balladeer library.
 # Copyright (C) 2021 D E Haynes
 
 # This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ import uuid
 from aiohttp import web
 import pkg_resources
 
-from turberfield.catchphrase.presenter import Presenter
+from balladeer import Presenter
 
 import tas
 from tas.story import TeaAndSympathy

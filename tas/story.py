@@ -61,7 +61,7 @@ def parser():
 
 def main(opts):
     story = TeaAndSympathy(**vars(opts))
-    text = None
+    text = ""
     presenter = None
     while story.active:
         presenter = story.represent(text, facts=story.context.facts, previous=presenter)
@@ -69,11 +69,11 @@ def main(opts):
             print(presenter.text, file=sys.stderr)
             print(*presenter.frames, sep="\n", file=sys.stderr)
 
-        for frame in presenter.frames:
+        for frame in filter(None, presenter.frames):
             animation = presenter.animate(
                 frame, dwell=presenter.dwell, pause=presenter.pause
             )
-            if animation is None:
+            if not animation:
                 continue
 
             for line, duration in story.render_frame_to_terminal(animation):
