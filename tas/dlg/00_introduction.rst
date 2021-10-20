@@ -55,7 +55,7 @@ Listen
 |PLAYER_NAME| listens for a moment.
 Someone is moving around the house.
 
-.. property:: DRAMA.prompt Type a command or just Return to continue.
+.. property:: DRAMA.prompt Type a command to continue.
 .. property:: DRAMA.state 2
 
 Shiver
@@ -71,7 +71,20 @@ It's cold. And it's early.
 
 .. property:: DRAMA.state 1
 
-.. Hallway
+Hallway
+-------
+
+.. condition:: PLAYER.state tas.types.Location.hall
+.. condition:: DRAMA.state 0
+
+We get the squeak of a door.
+
+From semi-darkness, the bare floor is suddenly bathed in tobacco and tungsten.
+
+|PLAYER_NAME|, in her blue cotton pyjamas, pads clumsily into the hallway.
+
+.. property:: DRAMA.state 1
+
 .. Kitchen
 .. Sophie
 
