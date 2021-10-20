@@ -32,11 +32,14 @@ Introduction
 Open
 ----
 
+.. condition:: PLAYER.state tas.types.Location.bedroom
+.. condition:: DRAMA.state 0
+
 There is a thud. From above.
 
 |PLAYER_NAME| sits up in bed. She listens for a moment, confused.
 
-Then looks towards the door.
+Then looks toward the door.
 
 .. property:: DRAMA.prompt Type 'help'. Or 'again' to read once more.
 .. property:: DRAMA.state 1

@@ -23,7 +23,7 @@
 .. entity:: DRAMA
    :types:  tas.drama.Sympathy
    :states: tas.types.Journey.mentor
-            tas.types.Operation.prompt
+            tas.types.Operation.paused
 
 .. entity:: SETTINGS
    :types:  balladeer.Settings
