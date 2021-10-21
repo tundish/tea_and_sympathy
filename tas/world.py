@@ -96,7 +96,7 @@ class Tea(World):
             Character(
                 names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
                 description="{0.name} goes to art college."
-            ).set_state(Motivation.acting, Location.kitchen),
+            ).set_state(Motivation.acting, Location.kitchen, Availability.removed),
             Character(
                 names=[Name("Louise", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
                 description="{0.name} is a young woman from Manchester. She works as a nurse."

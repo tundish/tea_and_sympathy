@@ -100,28 +100,15 @@ Kitchen
 -------
 
 .. condition:: PLAYER.state tas.types.Location.kitchen
-.. condition:: DRAMA.state 0
+
+{0}
 
 The Kitchen is less gloomy that the rest of the house.
 It has mostly white walls. The shaky cupboards were painted white too, several years ago.
 
-.. property:: DRAMA.state 1
-
-Sophie
--------
-
-.. condition:: PLAYER.state tas.types.Location.kitchen
-.. condition:: DRAMA.state 1
-
-{0}
-
 |NPC_NAME| has her boots on the table.
 
-|PLAYER_NAME| notices she is wearing her best outfit.
-A long-sleeved black fishnet top, and a leather bodice. Black woollen miniskirt and leggings.
-
-Her long black hair is a bit tangled, but sometimes she does that on purpose.
-
+.. property:: NPC.state tas.types.Availability.allowed
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name

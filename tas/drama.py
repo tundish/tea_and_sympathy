@@ -54,8 +54,7 @@ class Sympathy(Drama):
             description="Tea and Sympathy",
             metadata={},
             paths=[
-                "00_introduction.rst",
-                #"01_inception.rst",
+                "01_inception.rst",
                 #"02_elaboration.rst",
                 #"03_construction.rst",
                 #"04_transition.rst",
@@ -67,6 +66,7 @@ class Sympathy(Drama):
                 #"10_resolution.rst",
                 #"11_conclusion.rst",
                 "12_intervention.rst",
+                "00_introduction.rst",
             ],
             interludes=None
         )
