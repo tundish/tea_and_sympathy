@@ -126,13 +126,15 @@ class Sympathy(Drama):
         go {locn.value[0]} | go {locn.value[1]} | go {locn.value[2]} | go {locn.value[3]} | go {locn.value[4]}
 
         """
+        gone = [i for i in self.history if i.name == this.__name__]
+        never_been = not any(i for i in gone if i.kwargs["locn"] == locn) and locn != Location.bedroom
         if locn == Location.stairs:
             yield f"{self.world.player.name} looks upward."
             yield "The stairs lead to an attic gallery, and Sophie's room."
             yield f"{self.world.player.name} hesitates."
             yield "She doesn't want to go up there."
         else:
-            self.state = 0
+            self.state = 0 if never_been else 1
             self.world.player.state = locn
             yield f"{self.world.player.name} goes into the {locn.title}."
 
