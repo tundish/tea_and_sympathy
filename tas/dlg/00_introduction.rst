@@ -85,8 +85,41 @@ From semi-darkness, the bare floor is suddenly bathed in tobacco and tungsten.
 
 .. property:: DRAMA.state 1
 
-.. Kitchen
-.. Sophie
+Between
+-------
+
+.. condition:: PLAYER.state tas.types.Location.hall
+.. condition:: DRAMA.state 1
+
+{0}
+
+|PLAYER_NAME| lets the empty space soothe her for a moment.
+Everywhere else there are situations.
+
+Kitchen
+-------
+
+.. condition:: PLAYER.state tas.types.Location.kitchen
+.. condition:: DRAMA.state 0
+
+We get the squeak of a door.
+
+From semi-darkness, the bare floor is suddenly bathed in tobacco and tungsten.
+
+|PLAYER_NAME|, in her blue cotton pyjamas, pads clumsily into the hallway.
+
+.. property:: DRAMA.state 1
+
+Sophie
+-------
+
+.. condition:: PLAYER.state tas.types.Location.kitchen
+.. condition:: DRAMA.state 1
+
+{0}
+
+|NPC_NAME| has her boots on the table.
+Everywhere else there are situations.
 
 
 .. |NPC_NAME| property:: NPC.name
