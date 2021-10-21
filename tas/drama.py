@@ -76,7 +76,7 @@ class Sympathy(Drama):
 
         self.active = self.active.union({
             self.do_again, self.do_look,
-            self.do_go, self.do_inspect,
+            self.do_go,
             self.do_help, self.do_history, self.do_quit
         })
         self.default_fn = self.do_next
@@ -155,7 +155,7 @@ class Sympathy(Drama):
                 if all(
                     isinstance(i, Location) or
                     i is self.world.player or
-                    i in self.world.visible
+                    i in self.world.visible.each
                     for i in kwargs.values()
                 ):
                     cmds.append(cmd)
@@ -196,6 +196,7 @@ class Sympathy(Drama):
         """
         self.state = Operation.paused
         self.active.add(self.do_get)
+        self.active.add(self.do_inspect)
         for i in self.world.visible.each:
             if i is not self.world.player:
                 yield "* {0.names[0].noun}".format(i)
@@ -207,16 +208,16 @@ class Sympathy(Drama):
         more | next
 
         """
-        self.state = self.next_states(0)[1]
+        try:
+            self.state = self.next_states(0)[1]
+        except Exception:
+            pass
 
-        if self.get_state(Journey) == Journey.ordeal:
-            return next(self.flow)
-        else:
-            return random.choice([
-                f"{self.world.player.name} hesitates.",
-                f"{self.world.player.name} pauses.",
-                f"{self.world.player.name} waits in the {self.world.player.location.title} for a moment.",
-            ])
+        return random.choice([
+            f"{self.world.player.name} hesitates.",
+            f"{self.world.player.name} pauses.",
+            f"{self.world.player.name} waits in the {self.world.player.location.title} for a moment.",
+        ])
 
     def do_quit(self, this, text, presenter, *args, **kwargs):
         """

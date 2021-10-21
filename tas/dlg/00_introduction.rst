@@ -53,7 +53,7 @@ Listen
 {0}
 
 |PLAYER_NAME| listens for a moment.
-Someone is moving around the house.
+Not alone in the house. Is there going to be a problem?
 
 .. property:: DRAMA.prompt Type a command to continue.
 .. property:: DRAMA.state 2
@@ -96,10 +96,25 @@ Between
 |PLAYER_NAME| lets the empty space soothe her for a moment.
 Everywhere else there are situations.
 
+.. property:: DRAMA.state 2
+
+Sunday
+------
+
+.. condition:: PLAYER.state tas.types.Location.hall
+.. condition:: DRAMA.state 2
+
+{0}
+
+|PLAYER_NAME| wonders what she's doing up so early on a Sunday.
+
+.. property:: DRAMA.state 1
+
 Kitchen
 -------
 
 .. condition:: PLAYER.state tas.types.Location.kitchen
+.. condition:: DRAMA.state 0
 
 {0}
 
@@ -108,6 +123,45 @@ It has mostly white walls. The shaky cupboards were painted white too, several y
 
 |NPC_NAME| has her boots on the table.
 
+.. property:: DRAMA.state 1
+
+Sophie
+------
+
+.. condition:: PLAYER.state tas.types.Location.kitchen
+.. condition:: DRAMA.state 1
+
+{0}
+
+|NPC_NAME| is on her phone.
+
+[NPC]_
+
+    I am going to swear.
+
+.. property:: DRAMA.state 2
+
+Phone
+-----
+
+.. condition:: PLAYER.state tas.types.Location.kitchen
+.. condition:: DRAMA.state 2
+
+[NPC]_
+
+    Oh God, stop spamming me.
+
+{0}
+
+[PLAYER]_
+
+    Just block them.
+
+[NPC]_
+
+    I can't though, it's the Electricity.
+
+.. property:: DRAMA.state 1
 .. property:: NPC.state tas.types.Availability.allowed
 
 .. |NPC_NAME| property:: NPC.name

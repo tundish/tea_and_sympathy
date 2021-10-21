@@ -59,9 +59,22 @@ class SympathyTests(unittest.TestCase):
         presenter = None
         self.assertEqual(2, len([i for i in self.drama.ensemble if isinstance(i, Container)]))
         self.assertEqual(1, len([i for i in self.drama.world.local.each if isinstance(i, Container)]))
+
         presenter, animation, lines, text = self.turn("help", self.drama, self.settings, text, previous=presenter)
-        self.assertIn(self.drama.do_inspect, self.drama.active)
+        self.assertNotIn(self.drama.do_inspect, self.drama.active)
+        self.assertNotIn("inspect", text.lower(), text)
+        self.assertNotIn(self.drama.do_get, self.drama.active)
+        self.assertFalse("get" in text.lower() or "grab" in text.lower() or "pick" in text.lower(), text)
+
+        presenter, animation, lines, text = self.turn("look", self.drama, self.settings, text, previous=presenter)
+        mug = next(iter(self.drama.world.lookup["mug"]))
+        self.assertIn(mug, self.drama.world.visible.each)
+
+        presenter, animation, lines, text = self.turn("help", self.drama, self.settings, text, previous=presenter)
         self.assertIn("inspect", text.lower(), text)
+        self.assertIn(self.drama.do_get, self.drama.active)
+        self.assertIn(self.drama.do_get, self.drama.active)
+        self.assertTrue("get" in text.lower() or "grab" in text.lower() or "pick" in text.lower(), text)
 
     def test_look(self):
         cmds = ["look", "inspect mug", "inspect louise", "get mug", "inspect louise", "look"]
