@@ -108,7 +108,7 @@ class Sympathy(Drama):
         self.world.player.state = obj.contents
         return obj.description.format(obj, **self.facts)
 
-    def do_get(self, this, text, presenter, obj: "world.local[Container]", *args, **kwargs):
+    def do_get(self, this, text, presenter, obj: "world.visible[Container]", *args, **kwargs):
         """
         get {obj.names[0].noun}
         grab {obj.names[0].noun}
@@ -150,7 +150,12 @@ class Sympathy(Drama):
         for k, v in sorted(options.items()):
             cmds = []
             for cmd, (fn, kwargs) in v:
-                if all(isinstance(i, Location) or i in self.world.visible for i in kwargs.values()):
+                if all(
+                    isinstance(i, Location) or
+                    i is self.world.player or
+                    i in self.world.visible
+                    for i in kwargs.values()
+                ):
                     cmds.append(cmd)
 
             if cmds:
@@ -170,7 +175,16 @@ class Sympathy(Drama):
 
         """
         self.state = Operation.paused
-        return obj.description.format(obj, **self.facts)
+        yield obj.description.format(obj, **self.facts)
+
+        if obj is self.world.player:
+            items = [
+                i for i in self.ensemble
+                if i.get_state(Location) == Location.inventory and i.get_state(Availability) == Availability.allowed
+            ]
+            if items:
+                yield "\nCarrying:\n"
+                yield from ("* {0}".format(i) for i in items)
 
     def do_look(self, this, text, presenter, *args, **kwargs):
         """

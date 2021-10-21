@@ -54,23 +54,31 @@ class SympathyTests(unittest.TestCase):
         world = Tea()
         self.drama = Sympathy(world)
 
-    def test_enter(self):
+    def test_help(self):
         text = None
         presenter = None
         self.assertEqual(2, len([i for i in self.drama.ensemble if isinstance(i, Container)]))
         self.assertEqual(1, len([i for i in self.drama.world.local.each if isinstance(i, Container)]))
         presenter, animation, lines, text = self.turn("help", self.drama, self.settings, text, previous=presenter)
-        self.assertNotIn("mug", text.lower(), text)
+        self.assertIn(self.drama.do_inspect, self.drama.active)
+        self.assertIn("inspect", text.lower(), text)
 
     def test_look(self):
-        cmds = ["look"]
+        cmds = ["look", "inspect mug", "inspect louise", "get mug", "inspect louise", "look"]
         text = None
         presenter = None
+        mug = next(iter(self.drama.world.lookup["mug"]))
         for n, cmd in enumerate(cmds):
             presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text, previous=presenter)
+            with self.subTest(n=n, cmd=cmd, phase="post"):
+                if n in (0, 5):
+                    self.assertIn("hall", text.lower())
+                if n != 2:
+                    self.assertIn("mug", text.lower())
 
-        self.assertIn("hall", text.lower())
-        self.assertIn("mug", text.lower())
+        self.assertIn(self.drama.do_get, self.drama.active)
+        self.assertIn(self.drama.do_inspect, self.drama.active)
+        self.assertIn(mug, self.drama.world.visible.each)
 
     def test_get(self):
         cmds = ["look", "inspect mug", "get mug", "help"]

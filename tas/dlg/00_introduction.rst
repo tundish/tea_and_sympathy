@@ -102,11 +102,8 @@ Kitchen
 .. condition:: PLAYER.state tas.types.Location.kitchen
 .. condition:: DRAMA.state 0
 
-We get the squeak of a door.
-
-From semi-darkness, the bare floor is suddenly bathed in tobacco and tungsten.
-
-|PLAYER_NAME|, in her blue cotton pyjamas, pads clumsily into the hallway.
+The Kitchen is less gloomy that the rest of the house.
+It has mostly white walls. The shaky cupboards were painted white too, several years ago.
 
 .. property:: DRAMA.state 1
 
@@ -119,7 +116,11 @@ Sophie
 {0}
 
 |NPC_NAME| has her boots on the table.
-Everywhere else there are situations.
+
+|PLAYER_NAME| notices she is wearing her best outfit.
+A long-sleeved black fishnet top, and a leather bodice. Black woollen miniskirt and leggings.
+
+Her long black hair is a bit tangled, but sometimes she does that on purpose.
 
 
 .. |NPC_NAME| property:: NPC.name

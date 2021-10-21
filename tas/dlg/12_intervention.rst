@@ -39,7 +39,7 @@ Help
 [DRAMA]_
 
     Louise wakes early one Sunday morning.
-    Her flatmate is already up and anxious.
+    Her flatmate is already up.
 
     It doesn't hurt to *look around*.
     The dialogue may give you hints too.
@@ -61,7 +61,6 @@ History
 
 {0}
 
-.. property:: DRAMA.prompt ?
 .. property:: DRAMA.state tas.types.Operation.prompt
 
 See Mug in Bedroom
@@ -86,7 +85,24 @@ See Mug in Bedroom
 
 {0}
 
-.. property:: DRAMA.prompt ?
+.. property:: DRAMA.state tas.types.Operation.prompt
+
+Notice stairs
+-------------
+
+.. condition:: DRAMA.history[0].name do_look
+.. condition:: PLAYER.state tas.types.Location.hall
+
+[DRAMA]_
+
+    |PLAYER_NAME| is in the |PLAYER_LOCN|.
+    She stands at the foot of some **stairs**. Behind is her **bedroom**.
+    Ahead the **kitchen**.
+
+    Looking around, she is aware of:
+
+{0}
+
 .. property:: DRAMA.state tas.types.Operation.prompt
 
 Inspect
@@ -119,4 +135,3 @@ Look
 .. |INPUT_TEXT| property:: DRAMA.input_text
 .. |PLAYER_NAME| property:: PLAYER.name
 .. |PLAYER_LOCN| property:: PLAYER.location.title
-.. 'Pause' page.
