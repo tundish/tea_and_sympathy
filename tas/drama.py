@@ -124,6 +124,7 @@ class Sympathy(Drama):
         """
         enter {locn.value[0]} | enter {locn.value[1]}
         go {locn.value[0]} | go {locn.value[1]} | go {locn.value[2]} | go {locn.value[3]} | go {locn.value[4]}
+        {locn.value[0]} | {locn.value[1]} | {locn.value[2]} | {locn.value[3]} | {locn.value[4]}
 
         """
         if locn == Location.stairs:
@@ -152,6 +153,9 @@ class Sympathy(Drama):
         for k, v in sorted(options.items()):
             cmds = []
             for cmd, (fn, kwargs) in v:
+                if fn is self.do_go and len(cmd.split()) == 1:
+                    continue
+
                 if all(
                     isinstance(i, Location) or
                     i is self.world.player or

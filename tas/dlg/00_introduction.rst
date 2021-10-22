@@ -10,10 +10,6 @@
    :types:  tas.types.Character
    :states: tas.types.Motivation.acting
 
-.. entity:: KETTLE
-   :types:  tas.types.Container
-   :states: tas.types.Availability.fixture
-
 .. entity:: MUG
    :types:  tas.types.Container
    :states: tas.types.Availability.allowed
@@ -161,7 +157,7 @@ Phone
 
     I can't though, it's the Electricity.
 
-.. property:: DRAMA.state 1
+.. property:: DRAMA.state tas.types.Journey.ordeal
 .. property:: NPC.state tas.types.Availability.allowed
 
 .. |NPC_NAME| property:: NPC.name

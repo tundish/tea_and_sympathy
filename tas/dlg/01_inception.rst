@@ -10,7 +10,6 @@
 .. entity:: NPC
    :types:  tas.types.Character
    :states: tas.types.Motivation.acting
-            tas.types.Availability.allowed
 
 .. entity:: KETTLE
    :types:  tas.types.Container
@@ -22,7 +21,7 @@
 
 .. entity:: DRAMA
    :types:  tas.drama.Sympathy
-   :states: tas.types.Journey.mentor
+   :states: tas.types.Journey.ordeal
             tas.types.Operation.prompt
 
 .. entity:: SETTINGS
@@ -34,6 +33,7 @@ Inception
 Sophie
 ------
 
+.. condition:: DRAMA.state 0
 .. condition:: PLAYER.state tas.types.Location.kitchen
 
 {0}

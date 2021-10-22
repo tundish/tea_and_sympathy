@@ -26,6 +26,7 @@ from balladeer import Settings
 
 from tas.drama import Sympathy
 from tas.types import Container
+from tas.types import Journey
 from tas.types import Location
 from tas.world import Tea
 
@@ -64,7 +65,7 @@ class SympathyTests(unittest.TestCase):
         self.assertNotIn(self.drama.do_inspect, self.drama.active)
         self.assertNotIn("inspect", text.lower(), text)
         self.assertNotIn(self.drama.do_get, self.drama.active)
-        self.assertFalse("get" in text.lower() or "grab" in text.lower() or "pick" in text.lower(), text)
+        self.assertFalse(any(i in text.lower() for i in ("get", "grab", "pick", "take")), text)
 
         presenter, animation, lines, text = self.turn("look", self.drama, self.settings, text, previous=presenter)
         mug = next(iter(self.drama.world.lookup["mug"]))
@@ -74,7 +75,7 @@ class SympathyTests(unittest.TestCase):
         self.assertIn("inspect", text.lower(), text)
         self.assertIn(self.drama.do_get, self.drama.active)
         self.assertIn(self.drama.do_get, self.drama.active)
-        self.assertTrue("get" in text.lower() or "grab" in text.lower() or "pick" in text.lower(), text)
+        self.assertTrue(any(i in text.lower() for i in ("get", "grab", "pick", "take")), text)
 
     def test_look(self):
         cmds = ["look", "inspect mug", "inspect louise", "get mug", "inspect louise", "look"]
@@ -123,6 +124,23 @@ class SympathyTests(unittest.TestCase):
 
             with self.subTest(n=n, cmd=cmd):
                 self.assertIn(cmd.split()[-1], text.lower())
+
+    def test_mentor(self):
+        cmds = ["look", "get mug", "hall", "kitchen", "", "", ""]
+        text = None
+        presenter = None
+        mug = next(iter(self.drama.world.lookup["mug"]))
+        for n, cmd in enumerate(cmds):
+            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text, previous=presenter)
+        """
+            with self.subTest(n=n, cmd=cmd, phase="post"):
+                if n in (0, 5):
+                    self.assertIn("hall", text.lower())
+                if n != 2:
+                    self.assertIn("mug", text.lower())
+        """
+        self.assertIn(mug, self.drama.world.visible.each)
+        self.assertEqual(Journey.ordeal, self.drama.get_state(Journey))
 
     def test_world_lookup(self):
         self.assertIn("sophie", self.drama.world.lookup)
