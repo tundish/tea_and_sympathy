@@ -5,15 +5,18 @@
 .. entity:: PLAYER
    :types:  tas.types.Character
    :states: tas.types.Motivation.player
-            tas.types.Location.kitchen
 
 .. entity:: NPC
    :types:  tas.types.Character
    :states: tas.types.Motivation.acting
 
-.. entity:: KETTLE
-   :types:  tas.types.Container
-   :states: tas.types.Availability.fixture
+.. entity:: OPTION_1
+   :types:  tas.world.Gesture
+   :states: tas.world.Fruition.inception
+
+.. entity:: OPTION_2
+   :types:  tas.world.Gesture
+   :states: tas.world.Fruition.inception
 
 .. entity:: MUG
    :types:  tas.types.Container
@@ -34,7 +37,6 @@ Sophie
 ------
 
 .. condition:: DRAMA.state 0
-.. condition:: PLAYER.state tas.types.Location.kitchen
 
 {0}
 
@@ -44,6 +46,18 @@ Sophie
 A long-sleeved black fishnet top, and a leather bodice. Black woollen miniskirt and leggings.
 
 Her long black hair is a bit tangled, but sometimes she does that on purpose.
+
+.. property:: DRAMA.state 1
+.. property:: OPTION_1.state tas.types.Availability.allowed
+.. property:: OPTION_2.state tas.types.Availability.allowed
+
+Options
+-------
+
+.. condition:: DRAMA.state 1
+
+{0}
+
 
 .. Smoke cigarette
 .. Make tea

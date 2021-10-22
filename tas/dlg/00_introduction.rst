@@ -157,8 +157,8 @@ Phone
 
     I can't though, it's the Electricity.
 
+.. property:: DRAMA.state 0
 .. property:: DRAMA.state tas.types.Journey.ordeal
-.. property:: NPC.state tas.types.Availability.allowed
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name

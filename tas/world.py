@@ -28,6 +28,7 @@ import re
 import textwrap
 
 from balladeer import Article
+from balladeer import Fruition
 from balladeer import Gesture
 from balladeer import Grouping
 from balladeer import Name
@@ -96,15 +97,15 @@ class Tea(World):
             Character(
                 names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
                 description="{0.name} goes to art college."
-            ).set_state(Motivation.acting, Location.kitchen, Availability.removed),
+            ).set_state(Motivation.acting, Location.kitchen),
             Character(
                 names=[Name("Louise", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
                 description="{0.name} is a young woman from Manchester. She works as a nurse."
             ).set_state(Motivation.player, Location.bedroom),
             Gesture(
                 phrases=[Phrase(Verb("make"), Name("tea"))]
-            ).set_state(Location.inventory, Availability.removed),
+            ).set_state(Location.kitchen, Availability.removed, Fruition.inception),
             Gesture(
                 phrases=[Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette"))]
-            ).set_state(Location.inventory, Availability.removed),
+            ).set_state(Location.kitchen, Availability.removed, Fruition.inception),
         ]

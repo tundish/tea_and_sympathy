@@ -29,6 +29,7 @@ import textwrap
 
 from balladeer import CommandParser
 from balladeer import Drama
+from balladeer import Gesture
 from balladeer import SceneScript
 
 from tas.types import Availability
@@ -76,8 +77,9 @@ class Sympathy(Drama):
 
         self.active = self.active.union({
             self.do_again, self.do_look,
-            self.do_go,
-            self.do_help, self.do_history, self.do_quit
+            self.do_gesture, self.do_go,
+            self.do_help, self.do_history,
+            self.do_quit
         })
         self.default_fn = self.do_next
 
@@ -98,15 +100,13 @@ class Sympathy(Drama):
         self.state = self.next_states(n)[0]
         return "again..."
 
-    def do_consume(self, this, text, presenter, obj: "world.local.each", *args, **kwargs):
+    def do_gesture(self, this, text, presenter, obj: "world.visible[Gesture]", *args, **kwargs):
         """
-        {obj.contents.value.verb.imperative} {obj.contents.value.name.noun}
+        {obj!s}
 
         """
-        # TODO: Remove consumption from container
         # TODO: Create a memory of subject=player, object=obj.contents, state=?
-        self.world.player.state = obj.contents
-        return obj.description.format(obj, **self.facts)
+        return obj
 
     def do_get(self, this, text, presenter, obj: "world.visible[Container]", *args, **kwargs):
         """
@@ -145,6 +145,7 @@ class Sympathy(Drama):
         what | what do i do
 
         """
+        print(presenter.casting)
         self.state = Operation.paused
         options = {
             fn.__name__: list(CommandParser.expand_commands(fn, self.ensemble, parent=self))
@@ -165,7 +166,11 @@ class Sympathy(Drama):
                     cmds.append(cmd)
 
             if cmds:
-                yield "* {0}".format(random.choice(cmds))
+                if fn is self.do_gesture:
+                    print(options)
+                    yield from ("* {0}".format(i) for i in cmds)
+                else:
+                    yield "* {0}".format(random.choice(cmds))
 
     def do_history(self, this, text, presenter, *args, **kwargs):
         """
