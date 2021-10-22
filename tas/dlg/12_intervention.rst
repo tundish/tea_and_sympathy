@@ -41,11 +41,14 @@ Help
     Louise wakes early one Sunday morning.
     Her flatmate is already up.
 
-    It doesn't hurt to *look around*.
-    The dialogue may give you hints too.
+    The dialogue may give you hints on what you might wish to do.
     Here are some commands to try:
 
 {0}
+
+[DRAMA]_
+
+    You can always choose to do nothing, simply by pressing *Return*.
 
 .. property:: DRAMA.prompt ?
 .. property:: DRAMA.state tas.types.Operation.prompt
