@@ -102,7 +102,7 @@ async def post_command(request):
     story = session.story
     data = await request.post()
     cmd = data["cmd"]
-    if not story.context.validator.match(cmd):
+    if cmd and not story.context.validator.match(cmd):
         raise web.HTTPUnauthorized(reason="User sent invalid command.")
     else:
         text = story.context.deliver(cmd, presenter=story.presenter)
