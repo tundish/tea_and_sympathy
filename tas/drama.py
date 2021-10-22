@@ -145,7 +145,6 @@ class Sympathy(Drama):
         what | what do i do
 
         """
-        print(presenter.casting)
         self.state = Operation.paused
         options = {
             fn.__name__: list(CommandParser.expand_commands(fn, self.ensemble, parent=self))
@@ -166,8 +165,7 @@ class Sympathy(Drama):
                     cmds.append(cmd)
 
             if cmds:
-                if fn is self.do_gesture:
-                    print(options)
+                if k == "do_gesture":
                     yield from ("* {0}".format(i) for i in cmds)
                 else:
                     yield "* {0}".format(random.choice(cmds))
