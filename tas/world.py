@@ -103,7 +103,7 @@ class Tea(World):
                 description="{0.name} is a young woman from Manchester. She works as a nurse."
             ).set_state(Motivation.player, Location.bedroom),
             Gesture(
-                phrases=[Phrase(Verb("make"), Name("tea"))]
+                phrases=[Phrase(Verb("make"), Name("tea", Article("the", "")))]
             ).set_state(Location.kitchen, Availability.removed, Fruition.inception),
             Gesture(
                 phrases=[Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette"))]

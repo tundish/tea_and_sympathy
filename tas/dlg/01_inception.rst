@@ -58,9 +58,16 @@ Options
 
 {0}
 
+|PLAYER_NAME| considers if |PLAYER_SUBJECT| should |OPTION_1_IMPERATIVE| |OPTION_1_ARTICLE| |OPTION_1_NOUN|,
+or |OPTION_2_IMPERATIVE| |OPTION_2_ARTICLE| |OPTION_2_NOUN|.
 
-.. Smoke cigarette
-.. Make tea
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
+.. |PLAYER_SUBJECT| property:: PLAYER.names[0].pronoun.subject
+.. |OPTION_1_IMPERATIVE| property:: OPTION_1.phrases[0].verb.imperative
+.. |OPTION_1_ARTICLE| property:: OPTION_1.phrases[0].name.article.definite
+.. |OPTION_1_NOUN| property:: OPTION_1.phrases[0].name.noun
+.. |OPTION_2_IMPERATIVE| property:: OPTION_2.phrases[0].verb.imperative
+.. |OPTION_2_ARTICLE| property:: OPTION_2.phrases[0].name.article.indefinite
+.. |OPTION_2_NOUN| property:: OPTION_2.phrases[0].name.noun
