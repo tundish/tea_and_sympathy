@@ -60,6 +60,11 @@ class Tea(World):
         return Grouping(list, {k.__name__: v for k, v in grouped.items()})
 
     @property
+    def fruition(self):
+        # TODO: Grouping of Fruition.name: [Gesture]
+        return {}
+
+    @property
     def visible(self):
         return Grouping(
             list,
