@@ -145,4 +145,4 @@ class SympathyTests(unittest.TestCase):
     def test_world_lookup(self):
         self.assertIn("sophie", self.drama.world.lookup)
         self.assertIn("kettle", self.drama.world.lookup)
-        self.assertIn("smoke cigarette", self.drama.world.lookup)
+        self.assertIn("smoke cigarette", self.drama.world.lookup, self.drama.world.lookup)

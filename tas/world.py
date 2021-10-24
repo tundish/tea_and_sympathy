@@ -31,6 +31,7 @@ from balladeer import Article
 from balladeer import Fruition
 from balladeer import Gesture
 from balladeer import Grouping
+from balladeer import Head
 from balladeer import Name
 from balladeer import Phrase
 from balladeer import Pronoun
@@ -108,9 +109,33 @@ class Tea(World):
                 description="{0.name} is a young woman from Manchester. She works as a nurse."
             ).set_state(Motivation.player, Location.bedroom),
             Gesture(
-                phrases=[Phrase(Verb("make"), Name("tea", Article("the", "")))]
-            ).set_state(Location.kitchen, Availability.removed, Fruition.inception),
+                "make tea",
+                head=Head(
+                    propose=[
+                        Phrase(
+                            Verb("make"),
+                            Name("tea", Article("the", ""))
+                        )
+                    ]
+                )
+            ).set_state(
+                Location.kitchen,
+                Availability.removed,
+                Fruition.inception
+            ),
             Gesture(
-                phrases=[Phrase(Verb("smoke", progressive="is smoking", perfect="smoked"), Name("cigarette"))]
-            ).set_state(Location.kitchen, Availability.removed, Fruition.inception),
+                "smoke cigarette",
+                head=Head(
+                    propose=[
+                        Phrase(
+                            Verb("smoke", progressive="is smoking", perfect="smoked"),
+                            Name("cigarette")
+                        )
+                    ]
+                )
+            ).set_state(
+                Location.kitchen,
+                Availability.removed,
+                Fruition.inception
+            ),
         ]
