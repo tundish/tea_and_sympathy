@@ -61,7 +61,7 @@ class Sympathy(Drama):
                 #"03_construction.rst",
                 #"04_transition.rst",
                 #"05_completion.rst",
-                #"06_discussion.rst",
+                "06_discussion.rst",
                 #"07_defaulted.rst",
                 #"08_withdrawn.rst",
                 #"09_cancelled.rst",
@@ -78,7 +78,7 @@ class Sympathy(Drama):
 
         self.active = self.active.union({
             self.do_again, self.do_look,
-            self.do_inception,
+            self.do_inception, self.do_discussion,
             self.do_help, self.do_history,
             self.do_quit
         })
@@ -108,7 +108,16 @@ class Sympathy(Drama):
         """
         # TODO: Create a memory of subject=player, object=obj.contents, state=?
         obj.state = Fruition.elaboration
-        self.active.discard(this)
+        self.active.discard(this) # TODO: Place other option removed.
+        return obj
+
+    def do_discussion(self, this, text, presenter, obj: "world.fruition[discussion]", *args, **kwargs):
+        """
+        {obj.suggest}
+        {obj.confirm}
+
+        """
+        obj.state = Fruition.discussion
         return obj
 
     def do_get(self, this, text, presenter, obj: "world.visible[Container]", *args, **kwargs):
@@ -168,8 +177,8 @@ class Sympathy(Drama):
                     cmds.append(cmd)
 
             if cmds:
-                if k in ("do_inception",):
-                    yield from ("* {0}".format(i) for i in cmds)
+                if k in ("do_inception", "do_discussion"):
+                    yield from ("* {0}".format(i) for i in cmds if i != str(tuple()))
                 else:
                     yield "* {0}".format(random.choice(cmds))
 

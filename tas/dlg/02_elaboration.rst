@@ -34,11 +34,26 @@ Make Tea
 
 .. condition:: GESTURE.label (\w*\W+tea)
 
-{0}
+|PLAYER_NAME| drops her ash into the bin and goes to the sink.
+She starts to wash the blue mug.
 
-About to make tea then.
+[PLAYER]_
 
-.. Ask her about Mattie (discussion) or just go ahead and make the tea (construction).
+    Do you want tea?
+
+[NPC]_
+
+    Er, yeah sure.
+
+|PLAYER_NAME| moves away to fetch a tea towel.
+
+[NPC]_
+
+    Shall I fill the kettle?
+
+.. Sophie counters. Go to discussion
+.. property:: GESTURE.state tas.world.Fruition.discussion
+
 
 Spark up
 --------
