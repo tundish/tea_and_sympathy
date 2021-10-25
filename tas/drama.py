@@ -29,6 +29,7 @@ import textwrap
 
 from balladeer import CommandParser
 from balladeer import Drama
+from balladeer import Fruition
 from balladeer import Gesture
 from balladeer import SceneScript
 
@@ -167,7 +168,7 @@ class Sympathy(Drama):
                     cmds.append(cmd)
 
             if cmds:
-                if k == "do_gesture":
+                if k in ("do_inception",):
                     yield from ("* {0}".format(i) for i in cmds)
                 else:
                     yield "* {0}".format(random.choice(cmds))

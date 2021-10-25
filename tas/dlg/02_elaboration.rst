@@ -29,18 +29,25 @@
 Elaboration
 ===========
 
-Sophie
-------
+Make Tea
+--------
 
-.. condition:: DRAMA.state 0
+.. condition:: GESTURE.label (\w*\W+tea)
 
 {0}
 
-Elaboration.
+About to make tea then.
 
-|NPC_NAME| has her boots on the table.
+.. Ask her about Mattie (discussion) or just go ahead and make the tea (construction).
 
-.. property:: DRAMA.state 1
+Spark up
+--------
+
+.. condition:: GESTURE.label (\w*\W+cig)
+
+About to make smoke then.
 
 .. Sophie getting uncomfortable. She doesn't like smoke (cancelled).
-.. Ask her about Mattie (discussion) or just go ahead and make the tea (construction).
+
+.. |NPC_NAME| property:: NPC.name
+.. |PLAYER_NAME| property:: PLAYER.name
