@@ -65,9 +65,9 @@ or maybe |OPTION_2_IMPERATIVE| |OPTION_2_ARTICLE| |OPTION_2_NOUN| instead.
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
 .. |PLAYER_SUBJECT| property:: PLAYER.names[0].pronoun.subject
-.. |OPTION_1_IMPERATIVE| property:: OPTION_1.phrases[0].verb.imperative
-.. |OPTION_1_ARTICLE| property:: OPTION_1.phrases[0].name.article.definite
-.. |OPTION_1_NOUN| property:: OPTION_1.phrases[0].name.noun
-.. |OPTION_2_IMPERATIVE| property:: OPTION_2.phrases[0].verb.imperative
-.. |OPTION_2_ARTICLE| property:: OPTION_2.phrases[0].name.article.indefinite
-.. |OPTION_2_NOUN| property:: OPTION_2.phrases[0].name.noun
+.. |OPTION_1_IMPERATIVE| property:: OPTION_1.head.propose[0].verb.imperative
+.. |OPTION_1_ARTICLE| property:: OPTION_1.head.propose[0].name.article.definite
+.. |OPTION_1_NOUN| property:: OPTION_1.head.propose[0].name.noun
+.. |OPTION_2_IMPERATIVE| property:: OPTION_2.head.propose[0].verb.imperative
+.. |OPTION_2_ARTICLE| property:: OPTION_2.head.propose[0].name.article.indefinite
+.. |OPTION_2_NOUN| property:: OPTION_2.head.propose[0].name.noun

@@ -102,7 +102,7 @@ class Tea(World):
             ).set_state(20, Location.kitchen, Availability.fixture),
             Character(
                 names=[Name("Sophie", Article("", ""), Pronoun("she", "her", "herself", "hers"))],
-                description="{0.name} goes to art college."
+                description="{0.name} came here from Berkshire. She goes to Art College."
             ).set_state(Motivation.acting, Location.kitchen),
             Character(
                 names=[Name("Louise", Article("", ""), Pronoun("she", "her", "herself", "hers"))],

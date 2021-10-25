@@ -77,7 +77,7 @@ class Sympathy(Drama):
 
         self.active = self.active.union({
             self.do_again, self.do_look,
-            self.do_gesture, self.do_go,
+            self.do_gesture,
             self.do_help, self.do_history,
             self.do_quit
         })
@@ -203,6 +203,7 @@ class Sympathy(Drama):
         """
         self.state = Operation.paused
         self.active.add(self.do_get)
+        self.active.add(self.do_go)
         self.active.add(self.do_inspect)
         for i in self.world.visible.each:
             if i is not self.world.player:

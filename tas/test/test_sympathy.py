@@ -82,6 +82,11 @@ class SympathyTests(unittest.TestCase):
         text = None
         presenter = None
         mug = next(iter(self.drama.world.lookup["mug"]))
+
+        self.assertNotIn(self.drama.do_get, self.drama.active)
+        self.assertNotIn(self.drama.do_go, self.drama.active)
+        self.assertNotIn(self.drama.do_inspect, self.drama.active)
+
         for n, cmd in enumerate(cmds):
             presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text, previous=presenter)
             with self.subTest(n=n, cmd=cmd, phase="post"):
@@ -91,6 +96,7 @@ class SympathyTests(unittest.TestCase):
                     self.assertIn("mug", text.lower())
 
         self.assertIn(self.drama.do_get, self.drama.active)
+        self.assertIn(self.drama.do_go, self.drama.active)
         self.assertIn(self.drama.do_inspect, self.drama.active)
         self.assertIn(mug, self.drama.world.visible.each)
 
@@ -119,6 +125,7 @@ class SympathyTests(unittest.TestCase):
         cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]
         text = None
         presenter = None
+        self.drama.active.add(self.drama.do_go)
         for n, cmd in enumerate(cmds):
             presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text, previous=presenter)
 

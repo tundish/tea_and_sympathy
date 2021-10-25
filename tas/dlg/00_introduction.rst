@@ -80,6 +80,7 @@ From semi-darkness, the bare floor is suddenly bathed in tobacco and tungsten.
 |PLAYER_NAME|, in her blue cotton pyjamas, pads clumsily into the hallway.
 
 .. property:: DRAMA.state 1
+.. property:: DRAMA.prompt To wait for a moment, simply hit Return.
 
 Between
 -------
@@ -117,9 +118,10 @@ Kitchen
 The Kitchen is less gloomy that the rest of the house.
 It has mostly white walls. The shaky cupboards were painted white too, several years ago.
 
-|NPC_NAME| has her boots on the table.
+**Sophie** has her boots on the table.
 
 .. property:: DRAMA.state 1
+.. property:: DRAMA.prompt ?
 
 Sophie
 ------
@@ -156,6 +158,11 @@ Phone
 [NPC]_
 
     I can't though, it's the Electricity.
+    You have to have it to pay.
+
+[NPC]_
+
+    I'm trying to catch Matthew.
 
 .. property:: DRAMA.state 0
 .. property:: DRAMA.state tas.types.Journey.ordeal
