@@ -125,7 +125,9 @@ class SympathyTests(unittest.TestCase):
         cmds = [
             "look", "get mug", "hall", "kitchen", "", "", "", "help",
             "make tea", "look",
-            "", "help"
+            "", "help",
+            "help",
+            "louise fills the kettle",
         ]
         text = None
         presenter = None
@@ -140,6 +142,11 @@ class SympathyTests(unittest.TestCase):
                     self.assertIn("smoke cigarette", text.lower())
                 elif n == 11:
                     self.assertEqual(1, len(self.drama.world.fruition["inception"]))
+                    self.assertEqual(1, len(self.drama.world.fruition["discussion"]))
+                elif n == 12:
+                    self.assertEqual(1, len(self.drama.world.fruition["discussion"]))
+                    self.assertIn("louise", text.lower())
+                    self.assertIn("sophie", text.lower())
 
     def test_go(self):
         cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]

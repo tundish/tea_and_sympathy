@@ -44,8 +44,8 @@ But an answer is required.
     Shall I fill the kettle?
 
 
-.. property:: GESTURE.suggest Louise fills the kettle
-.. property:: GESTURE.confirm Sophie fills the kettle
+.. property:: GESTURE.suggest Louise fills kettle
+.. property:: GESTURE.confirm Sophie fills kettle
 
 .. Ask her about Mattie (discussion) or just go ahead and make the tea (construction).
 .. a minor squabble results in Sophie making the tea instead (construction).

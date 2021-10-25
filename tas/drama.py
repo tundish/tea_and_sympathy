@@ -117,6 +117,10 @@ class Sympathy(Drama):
         {obj.confirm}
 
         """
+        print("Text: ", text)
+        print("Trns: ", obj.transitions)
+        print(obj.suggest)
+        print(obj.confirm)
         obj.state = Fruition.discussion
         return obj
 
