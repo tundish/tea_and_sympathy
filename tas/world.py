@@ -62,8 +62,10 @@ class Tea(World):
 
     @property
     def fruition(self):
-        # TODO: Grouping of Fruition.name: [Gesture]
-        return {}
+        return Grouping(
+            list,
+            {i.get_state(Fruition).name: i for i in self.visible["Gesture"]}
+        )
 
     @property
     def visible(self):

@@ -56,7 +56,7 @@ class Sympathy(Drama):
             metadata={},
             paths=[
                 "01_inception.rst",
-                #"02_elaboration.rst",
+                "02_elaboration.rst",
                 #"03_construction.rst",
                 #"04_transition.rst",
                 #"05_completion.rst",
@@ -77,7 +77,7 @@ class Sympathy(Drama):
 
         self.active = self.active.union({
             self.do_again, self.do_look,
-            self.do_gesture,
+            self.do_inception,
             self.do_help, self.do_history,
             self.do_quit
         })
@@ -100,12 +100,14 @@ class Sympathy(Drama):
         self.state = self.next_states(n)[0]
         return "again..."
 
-    def do_gesture(self, this, text, presenter, obj: "world.visible[Gesture]", *args, **kwargs):
+    def do_inception(self, this, text, presenter, obj: "world.fruition[inception]", *args, **kwargs):
         """
         {obj!s}
 
         """
         # TODO: Create a memory of subject=player, object=obj.contents, state=?
+        obj.state = Fruition.elaboration
+        self.active.discard(this)
         return obj
 
     def do_get(self, this, text, presenter, obj: "world.visible[Container]", *args, **kwargs):
@@ -207,7 +209,10 @@ class Sympathy(Drama):
         self.active.add(self.do_inspect)
         for i in self.world.visible.each:
             if i is not self.world.player:
-                yield "* {0.names[0].noun}".format(i)
+                try:
+                    yield "* {0.names[0].noun}".format(i)
+                except AttributeError:
+                    pass  # Expect a gesture
 
         yield from ("* {0}".format(i.label.title()) for i in self.world.player.location.options)
 

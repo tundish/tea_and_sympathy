@@ -162,7 +162,7 @@ Phone
 
 [NPC]_
 
-    I'm trying to catch Matthew.
+    Trying to catch Matthew.
 
 .. property:: DRAMA.state 0
 .. property:: DRAMA.state tas.types.Journey.ordeal

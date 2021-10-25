@@ -121,6 +121,13 @@ class SympathyTests(unittest.TestCase):
                 elif n == 2:
                     self.assertEqual(Location.inventory, mug.get_state(Location), text)
 
+    def test_make_tea(self):
+        cmds = ["look", "get mug", "hall", "kitchen", "", "", "make tea", "look"]
+        text = None
+        presenter = None
+        for n, cmd in enumerate(cmds):
+            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text, previous=presenter)
+
     def test_go(self):
         cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]
         text = None
