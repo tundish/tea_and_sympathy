@@ -58,7 +58,7 @@ class Sympathy(Drama):
             paths=[
                 "01_inception.rst",
                 "02_elaboration.rst",
-                #"03_construction.rst",
+                "03_construction.rst",
                 #"04_transition.rst",
                 #"05_completion.rst",
                 "06_discussion.rst",
