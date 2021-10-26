@@ -165,7 +165,7 @@ class Sympathy(Drama):
             yield f"{self.world.player.name} looks upward."
             yield "The stairs lead to an attic gallery, and Sophie's room."
             yield f"{self.world.player.name} hesitates."
-            yield "She doesn't want to go up there."
+            yield "{0} doesn't want to go up there.".format(self.world.player.names[0].pronoun.subject.title())
         else:
             gone = (i for i in self.history if i.name == this.__name__)
             never_been = locn != Location.bedroom and not any(i for i in gone if i.kwargs["locn"] == locn)
