@@ -123,11 +123,12 @@ class SympathyTests(unittest.TestCase):
 
     def test_make_tea(self):
         cmds = [
-            "look", "get mug", "hall", "kitchen", "", "", "", "help",
+            "look", "get mug", "inspect mug", "hall", "kitchen", "", "", "", "help",
             "make tea", "look",
             "", "help",
             "help",
             "louise fills the kettle",
+            "",
         ]
         text = None
         presenter = None
@@ -135,18 +136,31 @@ class SympathyTests(unittest.TestCase):
             presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text, previous=presenter)
 
             with self.subTest(n=n, cmd=cmd, phase="post"):
-                if n == 7:
+                if n == 0:
+                    self.assertNotIn(self.drama.do_propose, self.drama.active)
+                elif n == 2:
+                    self.assertIn(self.drama.do_propose, self.drama.active)
+                elif n == 8:
                     self.assertEqual("help", cmd)
-                    self.assertEqual(2, len(self.drama.world.fruition["inception"]))
+                    self.assertEqual(2, len(self.drama.world.fruition["inception"]), self.drama.world.fruition)
                     self.assertIn("make tea", text.lower())
                     self.assertIn("smoke cigarette", text.lower())
-                elif n == 11:
+                elif n == 12:
+                    self.assertEqual("help", cmd)
                     self.assertEqual(1, len(self.drama.world.fruition["inception"]))
                     self.assertEqual(1, len(self.drama.world.fruition["discussion"]))
-                elif n == 12:
+                elif n == 13:
+                    self.assertEqual("help", cmd)
                     self.assertEqual(1, len(self.drama.world.fruition["discussion"]))
                     self.assertIn("louise", text.lower())
                     self.assertIn("sophie", text.lower())
+                    self.assertEqual(0, next(iter(self.drama.world.lookup["sophie"])).state)
+                elif n == 14:
+                    self.assertEqual(1, len(self.drama.world.fruition["elaboration"]))
+                    #print(self.drama.world.player.memories)
+                elif n == 15:
+                    self.assertEqual(1, next(iter(self.drama.world.lookup["sophie"])).state)
+                    self.assertEqual(1, len(self.drama.world.fruition["construction"]))
 
     def test_go(self):
         cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]

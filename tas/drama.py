@@ -78,7 +78,7 @@ class Sympathy(Drama):
 
         self.active = self.active.union({
             self.do_again, self.do_look,
-            self.do_propose, self.do_counter,
+            self.do_counter,
             self.do_confirm, self.do_disavow,
             self.do_help, self.do_history,
             self.do_quit
@@ -106,8 +106,6 @@ class Sympathy(Drama):
         {obj.counter}
 
         """
-        print("Text: ", text)
-        print("Trns: ", obj.transitions)
         obj.state = Fruition.elaboration
         return obj
 
@@ -116,8 +114,6 @@ class Sympathy(Drama):
         {obj.confirm}
 
         """
-        print("Text: ", text)
-        print("Trns: ", obj.transitions)
         obj.state = Fruition.construction
         return obj
 
@@ -126,8 +122,6 @@ class Sympathy(Drama):
         {obj.disavow}
 
         """
-        print("Text: ", text)
-        print("Trns: ", obj.transitions)
         obj.state = Fruition.defaulted
         return obj
 
@@ -217,6 +211,9 @@ class Sympathy(Drama):
         inspect {obj.names[0].noun}
 
         """
+        if obj.names[0].noun.lower() == "mug":
+            self.active.add(self.do_propose)
+
         self.state = Operation.paused
         yield obj.description.format(obj, **self.facts)
 

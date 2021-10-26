@@ -33,6 +33,7 @@ Make Tea
 --------
 
 .. condition:: GESTURE.label (\w*\W+tea)
+.. condition:: DRAMA.history[0].name do_propose
 
 |PLAYER_NAME| drops her ash into the bin and goes to the sink.
 She starts to wash the blue mug.
@@ -47,13 +48,34 @@ She starts to wash the blue mug.
 
 |PLAYER_NAME| moves away to fetch a tea towel.
 
+.. Sophie suggests something.
+
 [NPC]_
 
     Shall I fill the kettle?
 
-.. Sophie counters. Go to discussion
 .. property:: GESTURE.state tas.world.Fruition.discussion
 
+No job for Sophie
+-----------------
+
+.. condition:: GESTURE.label (\w*\W+tea)
+.. condition:: DRAMA.history[0].name do_counter
+
+{0}
+
+[PLAYER]_
+
+    Don't worry, I'll do it.
+
+|NPC_NAME| is back on her phone.
+
+[NPC]_
+
+    They are doing it every day now. I swear to God.
+
+.. property:: NPC.state 1
+.. property:: GESTURE.state tas.world.Fruition.construction
 
 Spark up
 --------
