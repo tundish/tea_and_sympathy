@@ -78,7 +78,8 @@ class Sympathy(Drama):
 
         self.active = self.active.union({
             self.do_again, self.do_look,
-            self.do_inception, self.do_discussion,
+            self.do_propose, self.do_counter,
+            self.do_confirm, self.do_disavow,
             self.do_help, self.do_history,
             self.do_quit
         })
@@ -90,6 +91,46 @@ class Sympathy(Drama):
     def interlude(self, folder, index, *args, **kwargs):
         return {}
 
+    def do_propose(self, this, text, presenter, obj: "world.fruition[inception]", *args, **kwargs):
+        """
+        {obj!s}
+
+        """
+        # TODO: Create a memory of subject=player, object=obj.contents, state=?
+        obj.state = Fruition.elaboration
+        self.active.discard(this) # TODO: Place other option removed.
+        return obj
+
+    def do_counter(self, this, text, presenter, obj: "world.fruition[discussion]", *args, **kwargs):
+        """
+        {obj.counter}
+
+        """
+        print("Text: ", text)
+        print("Trns: ", obj.transitions)
+        obj.state = Fruition.elaboration
+        return obj
+
+    def do_confirm(self, this, text, presenter, obj: "world.fruition[discussion]", *args, **kwargs):
+        """
+        {obj.confirm}
+
+        """
+        print("Text: ", text)
+        print("Trns: ", obj.transitions)
+        obj.state = Fruition.construction
+        return obj
+
+    def do_disavow(self, this, text, presenter, obj: "world.fruition[construction]", *args, **kwargs):
+        """
+        {obj.disavow}
+
+        """
+        print("Text: ", text)
+        print("Trns: ", obj.transitions)
+        obj.state = Fruition.defaulted
+        return obj
+
     def do_again(self, this, text, presenter, *args, **kwargs):
         """
         again | back
@@ -100,29 +141,6 @@ class Sympathy(Drama):
         ))) + 1
         self.state = self.next_states(n)[0]
         return "again..."
-
-    def do_inception(self, this, text, presenter, obj: "world.fruition[inception]", *args, **kwargs):
-        """
-        {obj!s}
-
-        """
-        # TODO: Create a memory of subject=player, object=obj.contents, state=?
-        obj.state = Fruition.elaboration
-        self.active.discard(this) # TODO: Place other option removed.
-        return obj
-
-    def do_discussion(self, this, text, presenter, obj: "world.fruition[discussion]", *args, **kwargs):
-        """
-        {obj.suggest}
-        {obj.confirm}
-
-        """
-        print("Text: ", text)
-        print("Trns: ", obj.transitions)
-        print(obj.suggest)
-        print(obj.confirm)
-        obj.state = Fruition.discussion
-        return obj
 
     def do_get(self, this, text, presenter, obj: "world.visible[Container]", *args, **kwargs):
         """
@@ -181,7 +199,7 @@ class Sympathy(Drama):
                     cmds.append(cmd)
 
             if cmds:
-                if k in ("do_inception", "do_discussion"):
+                if k in ("do_propose", "do_decline"):
                     yield from ("* {0}".format(i) for i in cmds if i != str(tuple()))
                 else:
                     yield "* {0}".format(random.choice(cmds))
