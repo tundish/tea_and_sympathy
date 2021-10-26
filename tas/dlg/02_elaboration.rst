@@ -74,7 +74,13 @@ No job for Sophie
 
     They are doing it every day now. I swear to God.
 
-.. property:: NPC.state 1
+.. memory::  1
+   :subject: PLAYER
+   :object:  NPC
+
+   |NPC_NAME| offers to help with the tea.
+   |PLAYER_NAME| would rather she stays out of the way.
+
 .. property:: GESTURE.state tas.world.Fruition.construction
 
 Spark up

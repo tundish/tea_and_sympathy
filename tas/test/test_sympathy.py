@@ -157,10 +157,10 @@ class SympathyTests(unittest.TestCase):
                     self.assertEqual(0, next(iter(self.drama.world.lookup["sophie"])).state)
                 elif n == 14:
                     self.assertEqual(1, len(self.drama.world.fruition["elaboration"]))
-                    #print(self.drama.world.player.memories)
                 elif n == 15:
                     self.assertEqual(1, next(iter(self.drama.world.lookup["sophie"])).state)
                     self.assertEqual(1, len(self.drama.world.fruition["construction"]))
+                    self.assertTrue(self.drama.world.player.memories)
 
     def test_go(self):
         cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]
