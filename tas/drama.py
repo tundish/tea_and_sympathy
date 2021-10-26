@@ -193,7 +193,7 @@ class Sympathy(Drama):
                     cmds.append(cmd)
 
             if cmds:
-                if k in ("do_propose", "do_decline"):
+                if k in ("do_propose", "do_counter", "do_confirm", "do_disavow"):
                     yield from ("* {0}".format(i) for i in cmds if i != str(tuple()))
                 else:
                     yield "* {0}".format(random.choice(cmds))

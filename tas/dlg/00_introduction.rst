@@ -49,7 +49,7 @@ Listen
 {0}
 
 |PLAYER_NAME| listens for a moment.
-Not alone in the house. Is there going to be a problem?
+She's not alone in the house. Is there going to be a problem?
 
 .. property:: DRAMA.prompt Type a command to continue.
 .. property:: DRAMA.state 2
@@ -115,7 +115,7 @@ Kitchen
 
 {0}
 
-The Kitchen is less gloomy that the rest of the house.
+The Kitchen is less gloomy than the rest of the house.
 It has mostly white walls. The shaky cupboards were painted white too, several years ago.
 
 **Sophie** has her boots on the table.
