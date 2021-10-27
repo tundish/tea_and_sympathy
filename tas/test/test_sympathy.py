@@ -128,12 +128,18 @@ class SympathyTests(unittest.TestCase):
             "", "help",
             "help",
             "no",
-            "",
-        ]
+        ] + [""] * 1 + [
+        ]  # FIXME: frame operation
         text = None
         presenter = None
         for n, cmd in enumerate(cmds):
-            presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text, previous=presenter)
+            try:
+                presenter, animation, lines, text = self.turn(
+                    cmd, self.drama, self.settings, text, previous=presenter
+                )
+            except AttributeError:
+                print(n, cmd, animation)
+                raise
 
             with self.subTest(n=n, cmd=cmd, phase="post"):
                 if n == 0:
@@ -161,6 +167,8 @@ class SympathyTests(unittest.TestCase):
                     self.assertEqual(1, next(iter(self.drama.world.lookup["sophie"])).state)
                     self.assertEqual(1, len(self.drama.world.fruition["construction"]))
                     self.assertTrue(self.drama.world.player.memories)
+                elif n > 20:
+                    print(text)
 
     def test_go(self):
         cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]

@@ -32,8 +32,6 @@ Cancelled
 Drastic measures
 ----------------
 
-.. condition:: DRAMA.state 0
-
 |NPC_NAME| flinches as she feels, and in her next conscious moment recognises, the sound of breaking china
 on a tiled floor.
 
