@@ -73,7 +73,7 @@ Hallway
 .. condition:: PLAYER.state tas.types.Location.hall
 .. condition:: DRAMA.state 0
 
-We get the squeak of a door.
+There is the squeak of a door.
 
 From semi-darkness, the bare floor is suddenly bathed in tobacco and tungsten.
 
@@ -158,11 +158,9 @@ Phone
 [NPC]_
 
     I can't though, it's the Electricity.
-    You have to have it to pay.
+    You have to have it so you can pay.
 
-[NPC]_
-
-    Trying to catch Matthew.
+    I'm trying to get hold of Matthew.
 
 .. property:: DRAMA.state 0
 .. property:: DRAMA.state tas.types.Journey.ordeal

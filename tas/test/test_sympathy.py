@@ -152,8 +152,8 @@ class SympathyTests(unittest.TestCase):
                 elif n == 13:
                     self.assertEqual("help", cmd)
                     self.assertEqual(1, len(self.drama.world.fruition["discussion"]))
-                    self.assertIn("louise", text.lower())
-                    self.assertIn("sophie", text.lower())
+                    self.assertIn("yes", text.lower())
+                    self.assertIn("no", text.lower())
                     self.assertEqual(0, next(iter(self.drama.world.lookup["sophie"])).state)
                 elif n == 14:
                     self.assertEqual(1, len(self.drama.world.fruition["elaboration"]))

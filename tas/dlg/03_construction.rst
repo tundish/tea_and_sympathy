@@ -41,7 +41,7 @@ Sophie helps out
 
 [PLAYER]_
 
-    Yeah, if you want to do that.
+    Yes, if you want to do that. I suppose.
 
 |NPC_NAME| fills the Kettle at the sink.
 
@@ -65,20 +65,27 @@ Sophie helps out
 
 [NPC]_
 
-    I have to go to in to work.
+    I have to go in to college.
 
 .. property:: GESTURE.state 1
+.. property:: DRAMA.state tas.types.Operation.frames
 
 1
 -
 
 .. condition:: GESTURE.state 1
 
-{0}
+[PLAYER]_
+
+    On a Sunday?
+
+[NPC]_
+
+    It's the only time I can use the kiln.
 
 [PLAYER]_
 
-    Are there even any buses?
+    How are you going to get there?
 
 [NPC]_
 
@@ -87,6 +94,7 @@ Sophie helps out
     He's not answering though.
 
 .. property:: GESTURE.state 2
+.. property:: DRAMA.state tas.types.Operation.prompt
 
 2
 -
@@ -99,14 +107,15 @@ Sophie helps out
 
     I'm gonna be late.
 
+    He'd better have a good excuse.
+
 .. property:: GESTURE.state 3
+.. property:: DRAMA.state tas.types.Operation.frames
 
 3
 -
 
 .. condition:: GESTURE.state 3
-
-{0}
 
 [NPC]_
 
@@ -117,6 +126,7 @@ Sophie helps out
     Couldn't sleep.
 
 .. property:: GESTURE.state 4
+.. property:: DRAMA.state tas.types.Operation.prompt
 
 4
 -
@@ -125,13 +135,15 @@ Sophie helps out
 
 {0}
 
-[NPC]_
+[PLAYER]_
+
+    I didn't know where you were last night.
 
     Did you go out?
 
-[PLAYER]_
+[NPC]_
 
-    Went for drinks after work. So tedious though.
+    Film festival. Not great though.
 
     I wanted an early night.
 
@@ -146,7 +158,7 @@ Sophie helps out
 
 [PLAYER]_
 
-    You didn't go over to Mattie's then?
+    You didn't see Mattie then?
 
 [NPC]_
 
@@ -178,6 +190,8 @@ Sophie helps out
 
     He's trying to save up some money.
 
+    He says he's giving up smoking but I don't believe him.
+
 .. property:: GESTURE.state 7
 
 7
@@ -189,13 +203,16 @@ Sophie helps out
 
 [PLAYER]_
 
-    Maybe he's saving up for a ring.
+    Maybe he's getting a ring.
 
 [NPC]_
 
-    Saving up for another moped, more likely.
+    Getting a bigger moped.
+
+    But I want go on holiday this year.
 
 .. property:: GESTURE.state 8
+.. property:: DRAMA.state tas.types.Operation.frames
 
 8
 -
@@ -204,9 +221,32 @@ Sophie helps out
 
 {0}
 
+[PLAYER]_
+
+    Is he working this morning?
+
 [NPC]_
 
-    Kettle's boiling.
+    Not usually.
+
+    I'll have to try his deliveries number.
+
+.. property:: GESTURE.state 9
+
+9
+-
+
+.. condition:: GESTURE.state 9
+
+[NPC]_
+
+    He hates it when I call him on his work phone.
+
+    Anyway. He'd better answer this time.
+
+.. property:: GESTURE.state Fruition.transition
+.. property:: DRAMA.state tas.types.Operation.prompt
+
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name

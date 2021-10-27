@@ -44,7 +44,7 @@ She starts to wash the blue mug.
 
 [NPC]_
 
-    Er, yeah sure.
+    Yeah sure.
 
 |PLAYER_NAME| moves away to fetch a tea towel.
 
@@ -72,7 +72,7 @@ No job for Sophie
 
 [NPC]_
 
-    They are doing it every day now. I swear to God.
+    They are texting me every day now. I swear to God.
 
 .. memory::  1
    :subject: PLAYER
