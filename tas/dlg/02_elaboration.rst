@@ -62,8 +62,6 @@ No job for Sophie
 .. condition:: GESTURE.label (\w*\W+tea)
 .. condition:: DRAMA.history[0].name do_counter
 
-{0}
-
 [PLAYER]_
 
     Don't worry, I'll do it.

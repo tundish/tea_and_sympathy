@@ -37,8 +37,6 @@ Sophie helps out
 .. condition:: GESTURE.label (\w*\W+tea)
 .. condition:: DRAMA.history[0].name do_confirm
 
-{0}
-
 [PLAYER]_
 
     Yes, if you want to do that. I suppose.
@@ -55,7 +53,7 @@ Sophie helps out
 0
 -
 
-.. condition:: GESTURE.state 0
+.. condition:: DRAMA.state 0
 
 {0}
 
@@ -67,13 +65,13 @@ Sophie helps out
 
     I have to go in to college.
 
-.. property:: GESTURE.state 1
+.. property:: DRAMA.state 1
 .. property:: DRAMA.state tas.types.Operation.frames
 
 1
 -
 
-.. condition:: GESTURE.state 1
+.. condition:: DRAMA.state 1
 
 [PLAYER]_
 
@@ -93,13 +91,13 @@ Sophie helps out
 
     He's not answering though.
 
-.. property:: GESTURE.state 2
+.. property:: DRAMA.state 2
 .. property:: DRAMA.state tas.types.Operation.prompt
 
 2
 -
 
-.. condition:: GESTURE.state 2
+.. condition:: DRAMA.state 2
 
 {0}
 
@@ -109,13 +107,13 @@ Sophie helps out
 
     He'd better have a good excuse.
 
-.. property:: GESTURE.state 3
+.. property:: DRAMA.state 3
 .. property:: DRAMA.state tas.types.Operation.frames
 
 3
 -
 
-.. condition:: GESTURE.state 3
+.. condition:: DRAMA.state 3
 
 [NPC]_
 
@@ -125,13 +123,12 @@ Sophie helps out
 
     Couldn't sleep.
 
-.. property:: GESTURE.state 4
-.. property:: DRAMA.state tas.types.Operation.prompt
+.. property:: DRAMA.state 4
 
 4
 -
 
-.. condition:: GESTURE.state 4
+.. condition:: DRAMA.state 4
 
 {0}
 
@@ -147,12 +144,13 @@ Sophie helps out
 
     I wanted an early night.
 
-.. property:: GESTURE.state 5
+.. property:: DRAMA.state 5
+.. property:: DRAMA.state tas.types.Operation.prompt
 
 5
 -
 
-.. condition:: GESTURE.state 5
+.. condition:: DRAMA.state 5
 
 {0}
 
@@ -174,13 +172,13 @@ Sophie helps out
 
     Ha ha ha.
 
-.. property:: GESTURE.state 6
+.. property:: DRAMA.state 6
 
 
 6
 -
 
-.. condition:: GESTURE.state 6
+.. condition:: DRAMA.state 6
 
 {0}
 
@@ -192,34 +190,32 @@ Sophie helps out
 
     He says he's giving up smoking but I don't believe him.
 
-.. property:: GESTURE.state 7
+.. property:: DRAMA.state 7
 
 7
 -
 
-.. condition:: GESTURE.state 7
+.. condition:: DRAMA.state 7
 
 {0}
 
 [PLAYER]_
 
-    Maybe he's getting a ring.
+    Sounds like he's getting a ring.
 
 [NPC]_
 
     Getting a bigger moped.
 
-    But I want go on holiday this year.
+    But I want to go on holiday this year.
 
-.. property:: GESTURE.state 8
+.. property:: DRAMA.state 8
 .. property:: DRAMA.state tas.types.Operation.frames
 
 8
 -
 
-.. condition:: GESTURE.state 8
-
-{0}
+.. condition:: DRAMA.state 8
 
 [PLAYER]_
 
@@ -231,12 +227,12 @@ Sophie helps out
 
     I'll have to try his deliveries number.
 
-.. property:: GESTURE.state 9
+.. property:: DRAMA.state 9
 
 9
 -
 
-.. condition:: GESTURE.state 9
+.. condition:: DRAMA.state 9
 
 [NPC]_
 
@@ -244,7 +240,7 @@ Sophie helps out
 
     Anyway. He'd better answer this time.
 
-.. property:: GESTURE.state Fruition.transition
+.. property:: DRAMA.state Fruition.transition
 .. property:: DRAMA.state tas.types.Operation.prompt
 
 

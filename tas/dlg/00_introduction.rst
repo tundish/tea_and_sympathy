@@ -77,7 +77,7 @@ There is the squeak of a door.
 
 From semi-darkness, the bare floor is suddenly bathed in tobacco and tungsten.
 
-|PLAYER_NAME|, in her blue cotton pyjamas, pads clumsily into the hallway.
+|PLAYER_NAME|, in her blue cotton pyjamas, stumbles clumsily into the hallway.
 
 .. property:: DRAMA.state 1
 .. property:: DRAMA.prompt To wait for a moment, simply hit Return.

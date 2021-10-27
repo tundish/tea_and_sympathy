@@ -42,10 +42,11 @@ Sophie
 
 |NPC_NAME| has her boots on the table.
 
-|PLAYER_NAME| notices she is wearing her best outfit.
-A long-sleeved black fishnet top, and a leather bodice. Black woollen miniskirt and leggings.
-
 Her long black hair is a bit tangled, but sometimes she does that on purpose.
+
+.. property:: NPC.description   |PLAYER_NAME| notices she is wearing her best outfit.
+                                A long-sleeved black fishnet top, and a leather bodice.
+                                Black woollen miniskirt and leggings.
 
 .. property:: DRAMA.state 1
 .. property:: OPTION_1.state tas.types.Availability.allowed
