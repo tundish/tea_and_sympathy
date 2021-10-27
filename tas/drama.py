@@ -60,7 +60,7 @@ class Sympathy(Drama):
                 "02_elaboration.rst",
                 "03_construction.rst",
                 "04_transition.rst",
-                #"05_completion.rst",
+                "05_completion.rst",
                 "06_discussion.rst",
                 #"07_defaulted.rst",
                 #"08_withdrawn.rst",
