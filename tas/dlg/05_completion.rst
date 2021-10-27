@@ -32,10 +32,10 @@ Completion
 Denouement
 ----------
 
-|NPC_NAME| looks up from her phone to meet the shocked face of |PLAYER_NAME|.
+|NPC_NAME| looks up from her phone to meet the frightened face of |PLAYER_NAME|.
 Through the open door, a musical ring tone is clearly to be heard coming from her bedroom.
 
-At first there is silence.
+In the Kitchen at first there is silence.
 
 [PLAYER]_
 
