@@ -79,6 +79,7 @@ No job for Sophie
    |NPC_NAME| offers to help with the tea.
    |PLAYER_NAME| would rather she stays out of the way.
 
+.. property:: DRAMA.state 0
 .. property:: GESTURE.state tas.world.Fruition.construction
 
 Spark up

@@ -107,30 +107,13 @@ Sophie helps out
 
     He'd better have a good excuse.
 
-.. property:: DRAMA.state 3
-.. property:: DRAMA.state tas.types.Operation.frames
-
-3
--
-
-.. condition:: DRAMA.state 3
-
-[NPC]_
-
-    What are you doing up then?
-
-[PLAYER]_
-
-    Couldn't sleep.
-
 .. property:: DRAMA.state 4
+.. property:: DRAMA.state tas.types.Operation.frames
 
 4
 -
 
 .. condition:: DRAMA.state 4
-
-{0}
 
 [PLAYER]_
 
@@ -142,7 +125,7 @@ Sophie helps out
 
     Film festival. Not great though.
 
-    I wanted an early night.
+    So another late one.
 
 .. property:: DRAMA.state 5
 .. property:: DRAMA.state tas.types.Operation.prompt
@@ -168,9 +151,7 @@ Sophie helps out
 
     Unreliable is about the best you can hope for.
 
-[NPC]_
-
-    Ha ha ha.
+|NPC_NAME| does not see the funny side.
 
 .. property:: DRAMA.state 6
 
@@ -190,27 +171,7 @@ Sophie helps out
 
     He says he's giving up smoking but I don't believe him.
 
-.. property:: DRAMA.state 7
-
-7
--
-
-.. condition:: DRAMA.state 7
-
-{0}
-
-[PLAYER]_
-
-    Sounds like he's getting a ring.
-
-[NPC]_
-
-    Getting a bigger moped.
-
-    But I want to go on holiday this year.
-
 .. property:: DRAMA.state 8
-.. property:: DRAMA.state tas.types.Operation.frames
 
 8
 -
@@ -228,6 +189,7 @@ Sophie helps out
     I'll have to try his deliveries number.
 
 .. property:: DRAMA.state 9
+.. property:: DRAMA.state tas.types.Operation.prompt
 
 9
 -
@@ -240,8 +202,8 @@ Sophie helps out
 
     Anyway. He'd better answer this time.
 
-.. property:: DRAMA.state Fruition.transition
-.. property:: DRAMA.state tas.types.Operation.prompt
+.. property:: DRAMA.state 0
+.. property:: GESTURE.state tas.world.Fruition.transition
 
 
 .. |NPC_NAME| property:: NPC.name

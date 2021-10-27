@@ -127,7 +127,7 @@ class SympathyTests(unittest.TestCase):
             "make tea", "look",
             "", "help",
             "help",
-            "louise fills the kettle",
+            "no",
             "",
         ]
         text = None

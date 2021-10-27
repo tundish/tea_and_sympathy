@@ -59,12 +59,12 @@ class Sympathy(Drama):
                 "01_inception.rst",
                 "02_elaboration.rst",
                 "03_construction.rst",
-                #"04_transition.rst",
+                "04_transition.rst",
                 #"05_completion.rst",
                 "06_discussion.rst",
                 #"07_defaulted.rst",
                 #"08_withdrawn.rst",
-                #"09_cancelled.rst",
+                "09_cancelled.rst",
                 #"10_resolution.rst",
                 #"11_conclusion.rst",
                 "12_intervention.rst",
@@ -80,6 +80,7 @@ class Sympathy(Drama):
             self.do_again, self.do_look,
             self.do_counter,
             self.do_confirm, self.do_disavow,
+            self.do_abandon,
             self.do_help, self.do_history,
             self.do_quit
         })
@@ -123,6 +124,14 @@ class Sympathy(Drama):
 
         """
         obj.state = Fruition.defaulted
+        return obj
+
+    def do_abandon(self, this, text, presenter, obj: "world.fruition[transition]", *args, **kwargs):
+        """
+        {obj.abandon}
+
+        """
+        obj.state = Fruition.cancelled
         return obj
 
     def do_again(self, this, text, presenter, *args, **kwargs):
@@ -193,7 +202,7 @@ class Sympathy(Drama):
                     cmds.append(cmd)
 
             if cmds:
-                if k in ("do_propose", "do_counter", "do_confirm", "do_disavow"):
+                if k in ("do_propose", "do_counter", "do_confirm", "do_disavow", "do_abandon"):
                     yield from ("* {0}".format(i) for i in cmds if i != str(tuple()))
                 else:
                     yield "* {0}".format(random.choice(cmds))
