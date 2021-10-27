@@ -33,7 +33,7 @@ Denouement
 ----------
 
 |NPC_NAME| looks up from her phone to meet the frightened face of |PLAYER_NAME|.
-Through the open door, a musical ring tone is clearly to be heard coming from her bedroom.
+Through the open door, a musical ring tone is clearly to be heard coming from her room.
 
 In the Kitchen at first there is silence.
 
