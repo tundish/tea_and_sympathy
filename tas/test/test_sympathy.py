@@ -28,6 +28,7 @@ from tas.drama import Sympathy
 from tas.types import Container
 from tas.types import Journey
 from tas.types import Location
+from tas.types import Operation
 from tas.world import Tea
 
 
@@ -40,13 +41,20 @@ class SympathyTests(unittest.TestCase):
             drama.folder, text, facts=drama.facts,
             ensemble=drama.ensemble + [drama, settings]
         )
-        animations = (
-            presenter.animate(
-                f, dwell=presenter.dwell, pause=presenter.pause
-            ) for f in presenter.frames
-        )
-        animation = next(filter(None, animations))
-        lines = list(Renderer.render_frame_to_terminal(animation))
+        lines = []
+        for frame in filter(None, presenter.frames):
+            animation = presenter.animate(
+                frame, dwell=presenter.dwell, pause=presenter.pause
+            )
+            if not animation:
+                continue
+
+            for line, duration in Renderer.render_frame_to_terminal(animation):
+                lines.append(line)
+
+            if drama.get_state(Operation) != Operation.frames:
+                break
+
         text = drama.deliver(cmd, presenter=presenter)
         return presenter, animation, lines, text
 
@@ -128,8 +136,9 @@ class SympathyTests(unittest.TestCase):
             "", "help",
             "help",
             "no",
-        ] + [""] * 1 + [
-        ]  # FIXME: frame operation
+        ] + [""] * 7 + [
+            "drop mug"
+        ]
         text = None
         presenter = None
         for n, cmd in enumerate(cmds):
@@ -168,7 +177,7 @@ class SympathyTests(unittest.TestCase):
                     self.assertEqual(1, len(self.drama.world.fruition["construction"]))
                     self.assertTrue(self.drama.world.player.memories)
                 elif n > 20:
-                    print(text)
+                    print(lines)
 
     def test_go(self):
         cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]
