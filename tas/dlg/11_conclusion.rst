@@ -25,7 +25,7 @@ About
 This is a technical demo and teaching example for the `Balladeer`_ package.
 A modern, web-native Python library you can download and install today.
 
-Catchphrase is unique in the way it lets you layer beautifully-written dialogue on top of well-tested game logic.
+Balladeer is unique in the way it lets you layer beautifully-written dialogue on top of well-tested game logic.
 
 *   Balladeer is 100% Free software.
 *   Game logic is Python code.

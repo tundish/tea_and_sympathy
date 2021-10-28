@@ -1,10 +1,10 @@
 Tea and Sympathy
 ::::::::::::::::
 
-This is a technical demonstration of `Catchphrase`_.
+This is a technical demonstration of `Balladeer`_.
 
-Catchphrase helps you build parser-based Interactive Fiction for the Web.
-Catchphrase is a Python library, and part of the `Turberfield` namespace.
+Balladeer helps you build parser-based Interactive Fiction for the Web.
+Balladeer is a Python library.
 
 Installation
 ++++++++++++
@@ -53,19 +53,19 @@ Virtual Environment
 
 #. First make a fresh Python virtual environment::
 
-    python -m venv C:\Users\author\catchphrase-app
+    python -m venv C:\Users\author\balladeer-app
 
 #. Update the package manager within it::
 
-    C:\Users\author\catchphrase-app\Scripts\pip install -U pip wheel
+    C:\Users\author\balladeer-app\Scripts\pip install -U pip wheel
 
 #. Install dependencies::
 
-    C:\Users\author\catchphrase-app\Scripts\pip install aiohttp
+    C:\Users\author\balladeer-app\Scripts\pip install aiohttp
 
-#. Install (or update) Catchphrase::
+#. Install (or update) Balladeer::
 
-    C:\Users\author\catchphrase-app\Scripts\pip install -U turberfield-catchphrase
+    C:\Users\author\balladeer-app\Scripts\pip install -U balladeer
 
 Download
 --------
@@ -80,13 +80,13 @@ Run
 
 You can run the demo in two modes.
 
-#. Text-only in the terminal::
-
-    C:\Users\author\catchphrase-app\Scripts\python -m tas.story
-
 #. Launch a local web server to play in a browser (`http://localhost:8080`)::
 
-    C:\Users\author\catchphrase-app\Scripts\python -m tas.server
+    C:\Users\author\balladeer-app\Scripts\python -m tas.server
+
+#. Or text-only in the terminal::
+
+    C:\Users\author\balladeer-app\Scripts\python -m tas.story
 
 Linux
 =====
@@ -105,19 +105,19 @@ Virtual Environment
 
 #. First make a fresh Python virtual environment::
 
-    python3 -m venv ~/catchphrase-app
+    python3 -m venv ~/balladeer-app
 
 #. Update the package manager within it::
 
-    ~/catchphrase-app/bin/pip install -U pip wheel
+    ~/balladeer-app/bin/pip install -U pip wheel
 
 #. Install dependencies::
 
-    ~/catchphrase-app/bin/pip install aiohttp
+    ~/balladeer-app/bin/pip install aiohttp
 
-#. Install (or update) Catchphrase::
+#. Install (or update) Balladeer::
 
-    ~/catchphrase-app/bin/pip install -U turberfield-catchphrase
+    ~/balladeer-app/bin/pip install -U balladeer
 
 Download
 --------
@@ -132,13 +132,13 @@ Run
 
 You can run the demo in two modes.
 
-#. Text-only in the terminal::
-
-    ~/catchphrase-app/bin/python -m tas.story
-
 #. Launch a local web server to play the web app (`http://localhost:8080`)::
 
-    ~/catchphrase-app/bin/python -m tas.app
+    ~/balladeer-app/bin/python -m tas.app
+
+#. Or text-only in the terminal::
+
+    ~/balladeer-app/bin/python -m tas.story
 
 
 The freedom to copy
@@ -147,13 +147,12 @@ The freedom to copy
 You are free to use this project as a teaching example, or as the basis of your own work.
 Please read the licence and make sure you `understand the Affero GPL`_.
 
-.. _Catchphrase: https://github.com/tundish/turberfield-catchphrase
+.. _Balladeer: https://github.com/tundish/balladeer
 .. _JSON Feed: https://jsonfeed.org/version/1.1
 .. _web rings: https://www.mic.com/p/how-geocities-webrings-made-the-90s-internet-a-cozier-place-19638198
 .. _web feeds: https://en.wikipedia.org/wiki/Web_feed
 .. _Git Bash: https://gitforwindows.org/
 .. _reStructuredText: https://docutils.sourceforge.io/rst.html
-.. _Turberfield dialogue library: https://turberfield-dialogue.readthedocs.io/en/latest/
 .. _Raspberry Pi: https://www.raspberrypi.org/
 .. _understand the Affero GPL: https://www.gnu.org/licenses/why-affero-gpl.html
 

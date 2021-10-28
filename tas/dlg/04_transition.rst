@@ -54,7 +54,8 @@ Premonition
 .. condition:: DRAMA.state 0
 
 |PLAYER_NAME| catches her breath as a sudden insight illuminates her grey morning.
-She kicked it. In the night. Then she slept again.
+
+It had felt cold. In the night. Then she slept again.
 
 Something very bad is about to happen.
 
