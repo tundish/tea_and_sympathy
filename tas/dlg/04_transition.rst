@@ -81,6 +81,7 @@ Something very bad is about to happen.
 
 .. property:: DRAMA.state 1
 .. property:: GESTURE.abandon drop mug
+.. property:: SETTINGS.catchphrase-colour-gravity hsl(203.39, 96.72%, 11.96%);
 
 Last chance
 -----------

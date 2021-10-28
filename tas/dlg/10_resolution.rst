@@ -47,9 +47,9 @@ Back to bed
 .. condition:: DRAMA.state 1
 
 |PLAYER_NAME| waits for the front door to shut behind them.
-She goes back to her room and puts the empty mug on the table.
+She goes back to her room and puts the mug on the table.
 
-She climbs back into bed. As she does, something drops out from under the covers.
+She climbs into bed. As she does, something drops out from under the covers.
 
 She picks it up off the floor, and the screen lights up.
 
