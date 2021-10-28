@@ -100,6 +100,27 @@ Sophie helps out
 -
 
 .. condition:: DRAMA.state 2
+.. condition:: GESTURE.label (\w*\W+cig)
+
+|PLAYER_NAME| nods.
+
+Glances out to the garden again.
+
+.. memory::  0
+   :subject: PLAYER
+   :object:  NPC
+
+   |NPC_NAME| is panicking about getting to college.
+   |PLAYER_NAME| is not really in the mood for talking.
+
+.. property:: DRAMA.state 0
+.. property:: GESTURE.state tas.world.Fruition.transition
+
+3
+-
+
+.. condition:: DRAMA.state 2
+.. condition:: GESTURE.label (\w*\W+tea)
 
 {0}
 

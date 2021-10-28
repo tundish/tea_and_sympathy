@@ -87,9 +87,14 @@ Spark up
 
 .. condition:: GESTURE.label (\w*\W+cig)
 
-About to make smoke then.
+|PLAYER_NAME| finds a lighter next to the Kettle, and sparks up.
+She takes a saucer from the drainer, and goes over to the window.
 
-.. Sophie getting uncomfortable. She doesn't like smoke (cancelled).
+Pulling up the sash a little, she looks out through the gap over the garden and to the houses beyond.
+She perches herself on the window sill.
+
+.. property:: DRAMA.state 0
+.. property:: GESTURE.state tas.world.Fruition.construction
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
