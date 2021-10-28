@@ -134,7 +134,7 @@ You can run the demo in two modes.
 
 #. Launch a local web server to play the web app (`http://localhost:8080`)::
 
-    ~/balladeer-app/bin/python -m tas.app
+    ~/balladeer-app/bin/python -m tas.server
 
 #. Or text-only in the terminal::
 
