@@ -44,9 +44,8 @@ In the Kitchen at first there is silence.
 Then across the hall, the doorbell rings.
 
 .. property:: DRAMA.state 0
-.. property:: DRAMA.state tas.types.Journey.reward
+.. property:: DRAMA.prompt Press Return
+.. property:: DRAMA.state tas.types.Operation.ending
 
 .. |NPC_NAME| property:: NPC.name
 .. |PLAYER_NAME| property:: PLAYER.name
-.. If Sophie made the tea, Mattie is here.
-.. If Louise, then Mattie's phone is ringing.
