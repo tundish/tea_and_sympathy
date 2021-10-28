@@ -30,7 +30,7 @@ Suddenly, across the hall, the doorbell rings.
 
 [NPC]_
 
-    It's Matthew. Sorry about the tea. I've got to go.
+    It's Matthew. I've got to go.
 
 [PLAYER]_
 

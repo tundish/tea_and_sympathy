@@ -29,9 +29,28 @@
 Transition
 ==========
 
+Boredom
+-------
+
+.. condition:: GESTURE.label (\w*\W+cig)
+.. condition:: NPC.state 0
+
+[PLAYER]_
+
+    Late night out was it?
+
+[NPC]_
+
+    Yeah, you beat me to bed again.
+
+.. property:: DRAMA.state 0
+.. property:: DRAMA.state tas.types.Journey.reward
+.. property:: GESTURE.state tas.world.Fruition.completion
+
 Distraction
 -----------
 
+.. condition:: GESTURE.label (\w*\W+tea)
 .. condition:: NPC.state 0
 .. condition:: DRAMA.state 0
 

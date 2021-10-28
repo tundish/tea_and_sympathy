@@ -29,8 +29,6 @@
 Construction
 ============
 
-.. If Louise makes the tea, as the kettle boils there are limited options to rescue (default)
-
 Sophie helps out
 ----------------
 

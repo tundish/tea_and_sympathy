@@ -132,9 +132,7 @@ class SympathyTests(unittest.TestCase):
     def test_smoke_cigarette(self):
         cmds = [
             "look", "get mug", "inspect mug", "hall", "kitchen", "", "", "", "help",
-            "smoke cigarette", "look",
-            "", "help",
-            "help",
+            "smoke cigarette", "", "", "", "", ""
         ]
         text = None
         presenter = None
@@ -158,21 +156,11 @@ class SympathyTests(unittest.TestCase):
                     self.assertIn("make tea", text.lower())
                     self.assertIn("smoke cigarette", text.lower())
                 elif n == 12:
-                    self.assertEqual("help", cmd)
                     self.assertEqual(1, len(self.drama.world.fruition["inception"]))
-                    self.assertEqual(1, len(self.drama.world.fruition["discussion"]))
+                    self.assertEqual(1, len(self.drama.world.fruition["transition"]))
                 elif n == 13:
-                    self.assertEqual("help", cmd)
-                    self.assertEqual(1, len(self.drama.world.fruition["discussion"]))
-                    self.assertIn("yes", text.lower())
-                    self.assertIn("no", text.lower())
+                    self.assertEqual(1, len(self.drama.world.fruition["completion"]))
                     self.assertEqual(0, next(iter(self.drama.world.lookup["sophie"])).state)
-                elif n == 14:
-                    self.assertEqual(1, len(self.drama.world.fruition["elaboration"]))
-                elif n == 15:
-                    self.assertEqual(1, next(iter(self.drama.world.lookup["sophie"])).state)
-                    self.assertEqual(1, len(self.drama.world.fruition["construction"]))
-                    self.assertTrue(self.drama.world.player.memories)
 
     def test_make_tea(self):
         cmds = [
