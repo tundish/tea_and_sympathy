@@ -129,15 +129,12 @@ class SympathyTests(unittest.TestCase):
                 elif n == 2:
                     self.assertEqual(Location.inventory, mug.get_state(Location), text)
 
-    def test_make_tea(self):
+    def test_smoke_cigarette(self):
         cmds = [
             "look", "get mug", "inspect mug", "hall", "kitchen", "", "", "", "help",
-            "make tea", "look",
+            "smoke cigarette", "look",
             "", "help",
             "help",
-            "no",
-        ] + [""] * 7 + [
-            "drop mug"
         ]
         text = None
         presenter = None
@@ -176,8 +173,50 @@ class SympathyTests(unittest.TestCase):
                     self.assertEqual(1, next(iter(self.drama.world.lookup["sophie"])).state)
                     self.assertEqual(1, len(self.drama.world.fruition["construction"]))
                     self.assertTrue(self.drama.world.player.memories)
-                elif n > 20:
-                    print(lines)
+
+    def test_make_tea(self):
+        cmds = [
+            "look", "get mug", "inspect mug", "hall", "kitchen", "", "", "", "help",
+            "make tea", "look",
+            "", "help",
+            "help",
+            "no",
+        ] + [""] * 7 + [
+            "drop mug"
+        ]
+        text = None
+        presenter = None
+        for n, cmd in enumerate(cmds):
+            presenter, animation, lines, text = self.turn(
+                cmd, self.drama, self.settings, text, previous=presenter
+            )
+
+            with self.subTest(n=n, cmd=cmd, phase="post"):
+                if n == 0:
+                    self.assertNotIn(self.drama.do_propose, self.drama.active)
+                elif n == 2:
+                    self.assertIn(self.drama.do_propose, self.drama.active)
+                elif n == 8:
+                    self.assertEqual("help", cmd)
+                    self.assertEqual(2, len(self.drama.world.fruition["inception"]), self.drama.world.fruition)
+                    self.assertIn("make tea", text.lower())
+                    self.assertIn("smoke cigarette", text.lower())
+                elif n == 12:
+                    self.assertEqual("help", cmd)
+                    self.assertEqual(1, len(self.drama.world.fruition["inception"]))
+                    self.assertEqual(1, len(self.drama.world.fruition["discussion"]))
+                elif n == 13:
+                    self.assertEqual("help", cmd)
+                    self.assertEqual(1, len(self.drama.world.fruition["discussion"]))
+                    self.assertIn("yes", text.lower())
+                    self.assertIn("no", text.lower())
+                    self.assertEqual(0, next(iter(self.drama.world.lookup["sophie"])).state)
+                elif n == 14:
+                    self.assertEqual(1, len(self.drama.world.fruition["elaboration"]))
+                elif n == 15:
+                    self.assertEqual(1, next(iter(self.drama.world.lookup["sophie"])).state)
+                    self.assertEqual(1, len(self.drama.world.fruition["construction"]))
+                    self.assertTrue(self.drama.world.player.memories)
 
     def test_go(self):
         cmds = ["go hall", "go bedroom", "go hall", "go stairs", "go kitchen", "go hall", "go bedroom"]
@@ -197,13 +236,6 @@ class SympathyTests(unittest.TestCase):
         mug = next(iter(self.drama.world.lookup["mug"]))
         for n, cmd in enumerate(cmds):
             presenter, animation, lines, text = self.turn(cmd, self.drama, self.settings, text, previous=presenter)
-        """
-            with self.subTest(n=n, cmd=cmd, phase="post"):
-                if n in (0, 5):
-                    self.assertIn("hall", text.lower())
-                if n != 2:
-                    self.assertIn("mug", text.lower())
-        """
         self.assertIn(mug, self.drama.world.visible.each)
         self.assertEqual(Journey.ordeal, self.drama.get_state(Journey))
 
