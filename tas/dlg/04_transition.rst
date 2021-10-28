@@ -45,6 +45,7 @@ Distraction
 
     I'll get it.
 
+.. property:: DRAMA.state tas.types.Journey.reward
 .. property:: GESTURE.state tas.world.Fruition.completion
 
 Premonition
@@ -55,7 +56,7 @@ Premonition
 
 |PLAYER_NAME| catches her breath as a sudden insight illuminates her grey morning.
 
-It had felt cold. In the night. Then she slept again.
+It had felt cold. In the night. At her feet. Then she slept again.
 
 Something very bad is about to happen.
 

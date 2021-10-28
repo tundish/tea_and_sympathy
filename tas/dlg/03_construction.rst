@@ -50,6 +50,8 @@ Sophie helps out
    |NPC_NAME| offers to help with the tea.
    |PLAYER_NAME| doesn't feel like arguing this morning.
 
+.. property:: DRAMA.state 0
+
 0
 -
 

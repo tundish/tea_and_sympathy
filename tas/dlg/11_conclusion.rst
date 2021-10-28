@@ -31,9 +31,9 @@ Balladeer is unique in the way it lets you layer beautifully-written dialogue on
 *   Game logic is Python code.
 *   Dialogue lives in separate screenplay files.
 *   Balladeer renders your story in pure HTML5 and CSS3. No Javascript is necessary.
-*   Host Web mode for a browser interface or play old-school in the terminal.
+*   Host web-mode for a browser interface or play old-school in the terminal.
 
-If you've enjoyed `Tea and Sympathy`, why not `see how it's done`_?
+If you've enjoyed *Tea and Sympathy*, why not `see how it's done`_?
 Thanks for playing.
 
 © 2021 D E Haynes.

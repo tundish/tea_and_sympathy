@@ -48,6 +48,7 @@ on a tiled floor.
     Clumsy.
 
 .. property:: NPC.state 0
+.. property:: DRAMA.state 0
 .. property:: DRAMA.state tas.types.Journey.reward
 
 .. |NPC_NAME| property:: NPC.name
