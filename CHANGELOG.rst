@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.11.0
+=====
+
+* Add __main__.py for zipapp operation.
+
 0.10.0
 =====
 
