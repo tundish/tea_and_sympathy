@@ -6,13 +6,20 @@
 Change Log
 ::::::::::
 
+0.12.0
+======
+
+* Add Dockerfile.
+* Add setup.py.
+* Add MANIFEST.in.
+
 0.11.0
-=====
+======
 
 * Add __main__.py for zipapp operation.
 
 0.10.0
-=====
+======
 
 * Align with balladeer 0.11.0.
 
