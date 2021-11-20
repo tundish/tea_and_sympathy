@@ -22,6 +22,7 @@ import argparse
 from collections import deque
 from collections import namedtuple
 import datetime
+import logging
 import re
 import sys
 import uuid
@@ -30,6 +31,7 @@ from aiohttp import web
 import pkg_resources
 
 from balladeer import Presenter
+from turberfield.utils.misc import log_setup
 
 import tas
 from tas.story import TeaAndSympathy
@@ -130,7 +132,9 @@ def build_app(args):
 
 
 def main(args):
+    log = logging.getLogger(log_setup(args, ""))
     app = build_app(args)
+    log.info("Serving on {0.host}:{0.port}".format(args))
     return web.run_app(app, host=args.host, port=args.port)
 
 
@@ -139,6 +143,15 @@ def parser(description=__doc__):
     rv.add_argument(
         "--version", action="store_true", default=False,
         help="Print the current version number.")
+    rv.add_argument(
+        "-v", "--verbose", required=False,
+        action="store_const", dest="log_level",
+        const=logging.DEBUG, default=logging.INFO,
+        help="Increase the verbosity of output.")
+    rv.add_argument(
+        "--log", default=None, dest="log_path",
+        help="Set a file path for log output."
+    )
     rv.add_argument(
         "--host", default="127.0.0.1",
         help="Set an interface on which to serve."
