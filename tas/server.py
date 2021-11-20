@@ -24,6 +24,7 @@ from collections import namedtuple
 import datetime
 import logging
 import re
+import socket
 import sys
 import uuid
 
@@ -58,6 +59,21 @@ async def get_root(request):
     session = Session(datetime.datetime.utcnow(), story)
     request.app["sessions"][story.id] = session
     raise web.HTTPFound("/{0.id.hex}".format(story))
+
+
+async def get_metrics(request):
+    data = {
+        "host": {"name": socket.gethostname()},
+        "sessions": [
+            {
+                "uid": str(s.story.id),
+                "start": s.ts.isoformat(),
+                "turns": s.story.context.turns
+            }
+            for s in request.app["sessions"].values()
+        ]
+    }
+    return web.json_response(data)
 
 
 async def get_session(request):
@@ -116,6 +132,7 @@ def build_app(args):
     app = web.Application()
     app.add_routes([
         web.get("/", get_root),
+        web.get("/metrics", get_metrics),
         web.get("/{{session:{0}}}".format(VALIDATION["session"].pattern), get_session),
         web.post("/{{session:{0}}}/cmd/".format(VALIDATION["session"].pattern), post_command),
     ])
