@@ -21,4 +21,4 @@ RUN /home/$user/$envname/bin/pip install tea-and-sympathy
 
 EXPOSE 8080
 
-ENTRYPOINT ["/home/service/py3/bin/tas-web", "--log", "tas.log"]
+ENTRYPOINT ["/home/service/py3/bin/tas-web", "--host", "0.0.0.0", "--port", "8080", "--log", "tas.log"]
