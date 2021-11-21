@@ -38,7 +38,11 @@ import tas
 from tas.story import TeaAndSympathy
 from tas.types import Operation
 
-
+HEADERS = {
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    "Pragma": "no-cache",
+    "Expires": "0",
+}
 VALIDATION = {
     "email": re.compile(
         "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]"
@@ -58,7 +62,7 @@ async def get_root(request):
     story.presenter = story.represent("", facts=story.context.facts)
     session = Session(datetime.datetime.utcnow(), story)
     request.app["sessions"][story.id] = session
-    raise web.HTTPFound("/{0.id.hex}".format(story), headers={"Expires": "0"})
+    raise web.HTTPFound("/{0.id.hex}".format(story), headers=HEADERS)
 
 
 async def get_metrics(request):
@@ -111,7 +115,7 @@ async def get_session(request):
         story.render_animated_frame_to_html(story.animation, controls)
     )
 
-    return web.Response(text=rv, content_type="text/html", headers={"Expires": "0"})
+    return web.Response(text=rv, content_type="text/html", headers=HEADERS)
 
 
 async def post_command(request):

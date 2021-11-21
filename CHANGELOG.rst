@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.14.0
+======
+
+* Increasing attention to headers.
+
 0.13.0
 ======
 
