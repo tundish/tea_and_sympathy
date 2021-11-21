@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.13.0
+======
+
+* Add headers to defeat caching.
+
 0.12.0
 ======
 
