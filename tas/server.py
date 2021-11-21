@@ -58,7 +58,7 @@ async def get_root(request):
     story.presenter = story.represent("", facts=story.context.facts)
     session = Session(datetime.datetime.utcnow(), story)
     request.app["sessions"][story.id] = session
-    raise web.HTTPFound("/{0.id.hex}".format(story))
+    raise web.HTTPFound("/{0.id.hex}".format(story), headers={"Expires": "0"})
 
 
 async def get_metrics(request):
@@ -111,7 +111,7 @@ async def get_session(request):
         story.render_animated_frame_to_html(story.animation, controls)
     )
 
-    return web.Response(text=rv, content_type="text/html")
+    return web.Response(text=rv, content_type="text/html", headers={"Expires": "0"})
 
 
 async def post_command(request):
