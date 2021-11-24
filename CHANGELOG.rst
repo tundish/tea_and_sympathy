@@ -6,6 +6,12 @@
 Change Log
 ::::::::::
 
+0.15.0
+======
+
+* Add Janitor task.
+* Redirect on missing session.
+
 0.14.0
 ======
 

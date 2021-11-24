@@ -19,6 +19,7 @@
 
 
 import argparse
+import asyncio
 from collections import deque
 from collections import namedtuple
 import datetime
@@ -56,6 +57,29 @@ VALIDATION = {
 
 Session = namedtuple("Session", ["ts", "story"])
 
+async def start_tasks(app):
+    app["janitor"] = asyncio.create_task(janitor(app))
+
+
+async def cleanup_tasks(app):
+    app["janitor"].cancel()
+    await app["janitor"]
+
+
+async def janitor(app):
+    log = logging.getLogger("janitor")
+    limit = datetime.timedelta(minutes=3)
+    while True:
+        now = datetime.datetime.now()
+        orphans = [
+            i for i in app["sessions"].values()
+            if (now - i.ts) > limit and i.story.context.turns < 4
+        ]
+        for i in orphans:
+            log.info("Discard {0.story.id} after turn {0.story.context.turns}".format(i))
+            del app["sessions"][i.story.id]
+        await asyncio.sleep(10)
+
 
 async def get_root(request):
     story = TeaAndSympathy()
@@ -82,7 +106,11 @@ async def get_metrics(request):
 
 async def get_session(request):
     uid = uuid.UUID(hex=request.match_info["session"])
-    session = request.app["sessions"][uid]
+    try:
+        session = request.app["sessions"][uid]
+    except KeyError:
+        raise web.HTTPPermanentRedirect("/", headers=HEADERS)
+
     story = session.story
 
     while story.presenter.frames:
@@ -149,6 +177,8 @@ def build_app(args):
         pkg_resources.resource_filename("tas", "css")
     )
     app["sessions"] = {}
+    app.on_startup.append(start_tasks)
+    app.on_cleanup.append(cleanup_tasks)
     return app
 
 
