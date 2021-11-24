@@ -148,7 +148,11 @@ async def get_session(request):
 
 async def post_command(request):
     uid = uuid.UUID(hex=request.match_info["session"])
-    session = request.app["sessions"][uid]
+    try:
+        session = request.app["sessions"][uid]
+    except KeyError:
+        raise web.HTTPSeeOther("/", headers=HEADERS)
+
     story = session.story
     data = await request.post()
     cmd = data["cmd"]

@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.16.0
+======
+
+* Redirect if missing session on cmd endpoint.
+
 0.15.0
 ======
 
