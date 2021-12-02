@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.17.0
+======
+
+* Align with balladeer 0.19.0
+
 0.16.0
 ======
 

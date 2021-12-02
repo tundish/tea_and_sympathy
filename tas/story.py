@@ -36,10 +36,7 @@ class TeaAndSympathy(Story):
     def __init__(self, cfg=None, **kwargs):
         super().__init__(**kwargs)
         world = Tea(**kwargs)
-        self.drama = {
-            "sympathy": Sympathy(world, **kwargs)
-        }
-        self.context = self.drama["sympathy"]
+        self.drama = [Sympathy(world, **kwargs)]
 
     @property
     def active(self):
